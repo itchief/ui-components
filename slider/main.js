@@ -1,3 +1,10 @@
+/*!
+  * Slider (https://itchief.ru/lessons/php/feedback-form-for-website)
+  * Copyright 2018 Alexander Maltsev
+  * Licensed under MIT (https://github.com/itchief/feedback-form/blob/master/LICENSE)
+  * Forked from Bootstrap, licensed MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  */
+
 'use strict';
 var slider = (function (config) {
 
