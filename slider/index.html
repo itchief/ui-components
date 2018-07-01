@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>JavaScript - Как сделать слайдер для сайта</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+  <div id="slider" class="slider">
+    <ol class="slider__indicators">
+      <li class="slider__indicator slider__indicator_active" data-slide-to="0"></li>
+      <li class="slider__indicator" data-slide-to="1"></li>
+      <li class="slider__indicator" data-slide-to="2"></li>
+      <li class="slider__indicator" data-slide-to="3"></li>
+    </ol>
+    <div class="slider__items">
+      <div class="slider__item slider__item_active">
+        <div style="height: 250px; background: orange;"></div>
+      </div>
+      <div class="slider__item">
+        <div style="height: 250px; background: green;"></div>
+      </div>
+      <div class="slider__item">
+        <div style="height: 250px; background: violet;"></div>
+      </div>
+      <div class="slider__item">
+        <div style="height: 250px; background: coral;"></div>
+      </div>
+    </div>
+    <a class="slider__control slider__control_prev" href="#" role="button"></a>
+    <a class="slider__control slider__control_next" href="#" role="button"></a>
+  </div>
+
+  <script src="main.js"></script>
+
+</body>
+
+</html>
