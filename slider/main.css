@@ -1,7 +1,7 @@
 /*!
-  * Slider (https://itchief.ru/lessons/php/feedback-form-for-website)
+  * Slider (https://github.com/itchief/how-to/tree/master/slider)
   * Copyright 2018 Alexander Maltsev
-  * Licensed under MIT (https://github.com/itchief/feedback-form/blob/master/LICENSE)
+  * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
   * Forked from Bootstrap, licensed MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 
