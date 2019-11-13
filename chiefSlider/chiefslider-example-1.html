@@ -174,9 +174,11 @@
 
         // обработчик события click для кнопок "назад" и "вперед"
         var _controlClick = function (e) {
-          var direction = this.classList.contains('slider__control_right') ? 'right' : 'left';
-          e.preventDefault();
-          _transformItem(direction);
+          if (e.target.classList.contains('slider__control')) {
+            e.preventDefault();
+            var direction = e.target.classList.contains('slider__control_right') ? 'right' : 'left';
+            _transformItem(direction);
+          }
         };
 
         var _setUpListeners = function () {
