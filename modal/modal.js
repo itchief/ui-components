@@ -82,7 +82,7 @@ $modal = function (options) {
         destroy: function () {
             _elemModal.parentElement.removeChild(_elemModal),
                 _elemModal.removeEventListener('click', _handlerCloseModal),
-                destroyed = true;
+                _destroyed = true;
         },
         setContent: function (html) {
             _elemModal.querySelector('[data-modal="content"]').innerHTML = html;
