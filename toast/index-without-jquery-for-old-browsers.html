@@ -70,7 +70,6 @@
       color: #000;
       text-shadow: 0 1px 0 #fff;
       opacity: 0.6;
-      appearance: button;
       margin: 0;
       font-family: inherit;
       border-radius: 0;
@@ -138,7 +137,7 @@
           _this.hide();
         }
       });
-    }
+    };
 
     Toast.prototype = {
       show: function () {
@@ -202,7 +201,7 @@
       var toast = new Toast(toasts[toasts.length - 1], { autohide: config.autohide, delay: config.delay });
       toast.show();
       return toast;
-    }
+    };
     document.querySelector('#addToast').addEventListener('click', function () {
       /*
         Параметры функции add:

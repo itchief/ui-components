@@ -63,7 +63,6 @@
       color: #000;
       text-shadow: 0 1px 0 #fff;
       opacity: 0.6;
-      appearance: button;
       margin: 0;
       font-family: inherit;
       border-radius: 0;
@@ -96,7 +95,7 @@
   <input name="toast-delay" type="text" value="5000">
   <button id="addToast" type="button">Добавить toast</button>
 
-  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/jquery-3.5.0.min.js"></script>
   <script>
     'use strict';
 
@@ -125,7 +124,7 @@
       $(_element).on('click', '.toast__close', function () {
         _this.hide();
       })
-    }
+    };
 
     Toast.prototype = {
       show: function () {
@@ -154,7 +153,7 @@
         color: '#ffffff',
         autohide: true,
         delay: 5000
-      }
+      };
       if (params !== undefined) {
         for (var item in params) {
           config[item] = params[item];
@@ -168,7 +167,7 @@
       var toast = new Toast(toasts[toasts.length - 1], { autohide: config.autohide, delay: config.delay });
       toast.show();
       return toast;
-    }
+    };
     /* удалять при скрытии всплывающей подсказки её из DOM */
     /*$(document).on('hidden.toast', '.toast', function () {
       $(this).remove();

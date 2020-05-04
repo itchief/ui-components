@@ -8,7 +8,7 @@
   <style>
     /*!
      * chiefSlider (https://github.com/itchief/how-to/tree/master/chiefSlider)
-     * Copyright 2018 Alexander Maltsev
+     * Copyright 2020 Alexander Maltsev
      * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
      */
 
@@ -191,7 +191,7 @@
           getMax: function () {
             return _items[position.getItemMax()].position;
           }
-        }
+        };
 
         var _transformItem = function (direction) {
           var nextItem;
@@ -221,7 +221,7 @@
             _transform += _step;
           }
           _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
-        }
+        };
 
         var _cycle = function (direction) {
           if (!_config.isCycling) {
@@ -230,7 +230,7 @@
           _interval = setInterval(function () {
             _transformItem(direction);
           }, _config.interval);
-        }
+        };
 
         // обработчик события click для кнопок "назад" и "вперед"
         var _controlClick = function (e) {
@@ -251,7 +251,7 @@
             clearInterval(_interval);
             _cycle(_config.direction);
           }
-        }
+        };
 
         var _setUpListeners = function () {
           // добавление к кнопкам "назад" и "вперед" обрботчика _controlClick для событя click
@@ -268,7 +268,7 @@
             });
           }
           document.addEventListener('visibilitychange', _handleVisibilityChange, false);
-        }
+        };
 
         // инициализация
         _setUpListeners();
@@ -297,7 +297,7 @@
       }
     }());
 
-    var slider = multiItemSlider('.slider', {
+    multiItemSlider('.slider', {
       isCycling: true
     })
 

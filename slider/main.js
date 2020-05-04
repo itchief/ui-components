@@ -51,7 +51,7 @@ var slideShow = (function () {
 
     // функция, выполняющая смену слайда в указанном направлении
     var _move = function (direction) {
-      var nextItem, currentIndicator = _indicatorIndex;;
+      var nextItem, currentIndicator = _indicatorIndex;
       if (direction === 'next') {
         _currentPosition++;
         if (_currentPosition > position.getItemPosition('max')) {

@@ -8,7 +8,7 @@
   <style>
     /*!
      * chiefSlider (https://github.com/itchief/how-to/tree/master/chiefSlider)
-     * Copyright 2018 Alexander Maltsev
+     * Copyright 2020 Alexander Maltsev
      * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
      */
 
@@ -187,7 +187,7 @@
               _index = index;
           });
           _states[_index].active = true;
-        }
+        };
 
         _setActive();
 
@@ -199,7 +199,7 @@
             }
           });
           return _index;
-        }
+        };
 
         // наполнение массива _items
         _sliderItems.forEach(function (item, index) {
@@ -231,7 +231,7 @@
           getMax: function () {
             return _items[position.getItemMax()].position;
           }
-        }
+        };
 
         var _transformItem = function (direction) {
           var nextItem;
@@ -261,7 +261,7 @@
             _transform += _step;
           }
           _sliderWrapper.style.transform = 'translateX(' + _transform + '%)';
-        }
+        };
 
         var _cycle = function (direction) {
           if (!_config.isCycling) {
@@ -270,7 +270,7 @@
           _interval = setInterval(function () {
             _transformItem(direction);
           }, _config.interval);
-        }
+        };
 
         // обработчик события click для кнопок "назад" и "вперед"
         var _controlClick = function (e) {
@@ -291,7 +291,7 @@
             clearInterval(_interval);
             _cycle(_config.direction);
           }
-        }
+        };
 
         var _refresh = function () {
           clearInterval(_interval);
@@ -315,7 +315,7 @@
           _sliderItems.forEach(function (item, index) {
             _items.push({ item: item, position: index, transform: 0 });
           });
-        }
+        };
 
 
         var _setUpListeners = function () {
@@ -346,7 +346,7 @@
               _refresh();
             }
           });
-        }
+        };
 
         // инициализация
         _setUpListeners();
@@ -379,7 +379,7 @@
       }
     }());
 
-    var slider = multiItemSlider('.slider', {
+    multiItemSlider('.slider', {
       isCycling: true
     })
 

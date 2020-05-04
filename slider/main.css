@@ -1,6 +1,6 @@
 /*!
   * Slider (https://github.com/itchief/how-to/tree/master/slider)
-  * Copyright 2019 Alexander Maltsev
+  * Copyright 2020 Alexander Maltsev
   * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
   */
 
@@ -99,11 +99,8 @@ body {
   display: flex;
   justify-content: center;
   padding-left: 0;
-  margin-right: 15%;
-  margin-left: 15%;
+  margin: 0 15%;
   list-style: none;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .slider__indicators li {
