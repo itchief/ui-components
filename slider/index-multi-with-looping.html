@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>JavaScript - Как сделать слайдер для сайта</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+  <div class="slider">
+    <div class="slider__wrapper">
+      <div class="slider__items">
+        <div class="slider__item">
+          <div style="height: 250px; background: orange;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: green;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: violet;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: coral;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: sandybrown;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: lightseagreen;"></div>
+        </div>
+      </div>
+    </div>
+    <a class="slider__control slider__control_prev" href="#" role="button"></a>
+    <a class="slider__control slider__control_next slider__control_show" href="#" role="button"></a>
+  </div>
+
+  <style>
+    /* стили для слайдов */
+    .slider__item {
+      flex: 0 0 25%;
+      max-width: 25%;
+    }
+    /* не показывать индикаторы */
+    .slider__indicators {
+      display: none;
+    }
+  </style>
+  <script src="main.js"></script>
+  <script>
+    slideShow('.slider', {
+      isAutoplay: true
+    });
+  </script>
+</body>
+
+</html>

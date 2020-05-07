@@ -4,11 +4,13 @@ var slideShow = (function () {
     var
       _slider = document.querySelector(selector), // основный элемент блока
       _sliderContainer = _slider.querySelector('.slider__items'), // контейнер для .slider-item
+      _containerWidth = parseFloat(getComputedStyle(_sliderContainer).width), // ширина контейнера
       _sliderItems = _slider.querySelectorAll('.slider__item'), // коллекция .slider-item
+      _itemWidth = parseFloat(getComputedStyle(_sliderItems[0]).width), // ширина одного элемента;
       _sliderControls = _slider.querySelectorAll('.slider__control'), // элементы управления
       _currentPosition = 0, // позиция левого активного элемента
       _transformValue = 0, // значение транфсофрмации .slider_wrapper
-      _transformStep = 100, // величина шага (для трансформации)
+      _transformStep = _itemWidth / _containerWidth * 100, // величина шага (для трансформации)
       _itemsArray = [], // массив элементов
       _timerId,
       _indicatorItems,
@@ -54,7 +56,7 @@ var slideShow = (function () {
       var nextItem, currentIndicator = _indicatorIndex;
       if (direction === 'next') {
         _currentPosition++;
-        if (_currentPosition > position.getItemPosition('max')) {
+        if ((_currentPosition + _containerWidth/_itemWidth -1 ) > position.getItemPosition('max')) {
           nextItem = position.getItemIndex('min');
           _itemsArray[nextItem].position = position.getItemPosition('max') + 1;
           _itemsArray[nextItem].transform += _itemsArray.length * 100;
