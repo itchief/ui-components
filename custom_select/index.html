@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom select</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Подключаем CSS файл CustomSelect -->
+  <link rel="stylesheet" href="custom_select.css">
+  <!-- Стили для страницы -->
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      max-width: 250px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="select">
+      <div class="select__backdrop" data-select="backdrop"></div>
+      <button type="button" class="select__trigger" data-select="trigger">
+        Выберите из списка
+      </button>
+      <div class="select__dropdown">
+        <ul class="select__items">
+          <li class="select__item" data-select="item">1</li>
+          <li class="select__item select__item_selected" data-select="item">2</li>
+          <li class="select__item" data-select="item">3</li>
+          <li class="select__item" data-select="item">4</li>
+          <li class="select__item" data-select="item">5</li>
+          <li class="select__item" data-select="item">6</li>
+          <li class="select__item" data-select="item">7</li>
+          <li class="select__item" data-select="item">8</li>
+          <li class="select__item" data-select="item">9</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Подключаем js-файл CustomSelect -->
+  <script src="custom_select.js"></script>
+
+  <!-- JS код в котором инициализируем экземпляр CustomSelect для .select -->
+  <script>
+    const select1 = new CustomSelect('.select', {
+      defaultValue: 'Ford',
+      data: ['Volkswagen', 'Ford', 'Toyota', 'Nissan'],
+      onSelected(item) {
+        console.log(`Выбранное значение: ${item.textContent}`);
+      },
+    });
+
+    document.querySelector('.select').addEventListener('select.change', (e) => {
+      console.log(
+        `Выбранное значение: ${
+        e.target.querySelector('.select__item_selected').textContent
+        }`
+      );
+    });
+  </script>
+</body>
+
+</html>
