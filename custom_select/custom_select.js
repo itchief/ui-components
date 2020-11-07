@@ -3,12 +3,7 @@
   function CustomEvent(event, params) {
     params = params || { bubbles: false, cancelable: false, detail: null };
     var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(
-      event,
-      params.bubbles,
-      params.cancelable,
-      params.detail
-    );
+    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
     return evt;
   }
   window.CustomEvent = CustomEvent;
@@ -16,14 +11,12 @@
 
 const templateSelect = (data = [], defaultText = 'Выберите из списка') => {
   let items = [];
-  data.forEach((item) => {
+  data.forEach(item => {
     let classItemSelected = '';
     if (item === defaultText) {
       classItemSelected = ' select__item_selected';
     }
-    items.push(
-      `<li class="select__item${classItemSelected}" data-select="item">${item}</li>`
-    );
+    items.push(`<li class="select__item${classItemSelected}" data-select="item">${item}</li>`);
   });
   return `
   <div class="select__backdrop" data-select="backdrop"></div>
@@ -40,7 +33,7 @@ const templateSelect = (data = [], defaultText = 'Выберите из спис
 class CustomSelect {
   constructor(selector, config) {
     this._$main = document.querySelector(selector);
-    this._config = config;
+    this._config = config || {};
     if (this._config.data) {
       this._render();
     }
@@ -87,10 +80,7 @@ class CustomSelect {
     if (!this._$main.classList.contains('select')) {
       this._$main.classList.add('select');
     }
-    this._$main.innerHTML = templateSelect(
-      this._config['data'],
-      this._config['defaultValue']
-    );
+    this._$main.innerHTML = templateSelect(this._config['data'], this._config['defaultValue']);
   }
   show() {
     this._$main.classList.add('select_show');
@@ -109,32 +99,26 @@ class CustomSelect {
   selectedItem(value) {
     if (typeof value === 'object') {
       if (value['value']) {
-        this._$main
-          .querySelectorAll('[data-select="item"]')
-          .forEach(($item) => {
-            if ($item.textContent.trim() === value['value'].toString()) {
-              this._changeItem($item);
-              return;
-            }
-          });
+        this._$main.querySelectorAll('[data-select="item"]').forEach($item => {
+          if ($item.textContent.trim() === value['value'].toString()) {
+            this._changeItem($item);
+            return;
+          }
+        });
       } else if (value['index'] >= 0) {
-        const $item = this._$main.querySelectorAll('[data-select="item"]')[
-          value['index']
-        ];
+        const $item = this._$main.querySelectorAll('[data-select="item"]')[value['index']];
         this._changeItem($item);
       }
       return this.selectedItem();
     }
     let indexSelected = -1;
     let valueSelected = '';
-    this._$main
-      .querySelectorAll('[data-select="item"]')
-      .forEach(($element, index) => {
-        if ($element.classList.contains('select__item_selected')) {
-          indexSelected = index;
-          valueSelected = $element.textContent;
-        }
-      });
+    this._$main.querySelectorAll('[data-select="item"]').forEach(($element, index) => {
+      if ($element.classList.contains('select__item_selected')) {
+        indexSelected = index;
+        valueSelected = $element.textContent;
+      }
+    });
     return { index: indexSelected, value: valueSelected };
   }
 }
