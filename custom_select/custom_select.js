@@ -56,12 +56,16 @@ class CustomSelect {
     }
   }
   _eventHandler(e) {
-    const target = e.target;
-    const type = target.dataset.select;
+    let $target = e.target;
+    let type = $target.dataset.select;
+    if (!type) {
+      $target = $target.closest('[data-select]');
+      type = $target.dataset.select;
+    }
     if (type === 'trigger') {
       this.toggle();
     } else if (type === 'item') {
-      this._changeItem(target);
+      this._changeItem($target);
       this.hide();
     } else if (type === 'backdrop') {
       // закрываем селект, если кликнули вне его
