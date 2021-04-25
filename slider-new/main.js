@@ -103,13 +103,14 @@ Slider.prototype._moveTo = function (index) {
 
 // функция для запуска автоматической смены слайдов через промежутки времени
 Slider.prototype._startAutoplay = function () {
+  var that = this;
   if (!this._config.isAutoplay) {
     return;
   }
   this._stopAutoplay();
   this._timerId = setInterval(function () {
-    this._move(this._config.directionAutoplay);
-  }, this._config.delayAutoplay);
+    that._move(that._config.directionAutoplay);
+  }, that._config.delayAutoplay);
 };
 
 // функция, отключающая автоматическую смену слайдов
@@ -133,17 +134,38 @@ Slider.prototype._addIndicators = function () {
   this._indicatorItems = this._slider.querySelectorAll('.slider__indicators > li');
 };
 
+Slider.prototype._swipeStart = function(e){
+  var event = (e.type.search('touch') === 0) ? e.touches[0]: e;
+  this.startX = event.clientX;
+  console.log(this.startX);
+};
+Slider.prototype._swipeMove = function(e){
+  var event = (e.type.search('touch') === 0) ? e.touches[0]: e;
+  this.moveX = event.clientX;
+  console.log(`_transformValue: ${this._transformValue}`);
+  console.log(`this.moveX: ${this.moveX}`);
+  var deltaX = this._transformValue + this.moveX;
+  //this._sliderContainer.style.transform = 'translateX(' + deltaX + '%)';
+};
+Slider.prototype._swipeEnd = function(){
 
+};
 
 // функция, осуществляющая установку обработчиков для событий
 Slider.prototype._setUpListeners = function () {
   var _startX = 0;
   var that = this;
 
-  
+  this._slider.addEventListener('touchstart', this._swipeStart.bind(this));
+  this._slider.addEventListener('touchmove', this._swipeMove.bind(this));
+  this._slider.addEventListener('touchend', this._swipeEnd.bind(this));
+  this._slider.addEventListener('mousedown', this._swipeStart.bind(this));
+  this._slider.addEventListener('mousemove', this._swipeMove.bind(this));
+  this._slider.addEventListener('mouseup', this._swipeEnd.bind(this));
+
 
   if (isTouchDevice()) {
-    this._slider.addEventListener('touchstart', function (e) {
+    /*this._slider.addEventListener('touchstart', function (e) {
       that._startX = e.changedTouches[0].clientX;
       that._startAutoplay();
     });
@@ -157,7 +179,7 @@ Slider.prototype._setUpListeners = function () {
         that._move('next');
       }
       that._startAutoplay();
-    });
+    });*/
   } else {
     for (var i = 0, length = this._sliderControls.length; i < length; i++) {
       this._sliderControls[i].classList.add('slider__control_show');
