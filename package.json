@@ -1,0 +1,22 @@
+{
+  "name": "how-to",
+  "version": "1.0.0",
+  "description": "Code snippets for HTML, CSS and JavaScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itchief/how-to.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/itchief/how-to/issues"
+  },
+  "homepage": "https://github.com/itchief/how-to#readme",
+  "devDependencies": {
+    "eslint": "^7.25.0"
+  }
+}
