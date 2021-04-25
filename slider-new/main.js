@@ -144,7 +144,9 @@ Slider.prototype._swipeMove = function(e){
   this.moveX = event.clientX;
   console.log(`_transformValue: ${this._transformValue}`);
   console.log(`this.moveX: ${this.moveX}`);
-  var deltaX = this._transformValue + this.moveX;
+  var deltaX = this.startX + this.moveX;
+  var rect = this._sliderContainer.getBoundingClientRect();
+  console.log(rect);
   //this._sliderContainer.style.transform = 'translateX(' + deltaX + '%)';
 };
 Slider.prototype._swipeEnd = function(){
