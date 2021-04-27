@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>JavaScript - Как сделать слайдер для сайта</title>
-  <link rel="stylesheet" href="main.css">
+  <title>JavaScript - Слайдер для сайта на чистом JavaScript</title>
+  <link rel="stylesheet" href="slider.css">
 </head>
 
 <body>
@@ -27,14 +27,17 @@
         </div>
       </div>
     </div>
-    <a class="slider__control slider__control_prev" href="#" role="button"></a>
-    <a class="slider__control slider__control_next slider__control_show" href="#" role="button"></a>
+    <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+    <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
   </div>
 
-  <script src="main.js"></script>
+  <script src="slider.js"></script>
   <script>
-    slideShow('.slider', {
-      isAutoplay: true
+    // инициализация слайдера
+    var slider = new Slider('.slider', {
+      loop: true,
+      autoplay: true,
+      swipe: false
     });
   </script>
 </body>
