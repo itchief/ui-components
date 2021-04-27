@@ -6,6 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>JavaScript - Слайдер для сайта на чистом JavaScript</title>
   <link rel="stylesheet" href="slider.css">
+  <style>
+    .slider__items {
+      counter-reset: slide;
+    }
+
+    .slider__item {
+      counter-increment: slide;
+    }
+
+    .slider__item>div::before {
+      content: counter(slide);
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,16 +34,16 @@
     <div class="slider__wrapper">
       <div class="slider__items">
         <div class="slider__item">
-          <div style="height: 250px; background: orange;"></div>
+          <div style="height: 250px; background: #3f51b5;"></div>
         </div>
         <div class="slider__item">
-          <div style="height: 250px; background: green;"></div>
+          <div style="height: 250px; background: #607d8b;"></div>
         </div>
         <div class="slider__item">
-          <div style="height: 250px; background: violet;"></div>
+          <div style="height: 250px; background: #f44336;"></div>
         </div>
         <div class="slider__item">
-          <div style="height: 250px; background: coral;"></div>
+          <div style="height: 250px; background: #4caf50;"></div>
         </div>
       </div>
     </div>
@@ -36,8 +56,8 @@
     // инициализация слайдера
     var slider = new Slider('.slider', {
       loop: true,
-      autoplay: true,
-      swipe: false
+      autoplay: false,
+      swipe: true
     });
   </script>
 </body>
