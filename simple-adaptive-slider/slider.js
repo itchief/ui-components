@@ -1,3 +1,9 @@
+/*!
+  * Slider by Itchief v2.0.0 (https://github.com/itchief/how-to/tree/master/simple-adaptive-slider)
+  * Copyright 2020 - 2021 Alexander Maltsev
+  * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
+  */
+
 // базовые классы и селекторы
 var WRAPPER_SELECTOR = '.slider__wrapper';
 var ITEMS_SELECTOR = '.slider__items';
