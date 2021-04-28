@@ -5,8 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>JavaScript - Слайдер для сайта на чистом JavaScript</title>
-  <link rel="stylesheet" href="slider.css">
+  <link rel="stylesheet" href="simple-adaptive-slider.css">
   <style>
+    /* стили для элемента body */
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    }
+
     .slider__items {
       counter-reset: slide;
     }
@@ -51,10 +58,10 @@
     <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
   </div>
 
-  <script src="slider.js"></script>
+  <script src="simple-adaptive-slider.js"></script>
   <script>
     // инициализация слайдера
-    var slider = new Slider('.slider', {
+    var slider = new SimpleAdaptiveSlider('.slider', {
       loop: true,
       autoplay: false,
       swipe: true

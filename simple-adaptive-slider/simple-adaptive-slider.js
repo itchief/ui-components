@@ -1,8 +1,8 @@
 /*!
-  * Slider by Itchief v2.0.0 (https://github.com/itchief/how-to/tree/master/simple-adaptive-slider)
-  * Copyright 2020 - 2021 Alexander Maltsev
-  * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
-  */
+ * SimpleAdaptiveSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
+ * Copyright 2020 - 2021 Alexander Maltsev
+ * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
+ */
 
 // базовые классы и селекторы
 var WRAPPER_SELECTOR = '.slider__wrapper';
@@ -22,7 +22,7 @@ var POS_THRESHOLD = 40;
 // класс для отключения transition
 var TRANSITION_NONE = 'transition-none';
 
-function Slider(selector, config) {
+function SimpleAdaptiveSlider(selector, config) {
   // .slider
   this._$root = document.querySelector(selector);
   // .slider__wrapper
@@ -59,7 +59,7 @@ function Slider(selector, config) {
     swipe: true,
   };
   // изменяем конфигурацию слайдера в соответствии с переданными настройками
-  for (let key in config) {
+  for (var key in config) {
     if (this._config.hasOwnProperty(key)) {
       this._config[key] = config[key];
     }
@@ -91,7 +91,7 @@ function Slider(selector, config) {
 }
 
 // set active class
-Slider.prototype._setActiveClass = function () {
+SimpleAdaptiveSlider.prototype._setActiveClass = function () {
   // slides
   for (var i = 0, length = this._$itemList.length; i < length; i++) {
     var $item = this._$itemList[i];
@@ -139,7 +139,7 @@ Slider.prototype._setActiveClass = function () {
 };
 
 // смена слайдов
-Slider.prototype._move = function () {
+SimpleAdaptiveSlider.prototype._move = function () {
   if (this._direction === 'none') {
     this._$items.classList.remove(TRANSITION_NONE);
     this._$items.style.transform = 'translateX('.concat(this._transform, '%)');
@@ -171,7 +171,7 @@ Slider.prototype._move = function () {
 };
 
 // функция для перемещения к слайду по индексу
-Slider.prototype._moveTo = function (index) {
+SimpleAdaptiveSlider.prototype._moveTo = function (index) {
   var currentIndex = this._currentIndex;
   this._direction = index > currentIndex ? 'next' : 'prev';
   for (var i = 0; i < Math.abs(index - currentIndex); i++) {
@@ -180,7 +180,7 @@ Slider.prototype._moveTo = function (index) {
 };
 
 // метод для автоматической смены слайдов
-Slider.prototype._autoplay = function (action) {
+SimpleAdaptiveSlider.prototype._autoplay = function (action) {
   if (!this._config.autoplay) {
     return;
   }
@@ -190,7 +190,8 @@ Slider.prototype._autoplay = function (action) {
     return;
   }
   if (this._intervalId === null) {
-    this._intervalId = setInterval(function () {
+    this._intervalId = setInterval(
+      function () {
         this._direction = 'next';
         this._move();
       }.bind(this),
@@ -200,7 +201,7 @@ Slider.prototype._autoplay = function (action) {
 };
 
 // добавление индикаторов
-Slider.prototype._addIndicators = function () {
+SimpleAdaptiveSlider.prototype._addIndicators = function () {
   if (this._$root.querySelector('.' + INDICATOR_WRAPPER_CLASS)) {
     return;
   }
@@ -216,7 +217,7 @@ Slider.prototype._addIndicators = function () {
 };
 
 // refresh extreme values
-Slider.prototype._refreshExtremeValues = function () {
+SimpleAdaptiveSlider.prototype._refreshExtremeValues = function () {
   var $itemList = this._$itemList;
   this._minOrder = parseInt($itemList[0].dataset.order);
   this._maxOrder = this._minOrder;
@@ -234,13 +235,13 @@ Slider.prototype._refreshExtremeValues = function () {
     } else if (order > this._maxOrder) {
       this._maxOrder = order;
       this._$itemWithMaxOrder = $item;
-      this._minTranslate = parseInt($item.dataset.translate)
+      this._minTranslate = parseInt($item.dataset.translate);
     }
   }
 };
 
 // balancing items
-Slider.prototype._balancingItems = function () {
+SimpleAdaptiveSlider.prototype._balancingItems = function () {
   if (!this._balancingItemsFlag) {
     return;
   }
@@ -263,7 +264,7 @@ Slider.prototype._balancingItems = function () {
   } else if (this._direction === 'prev') {
     var wrapperRight = wrapperRect.right;
     var $max = this._$itemWithMaxOrder;
-    let translate = this._maxTranslate;
+    var translate = this._maxTranslate;
     var clientRect = $max.getBoundingClientRect();
     if (clientRect.left > wrapperRight + halfWidthItem) {
       $max.dataset.order = this._maxOrder - count;
@@ -277,8 +278,8 @@ Slider.prototype._balancingItems = function () {
 };
 
 // adding listeners
-Slider.prototype._addEventListener = function () {
-  function onClick (e) {
+SimpleAdaptiveSlider.prototype._addEventListener = function () {
+  function onClick(e) {
     var $target = e.target;
     this._autoplay('stop');
     if ($target.classList.contains('slider__control')) {
@@ -293,33 +294,33 @@ Slider.prototype._addEventListener = function () {
     if (this._config.loop) {
       this._autoplay();
     }
-  };
-  function onTransitionStart () {
+  }
+  function onTransitionStart() {
     this._balancingItemsFlag = true;
     window.requestAnimationFrame(this._balancingItems.bind(this));
   }
-  function onTransitionEnd () {
+  function onTransitionEnd() {
     this._balancingItemsFlag = false;
   }
-  function onMouseEnter () {
+  function onMouseEnter() {
     this._autoplay('stop');
   }
-  function onMouseLeave () {
+  function onMouseLeave() {
     if (this._config.loop) {
       this._autoplay();
     }
   }
-  function onSwipeStart (e) {
+  function onSwipeStart(e) {
     this._autoplay('stop');
-    var event = (e.type.search('touch') === 0) ? e.touches[0]: e;
+    var event = e.type.search('touch') === 0 ? e.touches[0] : e;
     this.swipeStartPos = event.clientX;
     this._hasSwipeState = true;
-  };
-  function onSwipeMove (e) {
+  }
+  function onSwipeMove(e) {
     if (!this._hasSwipeState) {
       return;
     }
-    var event = (e.type.search('touch') === 0) ? e.touches[0]: e;
+    var event = e.type.search('touch') === 0 ? e.touches[0] : e;
     var diffPos = this.swipeStartPos - event.clientX;
     if (!this._config.loop) {
       if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
@@ -329,16 +330,16 @@ Slider.prototype._addEventListener = function () {
         diffPos = diffPos / 4;
       }
     }
-    var value = diffPos / this._$wrapper.getBoundingClientRect().width * 100;
+    var value = (diffPos / this._$wrapper.getBoundingClientRect().width) * 100;
     var translateX = this._transform - value;
     this._$items.classList.add(TRANSITION_NONE);
     this._$items.style.transform = 'translateX('.concat(translateX, '%)');
-  };
-  function onSwipeEnd (e) {
+  }
+  function onSwipeEnd(e) {
     if (!this._hasSwipeState) {
       return;
     }
-    var event = (e.type.search('touch') === 0) ? e.changedTouches[0]: e;
+    var event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
     var diffPos = this.swipeStartPos - event.clientX;
     if (!this._config.loop) {
       if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
@@ -348,7 +349,7 @@ Slider.prototype._addEventListener = function () {
         diffPos = diffPos / 4;
       }
     }
-    var value = diffPos / this._$wrapper.getBoundingClientRect().width * 100;
+    var value = (diffPos / this._$wrapper.getBoundingClientRect().width) * 100;
     this._$items.classList.remove(TRANSITION_NONE);
     if (value > POS_THRESHOLD) {
       this._direction = 'next';
@@ -364,8 +365,8 @@ Slider.prototype._addEventListener = function () {
     if (this._config.loop) {
       this._autoplay();
     }
-  };
-  function onDragStart (e) {
+  }
+  function onDragStart(e) {
     e.preventDefault();
   }
   function onVisibilityChange() {
@@ -404,18 +405,18 @@ Slider.prototype._addEventListener = function () {
 };
 
 // перейти к следующему слайду
-Slider.prototype.next = function () {
+SimpleAdaptiveSlider.prototype.next = function () {
   this._direction = 'next';
   this._move();
 };
 
 // перейти к предыдущему слайду
-Slider.prototype.prev = function () {
+SimpleAdaptiveSlider.prototype.prev = function () {
   this._direction = 'prev';
   this._move();
 };
 
 // управление автоматической сменой слайдов
-Slider.prototype.autoplay = function (action) {
+SimpleAdaptiveSlider.prototype.autoplay = function (action) {
   this._autoplay('stop');
 };

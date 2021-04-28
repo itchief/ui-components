@@ -1,16 +1,9 @@
 @charset "UTF-8";
 /*!
-  * Slider by Itchief v2.0.0 (https://github.com/itchief/how-to/tree/master/simple-adaptive-slider)
+  * SimpleAdaptiveSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
   * Copyright 2020 - 2021 Alexander Maltsev
-  * Licensed under MIT (https://github.com/itchief/how-to/blob/master/LICENSE)
+  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
   */
-
-/* стили для элемента body */
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
 
 /* стили для корневого элемента слайдера */
 .slider {
