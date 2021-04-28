@@ -1,11 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>JavaScript - Слайдер для сайта на чистом JavaScript</title>
-  <link rel="stylesheet" href="simple-adaptive-slider.css">
+  <title>JavaScript SimpleAdaptiveSlider - Слайдер для сайта на чистом JavaScript [Example 01]</title>
+  <!-- Подключаем CSS слайдера -->
+  <link rel="stylesheet" href="simple-adaptive-slider.min.css">
+  <script defer src="simple-adaptive-slider.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // инициализация слайдера
+      var slider = new SimpleAdaptiveSlider('.slider', {
+        loop: true,
+        autoplay: false,
+        swipe: true
+      });
+    });
+  </script>
   <style>
     /* стили для элемента body */
     body {
@@ -14,6 +26,7 @@
         sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     }
 
+    /* дополнительные стили для этого примера */
     .slider__items {
       counter-reset: slide;
     }
@@ -36,7 +49,7 @@
 </head>
 
 <body>
-
+  <!-- Разметка слайдера -->
   <div class="slider">
     <div class="slider__wrapper">
       <div class="slider__items">
@@ -57,16 +70,6 @@
     <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
     <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
   </div>
-
-  <script src="simple-adaptive-slider.js"></script>
-  <script>
-    // инициализация слайдера
-    var slider = new SimpleAdaptiveSlider('.slider', {
-      loop: true,
-      autoplay: false,
-      swipe: true
-    });
-  </script>
 </body>
 
 </html>
