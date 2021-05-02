@@ -1,4 +1,4 @@
-/*!
+/*
  * SimpleAdaptiveSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
  * Copyright 2020 - 2021 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
@@ -76,7 +76,8 @@ function SimpleAdaptiveSlider(selector, config) {
     var translate = -this._$itemList.length * 100;
     this._$itemList[count].dataset.order = -1;
     this._$itemList[count].dataset.translate = -this._$itemList.length * 100;
-    this._$itemList[count].style.transform = 'translateX('.concat(translate, '%)');
+    var transformValue = 'translateX('.concat(translate, '%)');
+    this._$itemList[count].style.transform = transformValue;
   }
   // добавляем индикаторы к слайдеру
   this._addIndicators();
@@ -91,11 +92,15 @@ function SimpleAdaptiveSlider(selector, config) {
 }
 
 // set active class
-SimpleAdaptiveSlider.prototype._setActiveClass = function () {
+SimpleAdaptiveSlider.prototype._setActiveClass = function() {
   // slides
-  for (var i = 0, length = this._$itemList.length; i < length; i++) {
-    var $item = this._$itemList[i];
-    var index = parseInt($item.dataset.index);
+  var i;
+  var length;
+  var $item;
+  var index;
+  for (i = 0, length = this._$itemList.length; i < length; i++) {
+    $item = this._$itemList[i];
+    index = parseInt($item.dataset.index);
     if (this._currentIndex === index) {
       $item.classList.add(ITEM_CLASS_ACTIVE);
     } else {
@@ -105,9 +110,9 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function () {
   // indicators
   var $indicators = this._$root.querySelectorAll('.' + INDICATOR_ITEM_CLASS);
   if ($indicators.length) {
-    for (var i = 0, length = $indicators.length; i < length; i++) {
-      var $item = $indicators[i];
-      var index = parseInt($item.dataset.slideTo);
+    for (i = 0, length = $indicators.length; i < length; i++) {
+      $item = $indicators[i];
+      index = parseInt($item.dataset.slideTo);
       if (this._currentIndex === index) {
         $item.classList.add(INDICATOR_ITEM_CLASS_ACTIVE);
       } else {
@@ -121,7 +126,7 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function () {
     return;
   }
   if (this._config.loop) {
-    for (var i = 0, length = $controls.length; i < length; i++) {
+    for (i = 0, length = $controls.length; i < length; i++) {
       $controls[i].classList.add(CONTROL_CLASS_SHOW);
     }
   } else {
@@ -139,14 +144,15 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function () {
 };
 
 // смена слайдов
-SimpleAdaptiveSlider.prototype._move = function () {
+SimpleAdaptiveSlider.prototype._move = function() {
   if (this._direction === 'none') {
     this._$items.classList.remove(TRANSITION_NONE);
     this._$items.style.transform = 'translateX('.concat(this._transform, '%)');
     return;
   }
   if (!this._config.loop) {
-    if (this._currentIndex + 1 >= this._$itemList.length && this._direction === 'next') {
+    var condition = this._currentIndex + 1 >= this._$itemList.length;
+    if (condition && this._direction === 'next') {
       this._autoplay('stop');
       return;
     }
@@ -171,7 +177,7 @@ SimpleAdaptiveSlider.prototype._move = function () {
 };
 
 // функция для перемещения к слайду по индексу
-SimpleAdaptiveSlider.prototype._moveTo = function (index) {
+SimpleAdaptiveSlider.prototype._moveTo = function(index) {
   var currentIndex = this._currentIndex;
   this._direction = index > currentIndex ? 'next' : 'prev';
   for (var i = 0; i < Math.abs(index - currentIndex); i++) {
@@ -180,7 +186,7 @@ SimpleAdaptiveSlider.prototype._moveTo = function (index) {
 };
 
 // метод для автоматической смены слайдов
-SimpleAdaptiveSlider.prototype._autoplay = function (action) {
+SimpleAdaptiveSlider.prototype._autoplay = function(action) {
   if (!this._config.autoplay) {
     return;
   }
@@ -190,18 +196,17 @@ SimpleAdaptiveSlider.prototype._autoplay = function (action) {
     return;
   }
   if (this._intervalId === null) {
-    this._intervalId = setInterval(
-      function () {
-        this._direction = 'next';
-        this._move();
-      }.bind(this),
-      this._config.interval
+    this._intervalId = setInterval(function() {
+      this._direction = 'next';
+      this._move();
+    }.bind(this),
+    this._config.interval
     );
   }
 };
 
 // добавление индикаторов
-SimpleAdaptiveSlider.prototype._addIndicators = function () {
+SimpleAdaptiveSlider.prototype._addIndicators = function() {
   if (this._$root.querySelector('.' + INDICATOR_WRAPPER_CLASS)) {
     return;
   }
@@ -217,7 +222,7 @@ SimpleAdaptiveSlider.prototype._addIndicators = function () {
 };
 
 // refresh extreme values
-SimpleAdaptiveSlider.prototype._refreshExtremeValues = function () {
+SimpleAdaptiveSlider.prototype._refreshExtremeValues = function() {
   var $itemList = this._$itemList;
   this._minOrder = parseInt($itemList[0].dataset.order);
   this._maxOrder = this._minOrder;
@@ -241,7 +246,7 @@ SimpleAdaptiveSlider.prototype._refreshExtremeValues = function () {
 };
 
 // balancing items
-SimpleAdaptiveSlider.prototype._balancingItems = function () {
+SimpleAdaptiveSlider.prototype._balancingItems = function() {
   if (!this._balancingItemsFlag) {
     return;
   }
@@ -249,11 +254,13 @@ SimpleAdaptiveSlider.prototype._balancingItems = function () {
   var wrapperRect = $wrapper.getBoundingClientRect();
   var halfWidthItem = wrapperRect.width / 2;
   var count = this._$itemList.length;
+  var translate;
+  var clientRect;
   if (this._direction === 'next') {
     var wrapperLeft = wrapperRect.left;
     var $min = this._$itemWithMinOrder;
-    var translate = this._minTranslate;
-    var clientRect = $min.getBoundingClientRect();
+    translate = this._minTranslate;
+    clientRect = $min.getBoundingClientRect();
     if (clientRect.right < wrapperLeft - halfWidthItem) {
       $min.dataset.order = this._minOrder + count;
       translate += count * 100;
@@ -264,8 +271,8 @@ SimpleAdaptiveSlider.prototype._balancingItems = function () {
   } else if (this._direction === 'prev') {
     var wrapperRight = wrapperRect.right;
     var $max = this._$itemWithMaxOrder;
-    var translate = this._maxTranslate;
-    var clientRect = $max.getBoundingClientRect();
+    translate = this._maxTranslate;
+    clientRect = $max.getBoundingClientRect();
     if (clientRect.left > wrapperRight + halfWidthItem) {
       $max.dataset.order = this._maxOrder - count;
       translate -= count * 100;
@@ -278,7 +285,7 @@ SimpleAdaptiveSlider.prototype._balancingItems = function () {
 };
 
 // adding listeners
-SimpleAdaptiveSlider.prototype._addEventListener = function () {
+SimpleAdaptiveSlider.prototype._addEventListener = function() {
   function onClick(e) {
     var $target = e.target;
     this._autoplay('stop');
@@ -382,8 +389,10 @@ SimpleAdaptiveSlider.prototype._addEventListener = function () {
   this._$root.addEventListener('click', onClick.bind(this));
   // transitionstart and transitionend
   if (this._config.loop) {
-    this._$items.addEventListener('transitionstart', onTransitionStart.bind(this));
-    this._$items.addEventListener('transitionend', onTransitionEnd.bind(this));
+    this._$items.addEventListener('transitionstart',
+        onTransitionStart.bind(this));
+    this._$items.addEventListener('transitionend',
+        onTransitionEnd.bind(this));
   }
   // mouseenter and mouseleave
   if (this._config.autoplay) {
@@ -392,8 +401,8 @@ SimpleAdaptiveSlider.prototype._addEventListener = function () {
   }
   // swipe
   if (this._config.swipe) {
-    this._$root.addEventListener('touchstart', onSwipeStart.bind(this), { passive: true });
-    this._$root.addEventListener('touchmove', onSwipeMove.bind(this), { passive: true });
+    this._$root.addEventListener('touchstart', onSwipeStart.bind(this));
+    this._$root.addEventListener('touchmove', onSwipeMove.bind(this));
     this._$root.addEventListener('mousedown', onSwipeStart.bind(this));
     this._$root.addEventListener('mousemove', onSwipeMove.bind(this));
     document.addEventListener('touchend', onSwipeEnd.bind(this));
@@ -405,18 +414,18 @@ SimpleAdaptiveSlider.prototype._addEventListener = function () {
 };
 
 // перейти к следующему слайду
-SimpleAdaptiveSlider.prototype.next = function () {
+SimpleAdaptiveSlider.prototype.next = function() {
   this._direction = 'next';
   this._move();
 };
 
 // перейти к предыдущему слайду
-SimpleAdaptiveSlider.prototype.prev = function () {
+SimpleAdaptiveSlider.prototype.prev = function() {
   this._direction = 'prev';
   this._move();
 };
 
 // управление автоматической сменой слайдов
-SimpleAdaptiveSlider.prototype.autoplay = function (action) {
+SimpleAdaptiveSlider.prototype.autoplay = function(action) {
   this._autoplay('stop');
 };
