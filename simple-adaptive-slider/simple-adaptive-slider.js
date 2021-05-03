@@ -286,6 +286,7 @@ SimpleAdaptiveSlider.prototype._balancingItems = function() {
 
 // adding listeners
 SimpleAdaptiveSlider.prototype._addEventListener = function() {
+  var $items = this._$items;
   function onClick(e) {
     var $target = e.target;
     this._autoplay('stop');
@@ -389,10 +390,8 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   this._$root.addEventListener('click', onClick.bind(this));
   // transitionstart and transitionend
   if (this._config.loop) {
-    this._$items.addEventListener('transitionstart',
-        onTransitionStart.bind(this));
-    this._$items.addEventListener('transitionend',
-        onTransitionEnd.bind(this));
+    $items.addEventListener('transitionstart', onTransitionStart.bind(this));
+    $items.addEventListener('transitionend', onTransitionEnd.bind(this));
   }
   // mouseenter and mouseleave
   if (this._config.autoplay) {
