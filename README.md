@@ -1,2 +1,2 @@
 # UI Components
-Code snippets for HTML, CSS and JavaScript.
+UI Components - это набор адаптивных компонентов с открытым исходным кодом для создания пользовательского интерфейса сайтов и веб-приложений.
