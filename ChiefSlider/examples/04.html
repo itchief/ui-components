@@ -4,13 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>chiefSlider - Example 1</title>
-  <link rel="stylesheet" href="../chiefslider.css">
-  <script defer src="../chiefslider.js"></script>
+  <title>chiefSlider - Example 4</title>
+  <link rel="stylesheet" href="../chief-slider.css">
+  <script src="../chief-slider.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const slider = new ChiefSlider('.slider', {
-        loop: false
+      new ChiefSlider('.slider', {
+        loop: true,
+        autoplay: true,
+        interval: 5000,
       });
     });
   </script>
@@ -39,8 +41,8 @@
     }
 
     .slider__item {
-      flex: 0 0 100%;
-      max-width: 100%;
+      flex: 0 0 50%;
+      max-width: 50%;
     }
 
     .slider__item-container {
@@ -111,6 +113,13 @@
       </div>
       <a href="#" class="slider__control" data-slide="prev"></a>
       <a href="#" class="slider__control" data-slide="next"></a>
+      <ol class="slider__indicators">
+        <li data-slide-to="0"></li>
+        <li data-slide-to="1"></li>
+        <li data-slide-to="2"></li>
+        <li data-slide-to="3"></li>
+        <li data-slide-to="4"></li>
+      </ol>
     </div>
 
   </div>

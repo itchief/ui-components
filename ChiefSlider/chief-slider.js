@@ -73,7 +73,7 @@ function ChiefSlider(selector, config) {
   this._transform = 0;
   // swipe параметры
   this._hasSwipeState = false;
-  this._swipeStartPos = 0;
+  this.__swipeStartPos = 0;
   // slider properties
   this._transform = 0; // текущее значение трансформации
   this._intervalId = null;
@@ -132,6 +132,7 @@ function ChiefSlider(selector, config) {
 ChiefSlider.prototype._addEventListener = function() {
   var $root = this._$root;
   var $items = this._$items;
+  var config = this._config;
   function onClick(e) {
     var $target = e.target;
     this._autoplay('stop');
@@ -164,56 +165,64 @@ ChiefSlider.prototype._addEventListener = function() {
     window.requestAnimationFrame(this._refresh.bind(this));
   }
   function onSwipeStart(e) {
-    this._touchStartCoord = e.changedTouches[0].clientX;
+    this._autoplay('stop');
+    var event = e.type.search('touch') === 0 ? e.touches[0] : e;
+    this._swipeStartPos = event.clientX;
+    this._hasSwipeState = true;
   }
   function onSwipeEnd(e) {
-    var touchEndCoord = e.changedTouches[0].clientX;
-    var delta = touchEndCoord - this._touchStartCoord;
-    if (delta > 50) {
-      this._moveToPrev();
-    } else if (delta < -50) {
-      this._moveToNext();
+    if (!this._hasSwipeState) {
+      return;
+    }
+    var event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
+    var diffPos = this._swipeStartPos - event.clientX;
+    if (diffPos > 50) {
+      this._direction = 'next';
+      this._move();
+    } else if (diffPos < -50) {
+      this._direction = 'prev';
+      this._move();
+    }
+    this._hasSwipeState = false;
+    if (this._config.loop) {
+      this._autoplay();
     }
   }
+  function onDragStart(e) {
+    e.preventDefault();
+  }
+  function onVisibilityChange() {
+    if (document.visibilityState === 'hidden') {
+      this._autoplay('stop');
+    } else if (document.visibilityState === 'visible') {
+      if (this._config.loop) {
+        this._autoplay();
+      }
+    }
+  }
+
   $root.addEventListener('click', onClick.bind(this));
   $root.addEventListener('mouseenter', onMouseEnter.bind(this));
   $root.addEventListener('mouseleave', onMouseLeave.bind(this));
   // on resize
-  if (this._config.refresh) {
+  if (config.refresh) {
     window.addEventListener('resize', onResize.bind(this));
   }
   // on transitionstart and transitionend
-  if (this._config.loop) {
+  if (config.loop) {
     $items.addEventListener('transitionstart', onTransitionStart.bind(this));
     $items.addEventListener('transitionend', onTransitionEnd.bind(this));
   }
   // on touchstart and touchend
-  if (this._config.swipe) {
+  if (config.swipe) {
     $root.addEventListener('touchstart', onSwipeStart.bind(this));
-    $root.addEventListener('touchend', onSwipeEnd.bind(this));
+    $root.addEventListener('mousedown', onSwipeStart.bind(this));
+    document.addEventListener('touchend', onSwipeEnd.bind(this));
+    document.addEventListener('mouseup', onSwipeEnd.bind(this));
   }
-
-  // on mousedown and mouseup
-  if (!this._isTouchDevice && this._config.swipe) {
-    $root.addEventListener(
-        'mousedown',
-        function(e) {
-          this._touchStartCoord = e.clientX;
-        }.bind(this)
-    );
-    $root.addEventListener(
-        'mouseup',
-        function(e) {
-          var touchEndCoord = e.clientX;
-          var delta = touchEndCoord - this._touchStartCoord;
-          if (delta > 50) {
-            this._moveToPrev();
-          } else if (delta < -50) {
-            this._moveToNext();
-          }
-        }.bind(this)
-    );
-  }
+  $root.addEventListener('dragstart', onDragStart.bind(this));
+  // при изменении активности вкладки
+  document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
 };
 
 // update values of extreme properties

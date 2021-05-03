@@ -321,7 +321,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   function onSwipeStart(e) {
     this._autoplay('stop');
     var event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    this.swipeStartPos = event.clientX;
+    this._swipeStartPos = event.clientX;
     this._hasSwipeState = true;
   }
   function onSwipeMove(e) {
@@ -329,7 +329,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
       return;
     }
     var event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    var diffPos = this.swipeStartPos - event.clientX;
+    var diffPos = this._swipeStartPos - event.clientX;
     if (!this._config.loop) {
       if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
         diffPos = diffPos / 4;
@@ -348,7 +348,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
       return;
     }
     var event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
-    var diffPos = this.swipeStartPos - event.clientX;
+    var diffPos = this._swipeStartPos - event.clientX;
     if (!this._config.loop) {
       if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
         diffPos = diffPos / 4;

@@ -5,7 +5,18 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>chiefSlider - Example 4</title>
-  <link rel="stylesheet" href="../chiefslider.css">
+  <link rel="stylesheet" href="../chief-slider.css">
+  <script src="../chief-slider.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      new ChiefSlider('.slider', {
+        loop: true,
+        autoplay: true,
+        interval: 5000,
+        refresh: true,
+      });
+    });
+  </script>
   <style>
     *,
     *::before,
@@ -369,18 +380,6 @@
     </div>
 
   </div>
-
-  <script src="../chiefslider.js"></script>
-
-  <script>
-    const $slider = document.querySelector('[data-slider="chiefslider"]');
-    const slider = new ChiefSlider($slider, {
-      loop: true,
-      autoplay: true,
-      interval: 5000,
-      refresh: true,
-    });
-  </script>
 </body>
 
 </html>
