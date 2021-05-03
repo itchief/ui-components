@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Toast without header (without jQuery)</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+      background-color: #fff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    .toast {
+      max-width: 350px;
+      overflow: hidden;
+      font-size: 0.875rem;
+      background-color: rgba(255, 255, 255, 0.5);
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 0.25rem;
+      box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      display: none;
+      position: relative;
+      padding: 0.75rem 2rem 0.75rem 0.75rem;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .toast:not(:last-child) {
+      margin-bottom: 0.75rem;
+    }
+
+    .toast_show {
+      display: block;
+    }
+
+    .toast__close {
+      position: absolute;
+      top: 0;
+      right: 10px;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      float: right;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: 0.6;
+      margin: 0;
+      font-family: inherit;
+      border-radius: 0;
+    }
+
+    input:not([type="checkbox"]) {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: .5rem;
+    }
+  </style>
+</head>
+
+<body style="height: 2000px;">
+
+  Текст сообщения:
+  <input name="toast-text" type="text" value="Текст сообщения...">
+  Цвет:
+  <select class="form-control" name="toast-color">
+    <option selected value="#ffffff">#ffffff</option>
+    <option value="#17a2b8">#17a2b8</option>
+    <option value="#ffc107">#ffc107</option>
+    <option value="#dc3545">#dc3545</option>
+    <option value="#28a745">#28a745</option>
+  </select>
+  <br>
+  <input name="autohide" type="checkbox"> автоматически скрывать
+  <br>
+  Закрывать сообщение через (миллисекунд):
+  <input name="toast-delay" type="text" value="5000">
+  <button id="addToast" type="button">Добавить toast</button>
+
+  <script>
+    'use strict';
+
+    var Toast = function (element, config) {
+      var
+        _this = this,
+        _element = element,
+        _config = {
+          autohide: true,
+          delay: 5000
+        };
+      for (var prop in config) {
+        _config[prop] = config[prop];
+      }
+      Object.defineProperty(this, 'element', {
+        get: function () {
+          return _element;
+        }
+      });
+      Object.defineProperty(this, 'config', {
+        get: function () {
+          return _config;
+        }
+      });
+      _element.addEventListener('click', function (e) {
+        if (e.target.classList.contains('toast__close')) {
+          _this.hide();
+        }
+      });
+    };
+
+    Toast.prototype = {
+      show: function () {
+        var _this = this;
+        this.element.classList.add('toast_show');
+        if (this.config.autohide) {
+          setTimeout(function () {
+            _this.hide();
+          }, this.config.delay)
+        }
+      },
+      hide: function () {
+        this.element.classList.remove('toast_show');
+      }
+    };
+
+    Toast.create = function (text, color) {
+      var
+        fragment = document.createDocumentFragment(),
+        toast = document.createElement('div'),
+        toastClose = document.createElement('button');
+      toast.classList.add('toast');
+      toast.style.backgroundColor = 'rgba(' + parseInt(color.substr(1, 2), 16) + ',' + parseInt(color.substr(3, 2), 16) + ',' + parseInt(color.substr(5, 2), 16) + ',0.5)';
+      toast.textContent = text;
+      toastClose.classList.add('toast__close');
+      toastClose.setAttribute('type', 'button');
+      toastClose.textContent = '×';
+      toast.appendChild(toastClose);
+      fragment.appendChild(toast);
+      return fragment;
+    };
+
+    Toast.add = function (params) {
+      var config = {
+        header: 'Название заголовка',
+        text: 'Текст сообщения...',
+        color: '#ffffff',
+        autohide: true,
+        delay: 5000
+      };
+      if (params !== undefined) {
+        for (var item in params) {
+          config[item] = params[item];
+        }
+      }
+      if (!document.querySelector('.toasts')) {
+        var container = document.createElement('div');
+        container.classList.add('toasts');
+        container.style.cssText = 'position: fixed; top: 15px; right: 15px; width: 250px;';
+        document.body.appendChild(container);
+      }
+      document.querySelector('.toasts').appendChild(Toast.create(config.text, config.color));
+      var toasts = document.querySelectorAll('.toast');
+      var toast = new Toast(toasts[toasts.length - 1], { autohide: config.autohide, delay: config.delay });
+      toast.show();
+      return toast;
+    };
+    document.querySelector('#addToast').addEventListener('click', function () {
+      /*
+        Параметры функции add:
+        text (строка) - текст сообщения
+        color (строка) - цвет в формате #rrggbb
+        autohide (булево) - скрывать ли автоматически всплывающее сообщение
+        delay (число) - количество миллисекунд после которых сообщение будет автоматически скрыто
+      */
+      Toast.add({
+        text: document.querySelector('[name="toast-text"]').value,
+        color: document.querySelector('[name="toast-color"] option:checked').value,
+        autohide: document.querySelector('[name="autohide"]').checked,
+        delay: parseInt(document.querySelector('[name="toast-delay"]').value)
+      });
+    });
+  </script>
+</body>
+
+</html>
