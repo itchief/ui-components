@@ -9,6 +9,8 @@
   "rules": {
     "no-var": "off",
     "require-jsdoc": "off",
-    "no-prototype-builtins": "off"
+    "no-prototype-builtins": "off",
+    "getter-return": "off",
+    "no-empty": "off"
   }
 }

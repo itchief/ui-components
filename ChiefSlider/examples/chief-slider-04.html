@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChiefSlider [Example 4]</title>
+  <link rel="stylesheet" href="/examples/libs/chief-slider/chief-slider.min.css">
+  <script defer src="/examples/libs/chief-slider/chief-slider.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slider = new ChiefSlider('.slider', {
+        loop: true,
+        autoplay: true,
+        interval: 7000,
+      });
+    });
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .slider__wrapper {
+      overflow: hidden;
+    }
+
+    .slider__item {
+      flex: 0 0 50%;
+      max-width: 50%;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 7rem;
+    }
+
+    .slider__item:nth-child(1) {
+      background-color: #f44336;
+    }
+
+    .slider__item:nth-child(2) {
+      background-color: #9c27b0;
+    }
+
+    .slider__item:nth-child(3) {
+      background-color: #3f51b5;
+    }
+
+    .slider__item:nth-child(4) {
+      background-color: #03a9f4;
+    }
+
+    .slider__item:nth-child(5) {
+      background-color: #4caf50;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="slider">
+      <div class="slider__wrapper">
+        <div class="slider__items">
+          <div class="slider__item">
+            <!-- Контент 1 слайда -->
+            1
+          </div>
+          <div class="slider__item">
+            <!-- Контент 2 слайда -->
+            2
+          </div>
+          <div class="slider__item">
+            <!-- Контент 3 слайда -->
+            3
+          </div>
+          <div class="slider__item">
+            <!-- Контент 4 слайда -->
+            4
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            5
+          </div>
+        </div>
+      </div>
+      <a href="#" class="slider__control" data-slide="prev"></a>
+      <a href="#" class="slider__control" data-slide="next"></a>
+      <ol class="slider__indicators">
+        <li data-slide-to="0"></li>
+        <li data-slide-to="1"></li>
+        <li data-slide-to="2"></li>
+        <li data-slide-to="3"></li>
+        <li data-slide-to="4"></li>
+      </ol>
+    </div>
+
+  </div>
+</body>
+
+</html>

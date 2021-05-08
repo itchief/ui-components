@@ -1,4 +1,4 @@
-/*
+/**
  * SimpleAdaptiveSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
  * Copyright 2020 - 2021 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
@@ -18,7 +18,7 @@ var INDICATOR_ITEM_ELEMENT = 'li';
 var INDICATOR_ITEM_CLASS = 'slider__indicator';
 var INDICATOR_ITEM_CLASS_ACTIVE = 'slider__indicator_active';
 // порог для переключения слайда (40%)
-var POS_THRESHOLD = 40;
+var SWIPE_THRESHOLD = 20;
 // класс для отключения transition
 var TRANSITION_NONE = 'transition-none';
 
@@ -48,7 +48,7 @@ function SimpleAdaptiveSlider(selector, config) {
   this._transform = 0;
   // swipe параметры
   this._hasSwipeState = false;
-  this._swipeStartPos = 0;
+  this._swipeStartPosX = 0;
   // id таймера
   this._intervalId = null;
   // конфигурация слайдера (по умолчанию)
@@ -321,24 +321,35 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   function onSwipeStart(e) {
     this._autoplay('stop');
     var event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    this._swipeStartPos = event.clientX;
+    this._swipeStartPosX = event.clientX;
+    this._swipeStartPosY = event.clientY;
     this._hasSwipeState = true;
+    this._hasSwiping = false;
   }
   function onSwipeMove(e) {
     if (!this._hasSwipeState) {
       return;
     }
     var event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    var diffPos = this._swipeStartPos - event.clientX;
-    if (!this._config.loop) {
-      if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
-        diffPos = diffPos / 4;
+    var diffPosX = this._swipeStartPosX - event.clientX;
+    var diffPosY = this._swipeStartPosY - event.clientY;
+    if (!this._hasSwiping) {
+      if (Math.abs(diffPosY) > Math.abs(diffPosX)) {
+        this._hasSwipeState = false;
+        return;
       }
-      if (this._currentIndex <= 0 && diffPos <= 0) {
-        diffPos = diffPos / 4;
+      this._hasSwiping = true;
+    }
+    e.preventDefault();
+    if (!this._config.loop) {
+      if (this._currentIndex + 1 >= this._$itemList.length && diffPosX >= 0) {
+        diffPosX = diffPosX / 4;
+      }
+      if (this._currentIndex <= 0 && diffPosX <= 0) {
+        diffPosX = diffPosX / 4;
       }
     }
-    var value = (diffPos / this._$wrapper.getBoundingClientRect().width) * 100;
+    var value = (diffPosX / this._$wrapper.getBoundingClientRect().width) * 100;
     var translateX = this._transform - value;
     this._$items.classList.add(TRANSITION_NONE);
     this._$items.style.transform = 'translateX('.concat(translateX, '%)');
@@ -348,21 +359,21 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
       return;
     }
     var event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
-    var diffPos = this._swipeStartPos - event.clientX;
+    var diffPosX = this._swipeStartPosX - event.clientX;
     if (!this._config.loop) {
-      if (this._currentIndex + 1 >= this._$itemList.length && diffPos >= 0) {
-        diffPos = diffPos / 4;
+      if (this._currentIndex + 1 >= this._$itemList.length && diffPosX >= 0) {
+        diffPosX = diffPosX / 4;
       }
-      if (this._currentIndex <= 0 && diffPos <= 0) {
-        diffPos = diffPos / 4;
+      if (this._currentIndex <= 0 && diffPosX <= 0) {
+        diffPosX = diffPosX / 4;
       }
     }
-    var value = (diffPos / this._$wrapper.getBoundingClientRect().width) * 100;
+    var value = (diffPosX / this._$wrapper.getBoundingClientRect().width) * 100;
     this._$items.classList.remove(TRANSITION_NONE);
-    if (value > POS_THRESHOLD) {
+    if (value > SWIPE_THRESHOLD) {
       this._direction = 'next';
       this._move();
-    } else if (value < -POS_THRESHOLD) {
+    } else if (value < -SWIPE_THRESHOLD) {
       this._direction = 'prev';
       this._move();
     } else {
@@ -400,8 +411,19 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   }
   // swipe
   if (this._config.swipe) {
-    this._$root.addEventListener('touchstart', onSwipeStart.bind(this));
-    this._$root.addEventListener('touchmove', onSwipeMove.bind(this));
+    var supportsPassive = false;
+    try {
+      var opts = Object.defineProperty({}, 'passive', {
+        get: function() {
+          supportsPassive = true;
+        },
+      });
+      window.addEventListener('testPassiveListener', null, opts);
+    } catch (err) {}
+    this._$root.addEventListener('touchstart', onSwipeStart.bind(this),
+         supportsPassive ? {passive: false} : false);
+    this._$root.addEventListener('touchmove', onSwipeMove.bind(this),
+         supportsPassive ? {passive: false} : false);
     this._$root.addEventListener('mousedown', onSwipeStart.bind(this));
     this._$root.addEventListener('mousemove', onSwipeMove.bind(this));
     document.addEventListener('touchend', onSwipeEnd.bind(this));

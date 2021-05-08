@@ -1,4 +1,4 @@
-/*
+/**
  * ChiefSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
  * Copyright 2020 - 2021 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
@@ -31,20 +31,6 @@ var CLASS_CONTROL_HIDE = 'slider__control_hide';
 var CLASS_ITEM_ACTIVE = 'slider__item_active';
 var CLASS_INDICATOR_ACTIVE = 'active';
 
-function hasTouchDevice() {
-  return !!('ontouchstart' in window || navigator.maxTouchPoints);
-}
-
-function hasElementInVew($elem) {
-  var rect = $elem.getBoundingClientRect();
-  var windowHeight = window.innerHeight ||
-    document.documentElement.clientHeight;
-  var windowWidth = window.innerWidth || document.documentElement.clientWidth;
-  var vertInView = rect.top <= windowHeight && rect.top + rect.height >= 0;
-  var horInView = rect.left <= windowWidth && rect.left + rect.width >= 0;
-  return vertInView && horInView;
-}
-
 function ChiefSlider(selector, config) {
   // элементы слайдера
   var $root = typeof selector === 'string' ?
@@ -68,7 +54,6 @@ function ChiefSlider(selector, config) {
   // determines whether the position of item needs to be determined
   this._balancingItemsFlag = false;
   this._activeItems = [];
-  this._isTouchDevice = hasTouchDevice();
   // текущее значение трансформации
   this._transform = 0;
   // swipe параметры
@@ -325,9 +310,6 @@ ChiefSlider.prototype._updateIndicators = function() {
 
 // move slides
 ChiefSlider.prototype._move = function() {
-  if (!hasElementInVew(this._$root)) {
-    return;
-  }
   var step = this._direction ===
    'next' ? -this._transformStep : this._transformStep;
   var transform = this._transform + step;

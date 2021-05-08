@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>JavaScript - Как сделать слайдер для сайта</title>
+  <link rel="stylesheet" href="/examples/libs/chiefslider/chiefslider.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .slider__container {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .slider__item {
+      flex: 0 0 33.3333333333%;
+      max-width: 33.3333333333%;
+    }
+
+    .slider__item-container {
+      line-height: 250px;
+      font-size: 100px;
+      text-align: center;
+      height: 250px;
+      color: #fff;
+    }
+
+    .slider__item:nth-child(1) .slider__item-content {
+      background-color: #f44336;
+    }
+
+    .slider__item:nth-child(2) .slider__item-content {
+      background-color: #9c27b0;
+    }
+
+    .slider__item:nth-child(3) .slider__item-content {
+      background-color: #3f51b5;
+    }
+
+    .slider__item:nth-child(4) .slider__item-content {
+      background-color: #03a9f4;
+    }
+
+    .slider__item:nth-child(5) .slider__item-content {
+      background-color: #4caf50;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <div class="container">
+
+    <div class="slider" data-slider="chiefslider">
+      <div class="slider__container">
+        <div class="slider__wrapper">
+          <div class="slider__items">
+            <div class="slider__item">
+              <div class="slider__item-container">
+                <div class="slider__item-content">1</div>
+              </div>
+            </div>
+            <div class="slider__item">
+              <div class="slider__item-container">
+                <div class="slider__item-content">2</div>
+              </div>
+            </div>
+            <div class="slider__item">
+              <div class="slider__item-container">
+                <div class="slider__item-content">3</div>
+              </div>
+            </div>
+            <div class="slider__item">
+              <div class="slider__item-container">
+                <div class="slider__item-content">4</div>
+              </div>
+            </div>
+            <div class="slider__item">
+              <div class="slider__item-container">
+                <div class="slider__item-content">5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a href="#" class="slider__control" data-slide="prev"></a>
+      <a href="#" class="slider__control" data-slide="next"></a>
+    </div>
+
+  </div>
+
+  <script src="/examples/libs/chiefslider/chiefslider.js"></script>
+
+  <script>
+    const $slider = document.querySelector('[data-slider="chiefslider"]');
+    const slider = new ChiefSlider($slider, {
+      loop: false
+    });
+  </script>
+</body>
+
+</html>
