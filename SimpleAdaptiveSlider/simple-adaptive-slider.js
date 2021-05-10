@@ -4,6 +4,17 @@
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
 
+(function() {
+  if (typeof window.CustomEvent === 'function' ) return false;
+  function CustomEvent(event, params) {
+    params = params || {bubbles: false, cancelable: false, detail: null};
+    var e = document.createEvent('CustomEvent');
+    e.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
+    return e;
+  }
+  window.CustomEvent = CustomEvent;
+})();
+
 // базовые классы и селекторы
 var WRAPPER_SELECTOR = '.slider__wrapper';
 var ITEMS_SELECTOR = '.slider__items';
@@ -309,6 +320,8 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   }
   function onTransitionEnd() {
     this._balancingItemsFlag = false;
+    this._$root.dispatchEvent(new CustomEvent('slid.saslider',
+        {bubbles: true}));
   }
   function onMouseEnter() {
     this._autoplay('stop');
