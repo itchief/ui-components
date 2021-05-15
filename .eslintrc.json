@@ -11,6 +11,7 @@
     "require-jsdoc": "off",
     "no-prototype-builtins": "off",
     "getter-return": "off",
-    "no-empty": "off"
+    "no-empty": "off",
+    "max-len": "off"
   }
 }
