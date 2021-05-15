@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChiefSlider [Example 2]</title>
+  <link rel="stylesheet" href="../chief-slider.css">
+  <script defer src="../chief-slider.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slider = new ChiefSlider('.slider', {
+        loop: false
+      });
+    });
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .slider__wrapper {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .slider__items {
+      width: 100%;
+    }
+
+    .slider__item {
+      flex: 0 0 33.3333333333%;
+      max-width: 33.3333333333%;
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 7rem;
+    }
+
+    .slider__item:nth-child(1) {
+      background-color: #f44336;
+    }
+
+    .slider__item:nth-child(2) {
+      background-color: #9c27b0;
+    }
+
+    .slider__item:nth-child(3) {
+      background-color: #3f51b5;
+    }
+
+    .slider__item:nth-child(4) {
+      background-color: #03a9f4;
+    }
+
+    .slider__item:nth-child(5) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(6) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(7) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(8) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(9) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(10) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(11) {
+      background-color: #4caf50;
+    }
+
+    .slider__item:nth-child(12) {
+      background-color: #4caf50;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="slider">
+      <div class="slider__wrapper">
+        <div class="slider__items">
+          <div class="slider__item">
+            <!-- Контент 1 слайда -->
+            1
+          </div>
+          <div class="slider__item">
+            <!-- Контент 2 слайда -->
+            2
+          </div>
+          <div class="slider__item">
+            <!-- Контент 3 слайда -->
+            3
+          </div>
+          <div class="slider__item">
+            <!-- Контент 4 слайда -->
+            4
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            5
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            6
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            7
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            8
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            9
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            10
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            11
+          </div>
+          <div class="slider__item">
+            <!-- Контент 5 слайда -->
+            12
+          </div>
+        </div>
+      </div>
+      <a href="#" class="slider__control" data-slide="prev"></a>
+      <a href="#" class="slider__control" data-slide="next"></a>
+    </div>
+
+  </div>
+</body>
+
+</html>

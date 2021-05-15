@@ -316,6 +316,7 @@ ChiefSlider.prototype._move = function() {
   if (!this._config.loop) {
     var endTransformValue =
       this._transformStep * (this._$itemList.length - this._itemsInVisibleArea);
+    transform = Math.round(transform * 10) / 10;
     if (transform < -endTransformValue || transform > 0) {
       return;
     }
