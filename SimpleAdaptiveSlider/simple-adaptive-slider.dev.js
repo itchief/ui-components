@@ -124,6 +124,8 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function() {
       $item.classList.remove(ITEM_CLASS_ACTIVE);
     }
   }
+  this._$root.dispatchEvent(new CustomEvent('slider.set.active',
+      {bubbles: true}));
   // indicators
   var $indicators = this._$root.querySelectorAll('.' + INDICATOR_ITEM_CLASS);
   if ($indicators.length) {

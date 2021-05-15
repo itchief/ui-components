@@ -320,7 +320,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   }
   function onTransitionEnd() {
     this._balancingItemsFlag = false;
-    this._$root.dispatchEvent(new CustomEvent('slid.saslider',
+    this._$root.dispatchEvent(new CustomEvent('slider.transition.end',
         {bubbles: true}));
   }
   function onMouseEnter() {

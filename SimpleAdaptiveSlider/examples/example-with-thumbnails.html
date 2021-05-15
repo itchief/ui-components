@@ -31,7 +31,7 @@
         }
       }
       setActiveThumbnail();
-      document.querySelector('.slider').addEventListener('slid.saslider', setActiveThumbnail);
+      document.querySelector('.slider').addEventListener('slider.set.active', setActiveThumbnail);
       var sliderThumbnails = document.querySelector('.slider__thumbnails');
       sliderThumbnails.addEventListener('click', function(e) {
         $target = e.target.closest('.slider__thumbnails-item');
