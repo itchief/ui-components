@@ -6,18 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ChiefSlider [Example 1]</title>
   <link rel="stylesheet" href="../chief-slider.css">
-  <script defer src="../chief-slider.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const slider = new ChiefSlider('.slider', {
-        loop: false
-      });
-    });
-  </script>
   <style>
     *,
     *::before,
     *::after {
+      -webkit-box-sizing: border-box;
       box-sizing: border-box;
     }
 
@@ -43,6 +36,8 @@
     }
 
     .slider__item {
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
       flex: 0 0 100%;
       max-width: 100%;
       counter-increment: slide;
@@ -82,6 +77,14 @@
       background-color: #4caf50;
     }
   </style>
+  <script defer src="../chief-slider.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const slider = new ChiefSlider('.slider', {
+        loop: false
+      });
+    });
+  </script>
 </head>
 
 <body>
