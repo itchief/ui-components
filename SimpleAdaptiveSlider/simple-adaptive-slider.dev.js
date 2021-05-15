@@ -80,6 +80,7 @@ function SimpleAdaptiveSlider(selector, config) {
       this._config[key] = config[key];
     }
   }
+  this._$items.dataset.translate = 0;
   // добавляем к слайдам data-атрибуты
   for (var i = 0, length = this._$itemList.length; i < length; i++) {
     this._$itemList[i].dataset.order = i;
@@ -89,11 +90,10 @@ function SimpleAdaptiveSlider(selector, config) {
   // перемещаем последний слайд перед первым
   if (this._config.loop) {
     var count = this._$itemList.length - 1;
-    var translate = -this._$itemList.length * 100;
+    var translate = -this._$itemList.length;
     this._$itemList[count].dataset.order = -1;
-    this._$itemList[count].dataset.translate = -this._$itemList.length * 100;
-    // var transformValue = 'translateX('.concat(translate, '%)');
-    var translateX = translate / 100 * this._width;
+    this._$itemList[count].dataset.translate = -this._$itemList.length;
+    var translateX = translate * this._width;
     this._$itemList[count].style.transform = 'translateX(' + translateX + 'px)';
   }
   // добавляем индикаторы к слайдеру
@@ -162,9 +162,10 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function() {
 
 // смена слайдов
 SimpleAdaptiveSlider.prototype._move = function() {
+  var translateX;
+  this._$items.classList.remove(TRANSITION_NONE);
   if (this._direction === 'none') {
-    this._$items.classList.remove(TRANSITION_NONE);
-    var translateX = this._transform / 100 * this._width;
+    translateX = this._transform * this._width;
     this._$items.style.transform = 'translateX(' + translateX + 'px)';
     return;
   }
@@ -178,7 +179,7 @@ SimpleAdaptiveSlider.prototype._move = function() {
       return;
     }
   }
-  var step = this._direction === 'next' ? -100 : 100;
+  var step = this._direction === 'next' ? -1 : 1;
   var transform = this._transform + step;
   if (this._direction === 'next') {
     if (++this._currentIndex > this._$itemList.length - 1) {
@@ -190,7 +191,8 @@ SimpleAdaptiveSlider.prototype._move = function() {
     }
   }
   this._transform = transform;
-  translateX = transform / 100 * this._width;
+  this._$items.dataset.translate = transform;
+  translateX = transform * this._width;
   this._$items.style.transform = 'translateX(' + translateX + 'px)';
   this._setActiveClass();
 };
@@ -283,9 +285,9 @@ SimpleAdaptiveSlider.prototype._balancingItems = function() {
     clientRect = $min.getBoundingClientRect();
     if (clientRect.right < wrapperLeft - halfWidthItem) {
       $min.dataset.order = this._minOrder + count;
-      translate += count * 100;
+      translate += count;
       $min.dataset.translate = translate;
-      translateX = translate / 100 * this._width;
+      translateX = translate * this._width;
       $min.style.transform = 'translateX(' + translateX + 'px)';
       this._refreshExtremeValues();
     }
@@ -296,9 +298,9 @@ SimpleAdaptiveSlider.prototype._balancingItems = function() {
     clientRect = $max.getBoundingClientRect();
     if (clientRect.left > wrapperRight + halfWidthItem) {
       $max.dataset.order = this._maxOrder - count;
-      translate -= count * 100;
+      translate -= count;
       $max.dataset.translate = translate;
-      translateX = translate / 100 * this._width;
+      translateX = translate * this._width;
       $max.style.transform = 'translateX(' + translateX + 'px)';
       this._refreshExtremeValues();
     }
@@ -344,6 +346,9 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   }
   function onSwipeStart(e) {
     this._autoplay('stop');
+    if (e.target.closest('.slider__control')) {
+      return;
+    }
     var event = e.type.search('touch') === 0 ? e.touches[0] : e;
     this._swipeStartPosX = event.clientX;
     this._swipeStartPosY = event.clientY;
@@ -358,7 +363,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     var diffPosX = this._swipeStartPosX - event.clientX;
     var diffPosY = this._swipeStartPosY - event.clientY;
     if (!this._hasSwiping) {
-      if (Math.abs(diffPosY) > Math.abs(diffPosX)) {
+      if (Math.abs(diffPosY) > Math.abs(diffPosX) || Math.abs(diffPosX) === 0) {
         this._hasSwipeState = false;
         return;
       }
@@ -373,10 +378,10 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
         diffPosX = diffPosX / 4;
       }
     }
-    var value = (diffPosX / this._$wrapper.getBoundingClientRect().width) * 100;
+    var value = (diffPosX / this._$wrapper.getBoundingClientRect().width);
     var translateX = this._transform - value;
     this._$items.classList.add(TRANSITION_NONE);
-    translateX = translateX / 100 * this._width;
+    translateX = translateX * this._width;
     this._$items.style.transform = 'translateX(' + translateX + 'px)';
   }
   function onSwipeEnd(e) {
@@ -385,12 +390,16 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     }
     var event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
     var diffPosX = this._swipeStartPosX - event.clientX;
+    if (diffPosX === 0) {
+      this._hasSwipeState = false;
+      return;
+    }
     if (!this._config.loop) {
       if (this._currentIndex + 1 >= this._$itemList.length && diffPosX >= 0) {
-        diffPosX = diffPosX / 4;
+        diffPosX = diffPosX / 7;
       }
       if (this._currentIndex <= 0 && diffPosX <= 0) {
-        diffPosX = diffPosX / 4;
+        diffPosX = diffPosX / 7;
       }
     }
     var value = (diffPosX / this._$wrapper.getBoundingClientRect().width) * 100;
@@ -398,12 +407,15 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     if (value > SWIPE_THRESHOLD) {
       this._direction = 'next';
       this._move();
+      console.log('next');
     } else if (value < -SWIPE_THRESHOLD) {
       this._direction = 'prev';
       this._move();
+      console.log('prev');
     } else {
       this._direction = 'none';
       this._move();
+      console.log('none');
     }
     this._hasSwipeState = false;
     if (this._config.loop) {
@@ -458,31 +470,32 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   // при изменении активности вкладки
   document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
 
+  function onResizeObserver(entries) {
+    var contentBoxSize = entries[0].contentBoxSize;
+    var contentRect = entries[0].contentRect;
+    var newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
+    var newTranslateX;
+    if (this._width.toFixed(1) === newWidth.toFixed(1)) {
+      return;
+    }
+    this._autoplay('stop');
+    this._$items.classList.add(TRANSITION_NONE);
+    this._width = parseInt(newWidth.toFixed(1), 10);
+    console.log(this._$items.dataset.translate);
+    newTranslateX = newWidth * parseInt(this._$items.dataset.translate, 10);
+    this._$items.style.transform = 'translateX(' + newTranslateX + 'px)';
+    var $items = this._$itemList;
+    for (var i = 0; i < $items.length; i++) {
+      var translateX = parseInt($items[i].dataset.translate);
+      newTranslateX = translateX * newWidth;
+      $items[i].style.transform = 'translateX(' + newTranslateX + 'px)';
+    }
+    if (this._config.loop) {
+      this._autoplay();
+    }
+  }
   if (this._supportResizeObserver) {
-    var that = this;
-    var resizeObserver = new ResizeObserver(function(entries) {
-      var contentBoxSize = entries[0].contentBoxSize;
-      var contentRect = entries[0].contentRect;
-      var newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
-      if (that._width.toFixed(1) !== newWidth.toFixed(1)) {
-        var style = window.getComputedStyle(that._$items);
-        var matrix = new WebKitCSSMatrix(style.transform);
-        var translateX = matrix.m41;
-        var ratio = newWidth.toFixed(1) / that._width.toFixed(1);
-        console.log(translateX);
-        console.log(ratio);
-        var newtranslateX = translateX * ratio;
-        that._$items.classList.add(TRANSITION_NONE);
-        that._$items.style.transform = 'translateX(' + newtranslateX + 'px)';
-        var $items = that._$itemList;
-        for (var i = 0; i < $items.length; i++) {
-          var translateX = parseInt($items[i].dataset.translate);
-          var newtranslateX = translateX * ratio;
-          var newtranslateX = translateX * ratio;
-          that._$items.style.transform = 'translateX(' + newtranslateX + 'px)';
-        }
-      }
-    });
+    var resizeObserver = new ResizeObserver(onResizeObserver.bind(this));
     resizeObserver.observe(this._$wrapper);
     return;
   }
@@ -503,4 +516,8 @@ SimpleAdaptiveSlider.prototype.prev = function() {
 // управление автоматической сменой слайдов
 SimpleAdaptiveSlider.prototype.autoplay = function(action) {
   this._autoplay('stop');
+};
+
+SimpleAdaptiveSlider.prototype.moveTo = function(index) {
+  this._moveTo(index);
 };
