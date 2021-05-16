@@ -196,6 +196,7 @@ SimpleAdaptiveSlider.prototype._move = function() {
   this._$items.dataset.translate = transform;
   translateX = transform * this._width;
   this._$items.style.transform = 'translateX(' + translateX + 'px)';
+  this._$items.dispatchEvent(new CustomEvent('transition-start', {bubbles: true}));
   this._setActiveClass();
 };
 
@@ -330,12 +331,15 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     }
   }
   function onTransitionStart() {
+    if (this._balancingItemsFlag) {
+      return;
+    }
     this._balancingItemsFlag = true;
     window.requestAnimationFrame(this._balancingItems.bind(this));
   }
   function onTransitionEnd() {
     this._balancingItemsFlag = false;
-    this._$root.dispatchEvent(new CustomEvent('slid.saslider',
+    this._$root.dispatchEvent(new CustomEvent('transition-end',
         {bubbles: true}));
   }
   function onMouseEnter() {
@@ -409,15 +413,12 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     if (value > SWIPE_THRESHOLD) {
       this._direction = 'next';
       this._move();
-      console.log('next');
     } else if (value < -SWIPE_THRESHOLD) {
       this._direction = 'prev';
       this._move();
-      console.log('prev');
     } else {
       this._direction = 'none';
       this._move();
-      console.log('none');
     }
     this._hasSwipeState = false;
     if (this._config.loop) {
@@ -440,7 +441,7 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
   this._$root.addEventListener('click', onClick.bind(this));
   // transitionstart and transitionend
   if (this._config.loop) {
-    $items.addEventListener('transitionstart', onTransitionStart.bind(this));
+    $items.addEventListener('transition-start', onTransitionStart.bind(this));
     $items.addEventListener('transitionend', onTransitionEnd.bind(this));
   }
   // mouseenter and mouseleave
@@ -483,7 +484,6 @@ SimpleAdaptiveSlider.prototype._addEventListener = function() {
     this._autoplay('stop');
     this._$items.classList.add(TRANSITION_NONE);
     this._width = parseInt(newWidth.toFixed(1), 10);
-    console.log(this._$items.dataset.translate);
     newTranslateX = newWidth * parseInt(this._$items.dataset.translate, 10);
     this._$items.style.transform = 'translateX(' + newTranslateX + 'px)';
     var $items = this._$itemList;
