@@ -151,6 +151,9 @@ ChiefSlider.prototype._addEventListener = function() {
     this._autoplay();
   }
   function onTransitionStart() {
+    if (this._balancingItemsFlag) {
+      return;
+    }
     this._balancingItemsFlag = true;
     window.requestAnimationFrame(this._balancingItems.bind(this));
   }
@@ -206,8 +209,7 @@ ChiefSlider.prototype._addEventListener = function() {
   }
   // on transitionstart and transitionend
   if (config.loop) {
-    $root.addEventListener('transition_start', onTransitionStart.bind(this));
-    //$items.addEventListener('transitionstart', onTransitionStart.bind(this));
+    $items.addEventListener('transition-start', onTransitionStart.bind(this));
     $items.addEventListener('transitionend', onTransitionEnd.bind(this));
   }
   // on touchstart and touchend
@@ -368,9 +370,8 @@ ChiefSlider.prototype._move = function() {
   this._setActiveClass();
   this._updateIndicators();
   this._transform = transform;
-  this._$items.style.transform = 'translateX('.concat(transform, '%)');
-  this._$root.dispatchEvent(new CustomEvent('transition_start',
-  {bubbles: true}));
+  this._$items.style.transform = 'translateX(' + transform + '%)';
+  this._$items.dispatchEvent(new CustomEvent('transition-start', {bubbles: true}));
 };
 
 // _moveToNext
