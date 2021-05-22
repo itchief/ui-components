@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>JavaScript SimpleAdaptiveSlider - Слайдер с миниатюрами</title>
   <!-- Подключаем CSS слайдера -->
-  <link rel="stylesheet" href="../simple-adaptive-slider.min.css">
+  <link rel="stylesheet" href="../simple-adaptive-slider.css">
   <!-- Подключаем JS слайдера -->
   <script defer src="../simple-adaptive-slider.dev.js"></script>
   <script>
@@ -19,14 +19,47 @@
       });
 
       // добавим кнопки для увеличения изображения
-      const $items = document.querySelectorAll('.slider__item');
-      $items.forEach(function ($item) {
-        const $newElement = document.createElement('span');
-        $newElement.className = 'image-open';
-        $item.append($newElement);
+      const $slider = document.querySelector('.slider');
+      const $newElement = document.createElement('span');
+      $newElement.className = 'image-open';
+      $slider.append($newElement);
+
+      document.addEventListener('click', function (e) {
+        var $target = e.target;
+        if (!$target.classList.contains('image-open')) {
+          return;
+        }
+        var sliderWidth = $slider.clientWidth;
+        var sliderHeight = $slider.clientHeight;
+
+        var $container = document.querySelector('.slider-overflow__container');
+        $container.classList.add('slider-overflow__container_show');
+
+        var width = Math.round(($container.clientHeight / sliderHeight) * sliderWidth);
+        var $sliderOverflow = document.querySelector('.slider-overflow');
+        $sliderOverflow.style.width = width + 'px';
+        new SimpleAdaptiveSlider('.slider-overflow', {
+          loop: true,
+          swipe: true
+        });
       });
 
+      document.addEventListener('click', function (e) {
+        var $target = e.target;
+        if (!$target.classList.contains('btn-close')) {
+          return;
+        }
+        var $container = document.querySelector('.slider-overflow__container');
+        $container.classList.remove('slider-overflow__container_show');
+      });
+
+
+
+
       var thumbnailsItem = document.querySelectorAll('.slider__thumbnails-item');
+      thumbnailsItem.forEach(function ($item, index) {
+        $item.dataset.slideTo = index;
+      })
 
       function setActiveThumbnail() {
         var sliderItemActive = document.querySelector('.slider__item_active');
@@ -146,6 +179,10 @@
       height: auto;
     }
 
+    .slider__indicators {
+      display: none;
+    }
+
     .image-open {
       background: rgba(255, 255, 255, 0.3);
       border-radius: 12px 40px 12px 12px;
@@ -158,6 +195,10 @@
       line-height: 1;
     }
 
+    .image-open:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
     .image-open::before {
       content: '';
       display: inline-block;
@@ -166,6 +207,86 @@
       background: transparent no-repeat center center;
       background-size: 100% 100%;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z'/%3E%3C/svg%3E");
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    .slider-overflow__container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+    }
+
+    .slider-overflow__container_show {
+      display: flex;
+    }
+
+    .slider-overflow {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .slider-overflow .slider__wrapper {
+      height: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .slider-overflow .slider__items {
+      height: 100%;
+    }
+
+    .slider-overflow img {
+      max-height: 100%;
+      width: auto;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+      padding: 1.25rem 1rem;
+      box-sizing: content-box;
+      width: 2em;
+      height: 2em;
+      padding: 0.25em 0.25em;
+      color: #000;
+      background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/2em auto no-repeat;
+      border: 0;
+      border-radius: 0.25rem;
+      opacity: 0.5;
+    }
+
+    .btn-close:hover {
+      color: #000;
+      text-decoration: none;
+      opacity: 0.75;
+    }
+
+    .btn-close:focus {
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+      opacity: 1;
+    }
+
+    .btn-close:disabled,
+    .btn-close.disabled {
+      pointer-events: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      opacity: 0.25;
+    }
+
+    .btn-close-white {
+      filter: invert(1) grayscale(100%) brightness(200%);
     }
   </style>
 </head>
@@ -208,33 +329,69 @@
     </div>
     <!-- thumbnails -->
     <div class="slider__thumbnails">
-      <div class="slider__thumbnails-item" data-slide-to="0">
+      <div class="slider__thumbnails-item">
         <img src="images/image-1-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="1">
+      <div class="slider__thumbnails-item">
         <img src="images/image-2-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="2">
+      <div class="slider__thumbnails-item">
         <img src="images/image-3-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="3">
+      <div class="slider__thumbnails-item">
         <img src="images/image-4-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="4">
+      <div class="slider__thumbnails-item">
         <img src="images/image-5-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="5">
+      <div class="slider__thumbnails-item">
         <img src="images/image-6-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="6">
+      <div class="slider__thumbnails-item">
         <img src="images/image-7-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
-      <div class="slider__thumbnails-item" data-slide-to="7">
+      <div class="slider__thumbnails-item">
         <img src="images/image-8-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
       </div>
     </div>
   </div>
 
+  <!-- slider__over-->
+  <div class="slider-overflow__container">
+    <button type="button" class="btn-close"></button>
+    <div class="slider-overflow">
+      <div class="slider__wrapper">
+        <div class="slider__items">
+          <div class="slider__item">
+            <img src="images/image-1-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-2-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-3-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-4-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-5-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-6-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-7-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="images/image-8-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+        </div>
+      </div>
+      <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+      <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+    </div>
+  </div>
 </body>
 
 </html>

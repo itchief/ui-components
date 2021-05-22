@@ -41,7 +41,6 @@
 /* кнопки Prev и Next */
 .slider__control {
   position: absolute;
-  z-index: 10;
   top: 50%;
   width: 40px;
   height: 50px;
@@ -97,7 +96,6 @@
   left: 0;
   right: 0;
   bottom: 10px;
-  z-index: 10;
   display: flex;
   justify-content: center;
   padding-left: 0;
