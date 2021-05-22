@@ -17,6 +17,15 @@
         autoplay: false,
         swipe: true
       });
+
+      // добавим кнопки для увеличения изображения
+      const $items = document.querySelectorAll('.slider__item');
+      $items.forEach(function ($item) {
+        const $newElement = document.createElement('span');
+        $newElement.className = 'image-open';
+        $item.append($newElement);
+      });
+
       var thumbnailsItem = document.querySelectorAll('.slider__thumbnails-item');
 
       function setActiveThumbnail() {
@@ -33,7 +42,7 @@
       setActiveThumbnail();
       document.querySelector('.slider').addEventListener('slider.set.active', setActiveThumbnail);
       var sliderThumbnails = document.querySelector('.slider__thumbnails');
-      sliderThumbnails.addEventListener('click', function(e) {
+      sliderThumbnails.addEventListener('click', function (e) {
         $target = e.target.closest('.slider__thumbnails-item');
         if (!$target) {
           return;
@@ -135,6 +144,28 @@
       display: inline-block;
       width: 100%;
       height: auto;
+    }
+
+    .image-open {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px 40px 12px 12px;
+      position: absolute;
+      padding: 10px 16px 6px;
+      left: 8px;
+      bottom: 8px;
+      cursor: pointer;
+      transition: background-color .15s ease-in-out;
+      line-height: 1;
+    }
+
+    .image-open::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: transparent no-repeat center center;
+      background-size: 100% 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z'/%3E%3C/svg%3E");
     }
   </style>
 </head>
