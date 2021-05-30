@@ -163,9 +163,12 @@ SimpleAdaptiveSlider.prototype._setActiveClass = function() {
 };
 
 // смена слайдов
-SimpleAdaptiveSlider.prototype._move = function() {
+SimpleAdaptiveSlider.prototype._move = function(useTransition) {
   var translateX;
   this._$items.classList.remove(TRANSITION_NONE);
+  if (useTransition === false) {
+    this._$items.classList.add(TRANSITION_NONE);
+  }
   if (this._direction === 'none') {
     translateX = this._transform * this._width;
     this._$items.style.transform = 'translateX(' + translateX + 'px)';
@@ -201,11 +204,11 @@ SimpleAdaptiveSlider.prototype._move = function() {
 };
 
 // функция для перемещения к слайду по индексу
-SimpleAdaptiveSlider.prototype._moveTo = function(index) {
+SimpleAdaptiveSlider.prototype._moveTo = function(index, useTransition) {
   var currentIndex = this._currentIndex;
   this._direction = index > currentIndex ? 'next' : 'prev';
   for (var i = 0; i < Math.abs(index - currentIndex); i++) {
-    this._move();
+    this._move(useTransition);
   }
 };
 
@@ -520,6 +523,6 @@ SimpleAdaptiveSlider.prototype.autoplay = function(action) {
   this._autoplay('stop');
 };
 
-SimpleAdaptiveSlider.prototype.moveTo = function(index) {
-  this._moveTo(index);
+SimpleAdaptiveSlider.prototype.moveTo = function(index, useTransition) {
+  this._moveTo(index, useTransition);
 };

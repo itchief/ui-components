@@ -38,10 +38,13 @@
         var width = Math.trunc(($container.clientHeight / sliderHeight) * sliderWidth);
         var $sliderOverflow = document.querySelector('.slider-overflow');
         $sliderOverflow.style.width = width + 'px';
-        new SimpleAdaptiveSlider('.slider-overflow', {
+        var $sliderBox = new SimpleAdaptiveSlider('.slider-overflow', {
           loop: true,
           swipe: true
         });
+        var $sliderItemActive = document.querySelector('.slider__item_active');
+        var index = parseInt($sliderItemActive.dataset.index, 10);
+        $sliderBox.moveTo(index, false);
       });
 
       document.addEventListener('click', function (e) {
@@ -52,9 +55,6 @@
         var $container = document.querySelector('.slider-overflow__container');
         $container.classList.remove('slider-overflow__container_show');
       });
-
-
-
 
       var thumbnailsItem = document.querySelectorAll('.slider__thumbnails-item');
       thumbnailsItem.forEach(function ($item, index) {
