@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="simple-todo-list.css">
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script defer src="simple-todo-list.js"></script>
+
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      :root {
+        scroll-behavior: smooth;
+      }
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="todo-container">
+
+    <div class="todo-sections-wrapper">
+      <div class="todo-add-wrapper">
+        <input type="text" class="todo-add">
+        <span class="todo-add-btn"></span>
+      </div>
+      <select class="todo-sections">
+        <option value="all">все</option>
+        <option value="active">активные</option>
+        <option value="completed">завершённые</option>
+        <option value="canceled">удалённые</option>
+      </select>
+    </div>
+
+    <ul class="todo-list">
+      <li class="todo-item" data-state="active" draggable="true">
+        <span class="todo-text">Work 1</span>
+        <span class="todo-return"></span>
+        <span class="todo-complete"></span>
+        <span class="todo-cancel"></span>
+      </li>
+      <li class="todo-item" data-state="completed" draggable="true">
+        <span class="todo-text">Work 2</span>
+        <span class="todo-return"></span>
+        <span class="todo-complete"></span>
+        <span class="todo-cancel"></span>
+      </li>
+      <li class="todo-item todo-item-hide" data-state="canceled" draggable="true">
+        <span class="todo-text">Work 3</span>
+        <span class="todo-return"></span>
+        <span class="todo-complete"></span>
+        <span class="todo-cancel"></span>
+      </li>
+      <li class="todo-item" data-state="active" draggable="true">
+        <span class="todo-text">Work 4</span>
+        <span class="todo-return"></span>
+        <span class="todo-complete"></span>
+        <span class="todo-cancel"></span>
+      </li>
+    </ul>
+
+  </div>
+
+</body>
+
+</html>
