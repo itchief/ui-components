@@ -479,7 +479,7 @@ ChiefSlider.prototype._refresh = function() {
   }
 
   this._setActiveClass();
-
+  this._updateIndicators();
   window.requestAnimationFrame(
       function() {
         this._$items.classList.remove(SLIDER_TRANSITION_OFF);
@@ -502,7 +502,6 @@ ChiefSlider.prototype._refresh = function() {
   $itemList[count].style.transform = 'translateX('.concat(translate, '%)');
   // update values of extreme properties
   this.__refreshExtremeValues();
-  this._updateIndicators();
   // calling _autoplay
   this._autoplay();
 };
