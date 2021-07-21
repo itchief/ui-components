@@ -41,6 +41,12 @@
   background-color: #689f38;
 }
 
+.todo__text:disabled+.todo__add {
+  cursor: default;
+  background-color: #8bc34a;
+  opacity: 0.5;
+}
+
 .todo__add::before {
   content: "";
   position: absolute;
@@ -158,10 +164,6 @@
   opacity: 1;
 }
 
-.todo__item_hide {
-  display: none;
-}
-
 [data-state="completed"] {
   text-decoration: line-through;
   background-color: #f1f8ed;
@@ -179,6 +181,21 @@
 
 [data-state="deleted"] .todo__action_restore {
   right: 15px;
+}
+
+[data-items="active"] [data-state="completed"],
+[data-items="active"] [data-state="deleted"] {
+  display: none;
+}
+
+[data-items="completed"] [data-state="active"],
+[data-items="completed"] [data-state="deleted"] {
+  display: none;
+}
+
+[data-items="deleted"] [data-state="active"],
+[data-items="deleted"] [data-state="completed"] {
+  display: none;
 }
 
 .d-none {

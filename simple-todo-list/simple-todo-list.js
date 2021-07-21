@@ -1,34 +1,51 @@
-function todoUpdate() {
-  const section = $('.todo__options').val();
-  $('.todo__item')
-    .not('[data-state="' + section + '"]')
-      .addClass('todo__item_hide')
-    .end()
-    .filter('[data-state="' + section + '"]')
-      .removeClass('todo__item_hide');
+const todo = {
+  init() {
+    document.querySelector('.todo__options').addEventListener('change', this.update);
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target.classList.contains('todo__action')) {
+        const action = $(target).attr('data-action');
+        target.closest('.todo__item').dataset.state = action;
+
+      } else if (target.classList.contains('todo__add')) {
+        if (document.querySelector('.todo__text').disabled) {
+          return;
+        }
+        const text = document.querySelector('.todo__text');
+        if (!text.value.length) {
+          return;
+        }
+        document.querySelector('.todo__items').insertAdjacentHTML('beforeend', this.create(text.value));
+        text.value = '';
+      }
+    });
+  },
+  create(text) {
+    return `<li class="todo__item" data-state="active">
+      <span class="todo__task">${text}</span>
+      <span class="todo__action todo__action_restore" data-action="active"></span>
+      <span class="todo__action todo__action_complete" data-action="completed"></span>
+      <span class="todo__action todo__action_delete" data-action="deleted"></span></li>`;
+  },
+  update() {
+    const section = document.querySelector('.todo__options').value;
+    document.querySelector('.todo__text').disabled = section !== 'active';
+    document.querySelector('.todo__items').dataset.items = section;
+    /*document.querySelectorAll('.todo__item').forEach((item) => {
+      const state = item.dataset.state;
+      if (state === section) {
+        item.classList.remove('todo__item_hide');
+      } else {
+        item.classList.add('todo__item_hide');
+      }
+    });*/
+  }
 }
 
-$(document).on('change', '.todo__options', todoUpdate);
+todo.init();
 
-$(document).on('click', '.todo__action', function(e) {
-  const action = $(e.target).attr('data-action');
-  $(this).closest('.todo__item').attr('data-state', action);
-});
 
-function todoCreate(text) {
-  return $('<li>', {class: 'todo__item', 'data-state': 'active'})
-    .append('<span class="todo__task">' + text + '</span>')
-    .append('<span class="todo__action_restore" data-action="active"></span>')
-    .append('<span class="todo__action_complete" data-action="completed"></span>')
-    .append('<span class="todo__action_delete" data-action="deleted"></span>');
-}
 
-$(document).on('click', '.todo__add', function() {
-  const text = $('.todo__text').val();
-  if (!text.length) return false;
-  $('.todo__text').val('');
-  $('.todo__items').append(todoCreate(text));
-});
 
 var dragging = null;
 
