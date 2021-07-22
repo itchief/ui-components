@@ -7,9 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <link rel="stylesheet" href="simple-todo-list.css">
-  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script defer src="simple-todo-list.js"></script>
-
+  <!--script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script-->
+  <script defer src="simple-todo-list.es5.js"></script>
   <style>
     *,
     *::before,
@@ -49,34 +48,7 @@
       <option value="completed">завершённые</option>
       <option value="deleted">удалённые</option>
     </select>
-
-    <ul class="todo__items" data-items="active">
-      <li class="todo__item" data-state="active" draggable="true">
-        <span class="todo__task">Work 1</span>
-        <span class="todo__action todo__action_restore" data-action="active"></span>
-        <span class="todo__action todo__action_complete" data-action="completed"></span>
-        <span class="todo__action todo__action_delete" data-action="deleted"></span>
-      </li>
-      <li class="todo__item" data-state="completed" draggable="true">
-        <span class="todo__task">Work 2</span>
-        <span class="todo__action todo__action_restore" data-action="active"></span>
-        <span class="todo__action todo__action_complete" data-action="completed"></span>
-        <span class="todo__action todo__action_delete" data-action="deleted"></span>
-      </li>
-      <li class="todo__item" data-state="deleted" draggable="true">
-        <span class="todo__task">Work 3</span>
-        <span class="todo__action todo__action_restore" data-action="active"></span>
-        <span class="todo__action todo__action_complete" data-action="completed"></span>
-        <span class="todo__action todo__action_delete" data-action="deleted"></span>
-      </li>
-      <li class="todo__item" data-state="active" draggable="true">
-        <span class="todo__task">Work 4</span>
-        <span class="todo__action todo__action_restore" data-action="active"></span>
-        <span class="todo__action todo__action_complete" data-action="completed"></span>
-        <span class="todo__action todo__action_delete" data-action="deleted"></span>
-      </li>
-    </ul>
-
+    <ul class="todo__items" data-items="active"></ul>
   </div>
 
 </body>

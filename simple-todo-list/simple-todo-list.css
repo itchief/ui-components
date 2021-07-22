@@ -8,7 +8,6 @@
 
 .todo__input {
   position: relative;
-
 }
 
 .todo__text {
@@ -19,6 +18,7 @@
   border-radius: 4px;
   border: 1px solid #e0e0e0;
   padding: 6px 34px 6px 10px;
+  width: 225px;
 }
 
 .todo__text:focus {
@@ -183,18 +183,9 @@
   right: 15px;
 }
 
-[data-items="active"] [data-state="completed"],
-[data-items="active"] [data-state="deleted"] {
-  display: none;
-}
-
-[data-items="completed"] [data-state="active"],
-[data-items="completed"] [data-state="deleted"] {
-  display: none;
-}
-
-[data-items="deleted"] [data-state="active"],
-[data-items="deleted"] [data-state="completed"] {
+[data-items="active"] .todo__item:not([data-state="active"]),
+[data-items="completed"] .todo__item:not([data-state="completed"]),
+[data-items="deleted"] .todo__item:not([data-state="deleted"]) {
   display: none;
 }
 
@@ -202,6 +193,6 @@
   display: none;
 }
 
-.hovered {
+.todo__item_dragenter {
   border-bottom: 45px solid #e0e0e0;
 }
