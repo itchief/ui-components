@@ -24,7 +24,7 @@ const todo = {
     elemText.value = '';
   },
   create(text) {
-    return `<li class="todo__item" data-todo-state="active" draggable="true">
+    return `<li class="todo__item" data-todo-state="active">
       <span class="todo__task">${text}</span>
       <span class="todo__action todo__action_restore" data-todo-action="active"></span>
       <span class="todo__action todo__action_complete" data-todo-action="completed"></span>
@@ -40,8 +40,8 @@ const todo = {
   },
   update() {
     const option = document.querySelector('.todo__options').value;
-    document.querySelector('.todo__text').disabled = option !== 'active';
     document.querySelector('.todo__items').dataset.todoOption = option;
+    document.querySelector('.todo__text').disabled = option !== 'active';
   },
   save() {
     localStorage.setItem('todo', document.querySelector('.todo__items').innerHTML);
