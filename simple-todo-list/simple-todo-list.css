@@ -164,35 +164,27 @@
   opacity: 1;
 }
 
-[data-state="completed"] {
+[data-todo-state="active"] .todo__action_restore,
+[data-todo-state="completed"] .todo__action_complete,
+[data-todo-state="deleted"] .todo__action_complete {
+  display: none;
+}
+
+[data-todo-state="completed"] {
   text-decoration: line-through;
   background-color: #f1f8ed;
 }
 
-[data-state="active"] .todo__action_restore,
-[data-state="completed"] .todo__action_complete,
-[data-state="deleted"] .todo__action_complete {
-  display: none;
-}
-
-[data-state="deleted"] .todo__task {
+[data-todo-state="deleted"] .todo__task {
   color: #9e9e9e;
 }
 
-[data-state="deleted"] .todo__action_restore {
+[data-todo-state="deleted"] .todo__action_restore {
   right: 15px;
 }
 
-[data-items="active"] .todo__item:not([data-state="active"]),
-[data-items="completed"] .todo__item:not([data-state="completed"]),
-[data-items="deleted"] .todo__item:not([data-state="deleted"]) {
+[data-todo-option="active"] .todo__item:not([data-todo-state="active"]),
+[data-todo-option="completed"] .todo__item:not([data-todo-state="completed"]),
+[data-todo-option="deleted"] .todo__item:not([data-todo-state="deleted"]) {
   display: none;
-}
-
-.d-none {
-  display: none;
-}
-
-.todo__item_dragenter {
-  border-bottom: 45px solid #e0e0e0;
 }
