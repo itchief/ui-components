@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Styling input</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    h2 {
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    input[type="text"] {
+      display: block;
+      width: 100%;
+      height: calc(2rem + 2px);
+      margin: 0 0 1rem 0;
+      padding: 0.25rem 0.75rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #bdbdbd;
+      border-radius: 0.25rem;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    input[type="text"]::placeholder {
+      color: #212529;
+      opacity: 0.4;
+    }
+
+    input[type="text"]:focus {
+      color: #212529;
+      background-color: #fff;
+      border-color: #bdbdbd;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
+    }
+
+    input:disabled,
+    input[readonly] {
+      background-color: #e9ecef;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div style="max-width: 400px; margin-left: auto; margin-right: auto; padding-top: 10px; padding-bottom: 10px;">
+    <h2>Стилизованный input[type="text"]</h2>
+    <input type="text" placeholder="name">
+    <h2>в состоянии disabled</h2>
+    <input type="text" placeholder="name" disabled>
+  </div>
+
+</body>
+
+</html>
