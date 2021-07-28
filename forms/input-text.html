@@ -60,9 +60,10 @@
       box-shadow: 0 0 0 0.2rem rgba(158, 158, 158, 0.25);
     }
 
-    input:disabled,
-    input[readonly] {
-      background-color: #e9ecef;
+    input[type="text"]:disabled,
+    input[type="text"][readonly] {
+      background-color: #f5f5f5;
+      opacity: 1;
     }
   </style>
 </head>
@@ -73,7 +74,9 @@
     <h2>Стилизованный input[type="text"]</h2>
     <input type="text" placeholder="name">
     <h2>в состоянии disabled</h2>
-    <input type="text" placeholder="name" disabled>
+    <input type="text" placeholder="name" value="Alexander" disabled>
+    <h2>в состоянии readonly</h2>
+    <input type="text" placeholder="name" value="Alexander" readonly>
   </div>
 
 </body>
