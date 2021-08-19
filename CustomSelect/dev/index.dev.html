@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom select</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <!-- Стили для страницы -->
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      max-width: 250px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+  <!-- Подключаем CSS файл CustomSelect -->
+  <link rel="stylesheet" href="custom-select.dev.css">
+  <!-- Подключаем js-файл CustomSelect -->
+  <script defer src="custom-select.dev.js"></script>
+  <!-- JS код в котором инициализируем экземпляр CustomSelect для .select -->
+  <script>
+    let select1;
+    document.addEventListener('DOMContentLoaded', () => {
+      select1 = new CustomSelect('.select', {
+        name: 'car',
+        targetValue: 'f',
+        options: [
+          ['v', 'Volkswagen'],
+          ['f', 'Ford'],
+          ['t', 'Toyota'],
+          ['n', 'Nissan']
+        ],
+        onSelected(option) {
+          const text = option ? option.textContent : '';
+          console.log(`Выбранное значение: ${text}`);
+        },
+      });
+      document.querySelector('.select').addEventListener('select.change', (e) => {
+        const selected = e.target.querySelector('.select__option_selected');
+        const text = selected ? selected.textContent : '';
+        console.log(`Выбранное значение: ${text}`);
+      });
+    })
+  </script>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="select">
+      <button type="button" class="select__toggle" data-select="toggle">
+        Выберите из списка
+      </button>
+      <div class="select__dropdown">
+        <ul class="select__options">
+          <li class="select__option" data-select="option">1</li>
+          <li class="select__option select__option_selected" data-select="option">2</li>
+          <li class="select__option" data-select="option">3</li>
+          <li class="select__option" data-select="option">4</li>
+          <li class="select__option" data-select="option">5</li>
+          <li class="select__option" data-select="option">6</li>
+          <li class="select__option" data-select="option">7</li>
+          <li class="select__option" data-select="option">8</li>
+          <li class="select__option" data-select="option">9</li>
+        </ul>
+      </div>
+      <div class="select__backdrop" data-select="backdrop"></div>
+    </div>
+
+  </div>
+</body>
+
+</html>
