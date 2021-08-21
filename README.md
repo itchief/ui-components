@@ -4,7 +4,7 @@ UI Components - это набор адаптивных компонентов с
 Список компонентов:
 
 - ChiefSlider
-- CustomSelect
+- CustomSelect (<a href="https://itchief.ru/javascript/custom-select">описание</a>)
 - Modal
 - SimpleAdaptiveSlider
 - Toast
