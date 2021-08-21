@@ -1,7 +1,6 @@
 .select {
   position: relative;
   width: 100%;
-  z-index: 1000;
 }
 
 .select__toggle {
@@ -47,6 +46,8 @@
   max-height: 10rem;
   overflow-y: auto;
   border-radius: 0.3125rem;
+  z-index: 2;
+  background-color: #fff;
 }
 
 .select_show .select__dropdown {
@@ -87,15 +88,4 @@
   background-color: #f5f5f5;
   cursor: pointer;
   transition: 0.2s background-color ease-in-out;
-}
-
-.select__backdrop {
-  position: fixed;
-  z-index: -1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: none;
-  background-color: transparent;
 }

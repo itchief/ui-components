@@ -30,10 +30,10 @@
         name: 'car',
         targetValue: 'f',
         options: [
-          ['v', 'Volkswagen'],
-          ['f', 'Ford'],
-          ['t', 'Toyota'],
-          ['n', 'Nissan']
+          ['volkswagen', 'Volkswagen'],
+          ['ford', 'Ford'],
+          ['toyota', 'Toyota'],
+          ['nissan', 'Nissan']
         ],
         onSelected(option) {
           const text = option ? option.textContent : '';
@@ -53,25 +53,8 @@
 
   <div class="container">
 
-    <div class="select">
-      <button type="button" class="select__toggle" data-select="toggle">
-        Выберите из списка
-      </button>
-      <div class="select__dropdown">
-        <ul class="select__options">
-          <li class="select__option" data-select="option">1</li>
-          <li class="select__option select__option_selected" data-select="option">2</li>
-          <li class="select__option" data-select="option">3</li>
-          <li class="select__option" data-select="option">4</li>
-          <li class="select__option" data-select="option">5</li>
-          <li class="select__option" data-select="option">6</li>
-          <li class="select__option" data-select="option">7</li>
-          <li class="select__option" data-select="option">8</li>
-          <li class="select__option" data-select="option">9</li>
-        </ul>
-      </div>
-      <div class="select__backdrop" data-select="backdrop"></div>
-    </div>
+    <!-- Кастомный селект -->
+    <div id="select-1"></div>
 
   </div>
 </body>

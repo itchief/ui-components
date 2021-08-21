@@ -1,6 +1,7 @@
 const CLASS_NAME_SELECT = 'select';
 const CLASS_NAME_ACTIVE = 'select_show';
 const CLASS_NAME_SELECTED = 'select__option_selected';
+const SELECTOR_ACTIVE = '.select_show';
 const SELECTOR_DATA = '[data-select]';
 const SELECTOR_DATA_TOGGLE = '[data-select="toggle"]';
 const SELECTOR_OPTION_SELECTED = '.select__option_selected';
@@ -25,9 +26,6 @@ class CustomSelect {
         break;
       case 'option':
         this._changeValue(target);
-        break;
-      case 'backdrop':
-        this.hide();
         break;
     }
   }
@@ -64,13 +62,20 @@ class CustomSelect {
     this.hide();
   }
   show() {
+    document.querySelectorAll(SELECTOR_ACTIVE).forEach(select => {
+      select.classList.remove(CLASS_NAME_ACTIVE);
+    });
     this._elRoot.classList.add(CLASS_NAME_ACTIVE);
   }
   hide() {
     this._elRoot.classList.remove(CLASS_NAME_ACTIVE);
   }
   toggle() {
-    this._elRoot.classList.toggle(CLASS_NAME_ACTIVE);
+    if (this._elRoot.classList.contains(CLASS_NAME_ACTIVE)) {
+      this.hide();
+    } else {
+      this.show();
+    }
   }
   dispose() {
     this._elRoot.removeEventListener('click', this._onClick);
@@ -123,6 +128,14 @@ CustomSelect.template = params => {
   return `<button type="button" class="select__toggle" name="${name}" value="${selectedValue}" data-select="toggle" data-index="${selectedIndex}">${selectedContent}</button>
   <div class="select__dropdown">
     <ul class="select__options">${items.join('')}</ul>
-  </div>
-  <div class="select__backdrop" data-select="backdrop"></div>`;
+  </div>`;
 };
+
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.select')) {
+    document.querySelectorAll(SELECTOR_ACTIVE).forEach(select => {
+      select.classList.remove(CLASS_NAME_ACTIVE);
+    });
+  }
+});
