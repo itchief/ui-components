@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Слайдер</title>
+  <link rel="stylesheet" href="../simple-adaptive-slider.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      min-width: 550px;
+    }
+
+    .slider-1.slider__container {
+      position: relative;
+      margin-left: 200px;
+    }
+
+    .slider-1 .slider {
+      max-width: 310px;
+      flex: 0 0 310px;
+      margin-left: unset;
+      margin-right: unset;
+    }
+
+    /* дополнительные стили для этого примера */
+    .slider-1 .slider__items {
+      counter-reset: slide;
+    }
+
+    .slider-1 .slider__item {
+      counter-increment: slide;
+      display: flex;
+      background-color: #eee;
+    }
+
+    .slider-1 .slider__item::before {
+      content: counter(slide);
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .slider-1 .slider img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .slider-1 .slider__thumbnails {
+      position: absolute;
+      display: flex;
+      flex-flow: column wrap;
+      align-content: center;
+      width: 150px;
+      left: -175px;
+      top: 0;
+      height: 100%;
+    }
+
+    .slider-1 .slider__thumbnails-item {
+      line-height: 0;
+      max-width: 52px;
+      margin: 0 10px 10px 0;
+      opacity: 0.5;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: 0.15s opacity ease-in-out;
+    }
+
+    .slider-1 .slider__thumbnails-item.active {
+      opacity: 1;
+    }
+
+    .slider-1 .slider__thumbnails-item:hover {
+      opacity: 1;
+    }
+
+    .slider-1 .slider__thumbnails-item>img {
+      display: inline-block;
+      width: 100%;
+      height: auto;
+    }
+
+    .slider-1 .slider__indicators {
+      display: none;
+    }
+
+    .image-open {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 12px 40px 12px 12px;
+      position: absolute;
+      padding: 10px 16px 6px;
+      left: 8px;
+      bottom: 8px;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+      line-height: 1;
+    }
+
+    .image-open:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .image-open::before {
+      content: "";
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: transparent no-repeat center center;
+      background-size: 100% 100%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z'/%3E%3C/svg%3E");
+    }
+
+    .slider-overflow__container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      z-index: 1000;
+    }
+
+    .slider-overflow__container_show {
+      display: flex;
+    }
+
+    .slider-overflow {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .slider-overflow .slider__wrapper {
+      height: 100%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .slider-overflow .slider__items {
+      height: 100%;
+    }
+
+    .slider-overflow img {
+      max-height: 100%;
+      width: auto;
+    }
+
+    .btn-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2;
+      padding: 1.25rem 1rem;
+      box-sizing: content-box;
+      width: 2em;
+      height: 2em;
+      padding: 0.25em 0.25em;
+      color: #000;
+      background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/2em auto no-repeat;
+      border: 0;
+      border-radius: 0.25rem;
+      opacity: 0.5;
+    }
+
+    .btn-close:hover {
+      color: #000;
+      opacity: 0.75;
+    }
+
+    .btn-close:focus {
+      outline: 0;
+      box-shadow: none;
+      opacity: 0.75;
+    }
+
+    .open {
+      overflow: hidden;
+    }
+
+    /* .slider__thumbnails */
+    .slider-overflow__container .slider__thumbnails {
+      position: absolute;
+      display: flex;
+      flex-flow: column wrap;
+      align-content: center;
+      width: 150px;
+      left: 150px;
+      top: 10%;
+      height: 80%;
+    }
+
+    .slider-overflow__container .slider__thumbnails-item {
+      line-height: 0;
+      max-width: 52px;
+      margin: 0 10px 10px 0;
+      opacity: 0.8;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: 0.15s opacity ease-in-out;
+      border: 2px solid transparent;
+    }
+
+    .slider-overflow__container .slider__thumbnails-item.active {
+      opacity: 1;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .slider-overflow__container .slider__thumbnails-item:hover {
+      opacity: 1;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .slider-overflow__container .slider__thumbnails-item>img {
+      display: inline-block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+  <script src="../simple-adaptive-slider.dev.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // инициализация слайдера
+      var slider = new SimpleAdaptiveSlider(".slider", {
+        loop: true,
+        autoplay: false,
+        swipe: true
+      });
+      // добавим кнопки для увеличения изображения
+      const $slider = document.querySelector('.slider');
+      const $newElement = document.createElement('span');
+      $newElement.className = 'image-open';
+      $slider.append($newElement);
+
+      var sliderOverflow = null;
+
+      document.addEventListener('click', function (e) {
+        var $target = e.target;
+        if (!$target.classList.contains('image-open')) {
+          return;
+        }
+        var sliderWidth = $slider.clientWidth;
+        var sliderHeight = $slider.clientHeight;
+
+        var $container = document.querySelector('.slider-overflow__container');
+        document.body.classList.add('open');
+        $container.classList.add('slider-overflow__container_show');
+
+        var width = Math.trunc(
+          ($container.clientHeight / sliderHeight) * sliderWidth
+        );
+        var $sliderOverflow = document.querySelector('.slider-overflow');
+        $sliderOverflow.style.width = width + 'px';
+        var $sliderBox = new SimpleAdaptiveSlider('.slider-overflow', {
+          loop: true,
+          swipe: true
+        });
+        sliderOverflow = $sliderBox;
+        var $sliderItemActive = document.querySelector(".slider__item_active");
+        var index = parseInt($sliderItemActive.dataset.index, 10);
+        $sliderBox.moveTo(index, false);
+        var event = new CustomEvent('slider.overflow', {
+          detail: {
+            index: index
+          }
+        });
+        document.dispatchEvent(event);
+      });
+
+      document.addEventListener("click", function (e) {
+        var $target = e.target;
+        if (!$target.classList.contains("btn-close")) {
+          return;
+        }
+        var $container = document.querySelector(".slider-overflow__container");
+        $container.classList.remove("slider-overflow__container_show");
+        document.body.classList.remove('open');
+      });
+
+      var thumbnailsItem = document.querySelectorAll(".slider__thumbnails-item");
+      thumbnailsItem.forEach(function ($item, index) {
+        $item.dataset.slideTo = index;
+      });
+
+      function setActiveThumbnail() {
+        var sliderItemActive = document.querySelector(".slider__item_active");
+        var index = parseInt(sliderItemActive.dataset.index);
+        for (var i = 0, length = thumbnailsItem.length; i < length; i++) {
+          if (i !== index) {
+            thumbnailsItem[i].classList.remove("active");
+          } else {
+            thumbnailsItem[index].classList.add("active");
+          }
+        }
+      }
+      setActiveThumbnail();
+      document
+        .querySelector(".slider")
+        .addEventListener("slider.set.active", setActiveThumbnail);
+      var sliderThumbnails = document.querySelector(".slider__thumbnails");
+      sliderThumbnails.addEventListener("click", function (e) {
+        $target = e.target.closest(".slider__thumbnails-item");
+        if (!$target) {
+          return;
+        }
+        var index = parseInt($target.dataset.slideTo, 10);
+        slider.moveTo(index);
+      });
+
+      document.addEventListener('slider.overflow', function (e) {
+        var thumbnailsItem = document.querySelectorAll(".slider-overflow__container .slider__thumbnails-item");
+        thumbnailsItem.forEach(function ($item, index) {
+          $item.dataset.slideTo = index;
+        });
+        var index = e.detail.index;
+        function setActiveThumbnailInOverflow() {
+          var sliderItemActive = document.querySelector(".slider-overflow .slider__item_active");
+          var index = parseInt(sliderItemActive.dataset.index);
+          for (var i = 0, length = thumbnailsItem.length; i < length; i++) {
+            if (i !== index) {
+              thumbnailsItem[i].classList.remove("active");
+            } else {
+              thumbnailsItem[index].classList.add("active");
+            }
+          }
+        }
+        setActiveThumbnailInOverflow();
+        document
+          .querySelector('.slider-overflow')
+          .addEventListener("slider.set.active", setActiveThumbnailInOverflow);
+        var sliderThumbnails = document.querySelector(".slider-overflow__container .slider__thumbnails");
+        sliderThumbnails.addEventListener("click", function (e) {
+          $target = e.target.closest(".slider__thumbnails-item");
+          if (!$target) {
+            return;
+          }
+          var index = parseInt($target.dataset.slideTo, 10);
+          sliderOverflow.moveTo(index);
+        });
+      });
+
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // инициализация слайдера 2
+      var slider = new SimpleAdaptiveSlider(".slider-2", {
+        autoplay: false,
+        interval: 5000,
+        swipe: true
+      });
+      var slider = new SimpleAdaptiveSlider(".slider-3", {
+        autoplay: false,
+        interval: 5000,
+        swipe: true
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <!-- Разметка слайдера -->
+  <div class="slider__container slider-1">
+    <!-- slider -->
+    <div class="slider">
+      <div class="slider__wrapper">
+        <div class="slider__items">
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-1-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-2-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-3-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-4-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-5-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-6-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-7-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-8-700x1000.jpg" alt="..." width="700"
+              height="1000" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+      <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+    </div>
+    <!-- thumbnails -->
+    <div class="slider__thumbnails">
+      <div class="slider__thumbnails-item" data-slide-to="0">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-1-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="1">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-2-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="2">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-3-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="3">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-4-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="4">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-5-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="5">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-6-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="6">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-7-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="7">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-8-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+    </div>
+  </div>
+
+  <!-- slider__overflow-->
+  <div class="slider-overflow__container">
+    <button type="button" class="btn-close"></button>
+    <div class="slider-overflow">
+      <div class="slider__wrapper">
+        <div class="slider__items">
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-1-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-2-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-3-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-4-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-5-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-6-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-7-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+          <div class="slider__item">
+            <img src="https://itchief.ru/examples/images/lighthouses/image-8-700x1000.jpg" alt="..." loading="lazy">
+          </div>
+        </div>
+      </div>
+      <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+      <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+    </div>
+    <!-- thumbnails -->
+    <div class="slider__thumbnails">
+      <div class="slider__thumbnails-item" data-slide-to="0">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-1-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="1">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-2-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="2">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-3-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="3">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-4-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="4">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-5-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="5">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-6-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="6">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-7-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+      <div class="slider__thumbnails-item" data-slide-to="7">
+        <img src="https://itchief.ru/examples/images/lighthouses/image-8-100x143.jpg" alt="..." width="100" height="143"
+          loading="lazy">
+      </div>
+    </div>
+
+  </div>
+
+  <br><br>
+
+  <!-- Разметка слайдера -->
+  <div class="slider slider-2">
+    <div class="slider__wrapper">
+      <div class="slider__items">
+        <div class="slider__item">
+          <div style="height: 250px; background: #3f51b5;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #607d8b;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #f44336;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #4caf50;"></div>
+        </div>
+      </div>
+    </div>
+    <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+    <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+  </div>
+
+  <br><br>
+
+  <!-- Разметка слайдера -->
+  <div class="slider slider-3">
+    <div class="slider__wrapper">
+      <div class="slider__items">
+        <div class="slider__item">
+          <div style="height: 250px; background: #3f51b5;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #607d8b;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #f44336;"></div>
+        </div>
+        <div class="slider__item">
+          <div style="height: 250px; background: #4caf50;"></div>
+        </div>
+      </div>
+    </div>
+    <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
+    <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+  </div>
+
+</body>
+
+</html>
