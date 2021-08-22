@@ -32,16 +32,7 @@
           ['ford', 'Ford'],
           ['toyota', 'Toyota'],
           ['nissan', 'Nissan']
-        ],
-        onSelected(option) {
-          const text = option ? option.textContent : '';
-          console.log(`Выбранное значение: ${text}`);
-        },
-      });
-      document.querySelector('.select').addEventListener('select.change', (e) => {
-        const selected = e.target.querySelector('.select__option_selected');
-        const text = selected ? selected.textContent : '';
-        console.log(`Выбранное значение: ${text}`);
+        ]
       });
       // инициализируем #select-2 как CustomSelect -->
       new CustomSelect('#select-2');
