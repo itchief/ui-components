@@ -39,7 +39,7 @@ class CustomSelect {
     this._elToggle.value = option.dataset['value'];
     this._elToggle.dataset.index = option.dataset['index'];
     this._elRoot.dispatchEvent(new CustomEvent('select.change'));
-    this._params.onSelected ? this._params.onSelected(option) : null;
+    this._params.onSelected ? this._params.onSelected(this, option) : null;
     return option.dataset['value'];
   }
   _reset() {
@@ -51,7 +51,7 @@ class CustomSelect {
     this._elToggle.value = '';
     this._elToggle.dataset.index = -1;
     this._elRoot.dispatchEvent(new CustomEvent('select.change'));
-    this._params.onSelected ? this._params.onSelected(null) : null;
+    this._params.onSelected ? this._params.onSelected(this, null) : null;
     return '';
   }
   _changeValue(option) {
