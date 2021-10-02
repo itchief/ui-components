@@ -1,95 +1,59 @@
-'use strict';
+/**
+ * Toast (https://github.com/itchief/ui-components/tree/master/toast)
+ * Copyright 2020 - 2021 Alexander Maltsev
+ * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
+**/
 
-var Toast = function (element, config) {
-  var
-    _this = this,
-    _element = element,
-    _config = {
-      autohide: true,
-      delay: 5000
-    };
-  for (var prop in config) {
-    _config[prop] = config[prop];
+class Toast {
+  constructor(params) {
+    this._title = params['title'] === false ? false : params['title'] || 'Title';
+    console.log(this._title);
+    this._text = params['text'] || 'Message...';
+    this._theme = params['theme'] || 'default';
+    this._autohide = params['autohide'] && true;
+    this._interval = +params['interval'] || 5000;
+    console.log(this._title);
+    this._create();
+    this._el.addEventListener('click', (e) => {
+      if (e.target.classList.contains('toast__close')) {
+        this._hide();
+      }
+    });
+    this._show();
   }
-  Object.defineProperty(this, 'element', {
-    get: function () {
-      return _element;
+  _show() {
+    this._el.classList.add('toast_show');
+    if (this._autohide) {
+      setTimeout(() => {
+        this._hide();
+      }, this._interval);
     }
-  });
-  Object.defineProperty(this, 'config', {
-    get: function () {
-      return _config;
-    }
-  });
-  _element.addEventListener('click', function (e) {
-    if (e.target.classList.contains('toast__close')) {
-      _this.hide();
-    }
-  });
-}
-
-Toast.prototype = {
-  show: function () {
-    var _this = this;
-    this.element.classList.add('toast_show');
-    if (this.config.autohide) {
-      setTimeout(function () {
-        _this.hide();
-      }, this.config.delay)
-    }
-  },
-  hide: function () {
-    var event = new CustomEvent('hidden.toast', { detail: { toast: this.element } });
-    this.element.classList.remove('toast_show');
+  }
+  _hide() {
+    this._el.classList.remove('toast_show');
+    const event = new CustomEvent('hide.toast', { detail: { target: this._el } });
     document.dispatchEvent(event);
   }
-};
-
-Toast.create = function (text, color) {
-  var
-    fragment = document.createDocumentFragment(),
-    toast = document.createElement('div'),
-    toastClose = document.createElement('button');
-  toast.classList.add('toast');
-  toast.style.backgroundColor = 'rgba(' + parseInt(color.substr(1, 2), 16) + ',' + parseInt(color.substr(3, 2), 16) + ',' + parseInt(color.substr(5, 2), 16) + ',0.5)';
-  toast.textContent = text;
-  toastClose.classList.add('toast__close');
-  toastClose.setAttribute('type', 'button');
-  toastClose.textContent = '×';
-  toast.appendChild(toastClose);
-  fragment.appendChild(toast);
-  return fragment;
-};
-
-Toast.add = function (params) {
-  var config = {
-    header: 'Название заголовка',
-    text: 'Текст сообщения...',
-    color: '#ffffff',
-    autohide: true,
-    delay: 5000
-  };
-  if (params !== undefined) {
-    for (var item in params) {
-      config[item] = params[item];
+  _create() {
+    const el = document.createElement('div');
+    el.classList.add('toast');
+    el.classList.add(`toast_${this._theme}`);
+    let html = `{header}<div class="toast__body"></div><button class="toast__close" type="button"></button>`;
+    const htmlHeader = this._title === false ? '' : '<div class="toast__header"></div>';
+    html = html.replace('{header}', htmlHeader);
+    el.innerHTML = html;
+    if (this._title) {
+      el.querySelector('.toast__header').textContent = this._title;
+    } else {
+      el.classList.add('toast_message');
     }
+    el.querySelector('.toast__body').textContent = this._text;
+    this._el = el;
+    if (!document.querySelector('.toast-container')) {
+      const container = document.createElement('div');
+      container.classList.add('toast-container');
+      document.body.append(container);
+    }
+    document.querySelector('.toast-container').append(this._el);
   }
-  if (!document.querySelector('.toasts')) {
-    var container = document.createElement('div');
-    container.classList.add('toasts');
-    container.style.cssText = 'position: fixed; top: 15px; right: 15px; width: 250px;';
-    document.body.appendChild(container);
-  }
-  document.querySelector('.toasts').appendChild(Toast.create(config.text, config.color));
-  var toasts = document.querySelectorAll('.toast');
-  var toast = new Toast(toasts[toasts.length - 1], { autohide: config.autohide, delay: config.delay });
-  toast.show();
-  return toast;
 }
-
-document.addEventListener('hidden.toast', function (e) {
-  var element = e.detail.toast;
-  if (element) {
-    element.parentNode.removeChild(element);
-  }
-});
