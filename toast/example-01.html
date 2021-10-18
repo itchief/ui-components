@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Toast on pure JavaScript</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+      background-color: #fff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+  </style>
+  <link href="css/toast.css" rel="stylesheet">
+  <script src="js/toast.js"></script>
+</head>
+
+<body style="min-height: 100vh;">
+
+  <div style="max-width: 280px; padding: 15px; border: 1px solid #f5f5f5;">
+    <div style="margin-bottom: 0.5rem;">
+      Название заголовка:
+      <input name="toast-title" type="text" value="Заголовок" style="width: 100%;">
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      <input name="toast-without-title" type="checkbox">без заголовка
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      Текст сообщения:
+      <input name="toast-text" type="text" value="Сообщение..." style="width: 100%;">
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      Тема:
+      <select class="form-control" name="toast-theme" style="width: 100%;">
+        <option selected value="default">default</option>
+        <option value="primary">primary</option>
+        <option value="secondary">secondary</option>
+        <option value="success">success</option>
+        <option value="danger">danger</option>
+        <option value="warning">warning</option>
+        <option value="info">info</option>
+        <option value="light">light</option>
+        <option value="dark">dark</option>
+      </select>
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      <input name="toast-autohide" type="checkbox" checked>автоматически скрывать
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      Скрывать через (миллисекунд):
+      <input name="toast-interval" type="text" value="10000" style="width: 100%;">
+    </div>
+    <div style="margin-bottom: 0.5rem;">
+      <button id="add-toast" type="button" style="width: 100%;">Добавить toast</button>
+    </div>
+  </div>
+
+
+
+  <script>
+    document.querySelector('[name="toast-without-title"]').onchange = (e) => {
+      document.querySelector('[name="toast-title"]').disabled = e.target.checked;
+    }
+
+    document.addEventListener('hide.toast', (e) => {
+      console.log(e.detail.target);
+    });
+
+    document.querySelector('#add-toast').onclick = () => {
+      /*
+        title - название заголовка
+        text - текст сообщения
+        theme - тема
+        autohide - нужно ли автоматически скрыть всплывающее сообщение через interval миллисекунд interval - количество миллисекунд через которые необходимо скрыть сообщение
+      */
+      new Toast({
+        title: document.querySelector('[name="toast-without-title"]').checked === true ?
+          false : document.querySelector('[name="toast-title"]').value,
+        text: document.querySelector('[name="toast-text"]').value,
+        theme: document.querySelector('[name="toast-theme"] option:checked').value,
+        autohide: document.querySelector('[name="toast-autohide"]').checked,
+        interval: parseInt(document.querySelector('[name="toast-interval"]').value)
+      });
+    }
+
+window.addEventListener('load', (e) => {
+  const showToast = () => {
+    localStorage.setItem('toast-time', Date.now());
+    new Toast({
+      title: 'Заголовок',
+      text: 'Сообщение...',
+      theme: 'warning',
+      autohide: false
+    });
+  }
+  const time = localStorage.getItem('toast-time');
+  if (time) {
+    // если прошло больше 3 часов
+    if (Date.now() > time + 1000 * 60 * 60 * 3) {
+      showToast();
+    }
+  } else {
+    showToast();
+  }
+});
+  </script>
+</body>
+
+</html>
