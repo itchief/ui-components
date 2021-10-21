@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Todo List on pure JavaScript</title>
+  <link rel="stylesheet" href="../simple-todo-list.css">
+  <script defer src="../simple-todo-list.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .btn {
+      height: 32px;
+      position: fixed;
+      color: #fff;
+      right: 15px;
+      top: 15px;
+      cursor: pointer;
+      z-index: 1001;
+      background-color: #616161;
+      background-size: 10px;
+      border: none;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="todo">
+    <div class="todo__input">
+      <input class="todo__text" type="text">
+      <span class="todo__add"></span>
+    </div>
+    <select class="todo__options">
+      <option value="active">активные</option>
+      <option value="completed">завершённые</option>
+      <option value="deleted">удалённые</option>
+    </select>
+    <ul class="todo__items" data-todo-option="active"></ul>
+  </div>
+
+  <br><br>
+  <button class="btn" id="save"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+      class="bi bi-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"></path><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"></path></svg>&nbsp;Сохранить</button>
+  <script>
+    document.querySelector('#save').addEventListener('click', (e) => {
+      var a = document.createElement('a');
+      a.download = 'tasks.txt';
+      let content = '1. Активные задачи';
+      let items = document.querySelectorAll('.todo__item[data-todo-state="active"]');
+      items.forEach((item, index) => {
+        content += '\n1.' + (index + 1) + '. ' + item.querySelector('.todo__task').textContent;
+      });
+      content += '\n\n2. Завершённые задачи';
+      items = document.querySelectorAll('.todo__item[data-todo-state="completed"]');
+      items.forEach((item, index) => {
+        content += '\n2.' + (index + 1) + '. ' + item.querySelector('.todo__task').textContent;
+      });
+      content += '\n\n3. Удалённые задачи';
+      items = document.querySelectorAll('.todo__item[data-todo-state="deleted"]');
+      items.forEach((item, index) => {
+        content += '\n3.' + (index + 1) + '. ' + item.querySelector('.todo__task').textContent;
+      });
+      a.href = window.URL.createObjectURL(new Blob([content], { type: 'text/plain' }));
+      a.click();
+    });
+  </script>
+
+</body>
+
+</html>
