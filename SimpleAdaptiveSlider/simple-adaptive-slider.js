@@ -251,7 +251,7 @@ SimpleAdaptiveSlider.prototype._refreshExtremeValues = function() {
     } else if (order > this._maxOrder) {
       this._maxOrder = order;
       this._$itemWithMaxOrder = $item;
-      this._minTranslate = parseInt($item.dataset.translate);
+      this._maxTranslate = parseInt($item.dataset.translate);
     }
   }
 };

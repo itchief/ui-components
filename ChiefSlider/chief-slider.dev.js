@@ -243,7 +243,7 @@ ChiefSlider.prototype.__refreshExtremeValues = function() {
     } else if (order > this._maxOrder) {
       this._maxOrder = order;
       this._$itemByMaxOrder = $item;
-      this._minTranslate = +$item.dataset.translate;
+      this._maxTranslate = +$item.dataset.translate;
     }
   }
 };

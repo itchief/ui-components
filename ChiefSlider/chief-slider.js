@@ -5,7 +5,7 @@
  */
 
 (function() {
-  if (typeof window.CustomEvent === 'function' ) return false;
+  if (typeof window.CustomEvent === 'function') return false;
   function CustomEvent(event, params) {
     params = params || {bubbles: false, cancelable: false, detail: null};
     var e = document.createEvent('CustomEvent');
@@ -243,7 +243,7 @@ ChiefSlider.prototype.__refreshExtremeValues = function() {
     } else if (order > this._maxOrder) {
       this._maxOrder = order;
       this._$itemByMaxOrder = $item;
-      this._minTranslate = +$item.dataset.translate;
+      this._maxTranslate = +$item.dataset.translate;
     }
   }
 };
