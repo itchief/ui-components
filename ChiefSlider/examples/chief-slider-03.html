@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ChiefSlider [Example 3]</title>
-  <link rel="stylesheet" href="/examples/libs/chief-slider/chief-slider.min.css">
-  <script defer src="/examples/libs/chief-slider/chief-slider.min.js"></script>
+  <title>ChiefSlider - Example 03</title>
+  <link rel="stylesheet" href="../chief-slider.css">
+  <script defer src="../chief-slider.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const slider = new ChiefSlider('.slider', {
+    document.addEventListener('DOMContentLoaded', () => {
+      new ChiefSlider('.slider', {
         loop: true
       });
     });
@@ -38,13 +38,13 @@
     }
 
     .slider__item {
-      flex: 0 0 50%;
-      max-width: 50%;
+      flex: 0 0 100%;
+      max-width: 100%;
       height: 250px;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: rgba(255,255,255, 0.8);
+      color: rgba(255, 255, 255, 0.8);
       font-size: 7rem;
     }
 
@@ -80,22 +80,6 @@
           <div class="slider__item">
             <!-- Контент 1 слайда -->
             1
-          </div>
-          <div class="slider__item">
-            <!-- Контент 2 слайда -->
-            2
-          </div>
-          <div class="slider__item">
-            <!-- Контент 3 слайда -->
-            3
-          </div>
-          <div class="slider__item">
-            <!-- Контент 4 слайда -->
-            4
-          </div>
-          <div class="slider__item">
-            <!-- Контент 5 слайда -->
-            5
           </div>
         </div>
       </div>

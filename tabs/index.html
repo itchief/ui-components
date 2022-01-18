@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Табы на чистом CSS и JavaScript</title>
+  <link rel="stylesheet" href="css/tabs.css">
+  <style>
+    .tabs {
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="tabs">
+    <div class="tabs__nav">
+      <a class="tabs__link tabs__link_active" href="#content-1">Вкладка 1</a>
+      <a class="tabs__link" href="#content-2">Вкладка 2</a>
+      <a class="tabs__link" href="#content-3">Вкладка 3</a>
+    </div>
+    <div class="tabs__content">
+      <div class="tabs__pane tabs__pane_show" id="content-1">
+        Содержимое 1...
+      </div>
+      <div class="tabs__pane" id="content-2">
+        Содержимое 2...
+      </div>
+      <div class="tabs__pane" id="content-3">
+        Содержимое 3...
+      </div>
+    </div>
+  </div>
+
+  <script src="js/tabs.js"></script>
+  <script>
+    const tabs = new ItcTabs('.tabs');
+  </script>
+
+</body>
+
+</html>
