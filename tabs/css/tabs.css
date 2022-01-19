@@ -11,22 +11,24 @@
   border-bottom: 1px solid #e0e0e0;
 }
 
-.tabs__link {
+.tabs__btn {
   padding: 0.5rem 0.75rem;
   text-decoration: none;
   color: black;
   text-align: center;
   flex-shrink: 0;
   flex-grow: 1;
+  border: 1px solid transparent;
+  cursor: pointer;
 }
 
-.tabs__link_active {
+.tabs__btn_active {
   background: #e0e0e0;
   cursor: default;
 }
 
-.tabs__link:not(.tabs__link_active):hover,
-.tabs__link:not(.tabs__link_active):focus {
+.tabs__btn:not(.tabs__btn_active):hover,
+.tabs__btn:not(.tabs__btn_active):focus {
   background-color: #eee;
 }
 
