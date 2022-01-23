@@ -30,6 +30,7 @@ class CustomSelect {
     }
   }
   _update(option) {
+    option = option.closest('.select__option');
     const selected = this._elRoot.querySelector(SELECTOR_OPTION_SELECTED);
     if (selected) {
       selected.classList.remove(CLASS_NAME_SELECTED);
