@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collapse</title>
+  <link rel="stylesheet" href="css/collapse.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+      background-color: #fff;
+    }
+
+    .container {
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+    }
+
+    button {
+      display: inline-block;
+      font-weight: 400;
+      font-size: inherit;
+      line-height: 1.5;
+      color: #212529;
+      text-align: center;
+      text-decoration: none;
+      vertical-align: middle;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      background-color: #eee;
+      border: 1px solid #e0e0e0;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #e0e0e0;
+      border-color: #bdbdbd;
+    }
+
+    button {
+      margin-bottom: 1rem;
+    }
+
+    .collapse__body {
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid rgba(0, 0, 0, .125);
+      border-radius: 0.25rem;
+      padding: 1rem;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container">
+    <button id="toggle" type="button">Collapse</button>
+
+    <div class="collapse">
+      <div class="collapse__body">
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aspernatur obcaecati animi corrupti, numquam
+          explicabo maxime recusandae cupiditate amet velit sequi soluta nostrum vel consequuntur consectetur
+          repellendus quia doloremque itaque eum!</p>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Placeat esse suscipit pariatur laboriosam labore
+          sit? In perspiciatis quo, dolores vel cupiditate repellendus fuga magnam ipsum dignissimos asperiores quia.
+          Maiores, consequatur!</p>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script src="js/collapse.js"></script>
+  <script>
+
+    const collapse = new ItcCollapse(document.querySelector('.collapse'));
+
+    document.querySelector('#toggle').onclick = () => {
+      collapse.toggle();
+    }
+  </script>
+
+</body>
+
+</html>
