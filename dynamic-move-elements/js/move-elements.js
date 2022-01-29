@@ -17,29 +17,42 @@ class ItcMoveEl {
     const resizeObserver = new ResizeObserver(entries => {
       const width = entries[0].contentRect['width'];
       this._data.forEach(item => {
+        let newState = item['state'];
+        let minWidth = 0;
+        let maxWidth = 0;
+        let isChange = false;
         item['moves'].forEach((breakpoint, index) => {
-          let state = item['state'];
-          if (width >= breakpoint['bp-min']) {
-            state = index;
-          } else if (width < breakpoint['bp-max']) {
-            state = index;
-          } else {
-            state = -1;
-          }
-          if (item['state'] !== state) {
-            item['state'] = state;
-            this._move(item);
+          const bpMin = breakpoint['bp-min'];
+          const bpMax = breakpoint['bp-max'];
+          if (width >= bpMin && bpMax === undefined && bpMin >= minWidth) {
+            newState = index;
+            minWidth = bpMin;
+            isChange = true;
+          } else if (bpMin === undefined && width < bpMax && (bpMax <= maxWidth || maxWidth === 0)) {
+            newState = index;
+            maxWidth = bpMax;
+            isChange = true;
+          } else if (width >= bpMin && width < bpMax) {
+            newState = index;
+            minWidth = bpMin;
+            maxWidth = bpMax;
+            isChange = true;
           }
         });
+        newState = isChange ? newState : -1;
+        if (item['state'] !== newState) {
+          item['state'] = newState;
+          this._move(item);
+        }
       });
     });
     resizeObserver.observe(document.body);
   }
   _move(item) {
     const el = item['el'];
-    if (item['state'] > -1) {
-      const target = document.querySelector(item['moves'][item['state']]['target']);
-      target.children[item['moves'][item['state']]['index']].before(el);
-    }
+    const state = item['state'];
+    const position = state > -1 ? item['moves'][state]['index'] : item['position'];
+    const target = state > -1 ? document.querySelector(item['moves'][state]['target']) : item['parent'];
+    position >= target.children.length ? target.append(el) : target.children[position].before(el);
   }
 }

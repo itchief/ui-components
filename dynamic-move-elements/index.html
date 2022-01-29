@@ -24,26 +24,34 @@
     }
 
     .container {
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
     }
 
     .b-1,
     .b-2 {
+      margin: 20px;
+      padding: 20px;
       background-color: #e8f5e9;
+      position: relative;
+    }
+
+    .section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 2px 5px;
     }
 
     .el-1,
     .el-2,
     .el-3,
     .el-4 {
-      width: 100px;
-      height: 100px;
+      width: 70px;
+      height: 70px;
+      margin: 10px;
       background-color: #fff;
       border: 1px solid #4caf50;
-      margin: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -55,18 +63,23 @@
 
 <body>
 
+  <div class="container">
 
-  <div class="b-1">
-    <div>b-1</div>
-    <div class="el-1">1</div>
-    <div class="el-2">2</div>
+    <div class="b-1">
+      <div class="section">b-1</div>
+      <div class="el-1">1</div>
+      <div class="el-2">2</div>
+    </div>
+
+    <div class="b-2">
+      <div class="section">b-2</div>
+      <div class="el-3" data-move-el="[{'bp-min': 1000, 'index': 1, 'target': '.b-1'}]">3</div>
+      <div class="el-4" data-move-el="[{'bp-min': 300, 'index': 1, 'target': '.b-1'}]">4</div>
+    </div>
+
   </div>
 
-  <div class="b-2">
-    <div>b-2</div>
-    <div class="el-3" data-move-el="[{'bp-min': 1000, 'index': 1, 'target': '.b-1'}]">3</div>
-    <div class="el-4" data-move-el="[{'bp-min': 300, 'index': 1, 'target': '.b-1'}]">4</div>
-  </div>
+
 
   <script src="js/move-elements.js"></script>
   <script>
