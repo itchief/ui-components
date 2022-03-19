@@ -7,12 +7,10 @@
 class Toast {
   constructor(params) {
     this._title = params['title'] === false ? false : params['title'] || 'Title';
-    console.log(this._title);
     this._text = params['text'] || 'Message...';
     this._theme = params['theme'] || 'default';
     this._autohide = params['autohide'] && true;
     this._interval = +params['interval'] || 5000;
-    console.log(this._title);
     this._create();
     this._el.addEventListener('click', (e) => {
       if (e.target.classList.contains('toast__close')) {
@@ -22,7 +20,11 @@ class Toast {
     this._show();
   }
   _show() {
+    this._el.classList.add('toast_showing');
     this._el.classList.add('toast_show');
+    window.setTimeout(() => {
+      this._el.classList.remove('toast_showing');
+    });
     if (this._autohide) {
       setTimeout(() => {
         this._hide();
@@ -30,7 +32,12 @@ class Toast {
     }
   }
   _hide() {
-    this._el.classList.remove('toast_show');
+    this._el.classList.add('toast_showing');
+    this._el.addEventListener('transitionend', () => {
+      this._el.classList.remove('toast_showing');
+      this._el.classList.remove('toast_show');
+      this._el.remove();
+    }, {once : true});
     const event = new CustomEvent('hide.toast', { detail: { target: this._el } });
     document.dispatchEvent(event);
   }

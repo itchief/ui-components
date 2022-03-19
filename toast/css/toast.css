@@ -25,9 +25,9 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: var(--toast-border-radius);
   box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075);
-  display: none;
   position: relative;
   overflow: hidden;
+  transition: 0.3s opacity;
 }
 
 .toast_default {
@@ -87,8 +87,12 @@
   margin-bottom: 0.75rem;
 }
 
-.toast_show {
-  display: block;
+.toast:not(.toast_show) {
+  display: none;
+}
+
+.toast_showing {
+  opacity: 0;
 }
 
 .toast__header {
