@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Табы на чистом CSS и JavaScript</title>
+  <link rel="stylesheet" href="../css/tabs.css">
+  <style>
+    .tabs {
+      max-width: 350px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="tabs" class="tabs">
+    <div class="tabs__nav">
+      <button class="tabs__btn tabs__btn_active">Вкладка 1</button>
+      <button class="tabs__btn">Вкладка 2</button>
+      <button class="tabs__btn">Вкладка 3</button>
+    </div>
+    <div class="tabs__content">
+      <div id="tab1-1" class="tabs__pane tabs__pane_show">
+        <p>Содержимое 1...</p>
+      </div>
+      <div id="tab1-2" class="tabs__pane">
+        <p>Содержимое 2...</p>
+      </div>
+      <div id="tab1-3" class="tabs__pane">
+        <p>Содержимое 3...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/tabs.js"></script>
+  <script>
+    // получаем элемент
+    const elTabs = document.querySelector('#tabs');
+    // инициализируем элемент как ItcTabs
+    const tabs = new ItcTabs(elTabs);
+
+    const data = {
+      'tabs1-1': [
+        { title: 'Вкладка 1.1', content: 'Содержимое 1.1...' },
+        { title: 'Вкладка 1.2', content: 'Содержимое 1.2...' },
+        { title: 'Вкладка 1.3', content: 'Содержимое 1.3...' },
+        { title: 'Вкладка 1.4', content: 'Содержимое 1.4...' },
+      ],
+      'tabs1-2': [
+        { title: 'Вкладка 2.1', content: 'Содержимое 2.1...' },
+        { title: 'Вкладка 2.2', content: 'Содержимое 2.2...' },
+        { title: 'Вкладка 2.3', content: 'Содержимое 2.3...' },
+        { title: 'Вкладка 2.4', content: 'Содержимое 2.4...' },
+      ],
+      'tabs1-3': [
+        { title: 'Вкладка 3.1', content: 'Содержимое 3.1...' },
+        { title: 'Вкладка 3.2', content: 'Содержимое 3.2...' },
+        { title: 'Вкладка 3.3', content: 'Содержимое 3.3...' },
+        { title: 'Вкладка 3.4', content: 'Содержимое 3.4...' },
+      ]
+    }
+
+    const addTabs = (id, data, target) => {
+      let output = `<div {{id}} class="tabs">
+        <div class="tabs__nav">{{buttons}}</div>
+        <div class="tabs__content">{{content}}</div>
+      </div>`;
+      output = output.replace('{{id}}', `id="${id}"`);
+      let buttons = '';
+      let content = '';
+      data.forEach(item => {
+        buttons += `<button class="tabs__btn">${item['title']}</button>`;
+        content += `<div class="tabs__pane">${item['content']}</div>`;
+      })
+      output = output.replace('{{buttons}}', buttons);
+      output = output.replace('{{content}}', content);
+      if (!target.querySelector(`#${id}`)) {
+        target.insertAdjacentHTML('beforeend', output);
+        const tab = new ItcTabs(`#${id}`);
+        tab.showByIndex(0);
+      }
+    }
+
+    if (elTabs.querySelector('.tabs__pane_show')) {
+      elTabs.querySelectorAll('.tabs__pane_show').forEach(el => {
+        const id = el.id.replace('tab', 'tabs');
+        if (data[id]) {
+          addTabs(id, data[id], el);
+        }
+      });
+    }
+
+    elTabs.addEventListener('tab.itc.change', () => {
+      elTabs.querySelectorAll('.tabs__pane_show').forEach(el => {
+        const id = el.id.replace('tab', 'tabs');
+        if (data[id]) {
+          addTabs(id, data[id], el);
+        }
+      });
+    })
+
+
+  </script>
+
+</body>
+
+</html>
