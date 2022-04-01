@@ -3,12 +3,12 @@ const todo = {
   action(e) {
     const target = e.target;
     if (target.classList.contains('todo__action')) {
-      const action = target.dataset.action;
-      const todoItem = target.closest('.todo__item');
-      if (action === 'deleted' && todoItem.dataset.state === 'deleted') {
-        target.closest('.todo__item').remove();
+      const action = target.dataset.todoAction;
+      const elemItem = target.closest('.todo__item');
+      if (action === 'deleted' && elemItem.dataset.todoState === 'deleted') {
+        elemItem.remove();
       } else {
-        todoItem.dataset.state = action;
+        elemItem.dataset.todoState = action;
       }
       this.save();
     } else if (target.classList.contains('todo__add')) {
@@ -17,34 +17,33 @@ const todo = {
     }
   },
   add() {
-    const text = document.querySelector('.todo__text');
-    if (document.querySelector('.todo__text').disabled || !text.value.length) {
+    const elemText = document.querySelector('.todo__text');
+    if (elemText.disabled || !elemText.value.length) {
       return;
     }
-    document.querySelector('.todo__items').insertAdjacentHTML('beforeend', this.create(text.value));
-    text.value = '';
+    document.querySelector('.todo__items').insertAdjacentHTML('beforeend', this.create(elemText.value));
+    elemText.value = '';
   },
   create(text) {
-    return `<li class="todo__item" data-state="active" draggable="true">
+    return `<li class="todo__item" data-todo-state="active" draggable="true">
       <span class="todo__task">${text}</span>
-      <span class="todo__action todo__action_restore" data-action="active"></span>
-      <span class="todo__action todo__action_complete" data-action="completed"></span>
-      <span class="todo__action todo__action_delete" data-action="deleted"></span></li>`;
+      <span class="todo__action todo__action_restore" data-todo-action="active"></span>
+      <span class="todo__action todo__action_complete" data-todo-action="completed"></span>
+      <span class="todo__action todo__action_delete" data-todo-action="deleted"></span></li>`;
   },
   init() {
-    const data = localStorage.getItem('todo');
-    const todoItems = document.querySelector('.todo__items');
-    if (data) {
-      todoItems.innerHTML = data;
+    const fromStorage = localStorage.getItem('todo');
+    if (fromStorage) {
+      document.querySelector('.todo__items').innerHTML = fromStorage;
     }
     document.querySelector('.todo__options').addEventListener('change', this.update);
     document.addEventListener('click', this.action.bind(this));
     this.drag();
   },
   update() {
-    const section = document.querySelector('.todo__options').value;
-    document.querySelector('.todo__text').disabled = section !== 'active';
-    document.querySelector('.todo__items').dataset.items = section;
+    const option = document.querySelector('.todo__options').value;
+    document.querySelector('.todo__items').dataset.todoOption = option;
+    document.querySelector('.todo__text').disabled = option !== 'active';
   },
   save() {
     localStorage.setItem('todo', document.querySelector('.todo__items').innerHTML);

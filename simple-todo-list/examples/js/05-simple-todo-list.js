@@ -17,11 +17,11 @@ $(document).on('click', '.todo__action', function(e) {
 });
 
 function todoCreate(text) {
-  return $('<li>', {class: 'todo__item', 'data-state': 'active'})
+  return $('<li>', {class: 'todo__item', 'data-todo-state': 'active'})
     .append('<span class="todo__task">' + text + '</span>')
-    .append('<span class="todo__action_restore" data-action="active"></span>')
-    .append('<span class="todo__action_complete" data-action="completed"></span>')
-    .append('<span class="todo__action_delete" data-action="deleted"></span>');
+    .append('<span class="todo__action todo__action_restore" data-todo-action="active"></span>')
+    .append('<span class="todo__action todo__action_complete" data-todo-action="completed"></span>')
+    .append('<span class="todo__action todo__action_delete" data-todo-action="deleted"></span>');
 }
 
 $(document).on('click', '.todo__add', function() {
