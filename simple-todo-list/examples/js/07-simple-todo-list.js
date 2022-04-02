@@ -22,6 +22,7 @@ const todo = {
     }
     document.querySelector('.todo__items').insertAdjacentHTML('beforeend', this.create(elemText.value));
     elemText.value = '';
+    document.dispatchEvent(new Event('todo-item-add'));
   },
   create(text) {
     return `<li class="todo__item" data-todo-state="active">

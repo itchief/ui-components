@@ -43,6 +43,25 @@
     <ul class="todo__items" data-todo-option="active"></ul>
   </div>
 
+
+  <script>
+    data = {
+      'text1': '#href1',
+      'text2': '#href2',
+      'text3': '#href3'
+    };
+    document.addEventListener('todo-item-add', (e) => {
+      const elTodo = document.querySelector('.todo');
+      const links = [... elTodo.querySelectorAll('.todo__task a')];
+      links.forEach(link => {
+        if (data[link.textContent]) {
+          link.href = data[link.textContent];
+        }
+      });
+    });
+  </script>
+
+
 </body>
 
 </html>
