@@ -10,12 +10,13 @@ class CustomSelect {
   constructor(target, params) {
     this._elRoot = typeof target === 'string' ? document.querySelector(target) : target;
     this._params = params || {};
+    this._onClickFn = this._onClick.bind(this);
     if (this._params['options']) {
       this._elRoot.classList.add(CLASS_NAME_SELECT);
       this._elRoot.innerHTML = CustomSelect.template(this._params);
     }
     this._elToggle = this._elRoot.querySelector(SELECTOR_DATA_TOGGLE);
-    this._elRoot.addEventListener('click', this._onClick.bind(this));
+    this._elRoot.addEventListener('click', this._onClickFn);
   }
   _onClick(e) {
     const target = e.target;
@@ -79,7 +80,7 @@ class CustomSelect {
     }
   }
   dispose() {
-    this._elRoot.removeEventListener('click', this._onClick);
+    this._elRoot.removeEventListener('click', this._onClickFn);
   }
   get value() {
     return this._elToggle.value;
