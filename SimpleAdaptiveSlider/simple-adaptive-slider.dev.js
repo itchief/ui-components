@@ -461,6 +461,7 @@ class SimpleAdaptiveSlider {
       this._$root.addEventListener('mousemove', onSwipeMove.bind(this));
       document.addEventListener('touchend', onSwipeEnd.bind(this));
       document.addEventListener('mouseup', onSwipeEnd.bind(this));
+      document.addEventListener('mouseout', onSwipeEnd.bind(this));
     }
     this._$root.addEventListener('dragstart', onDragStart.bind(this));
     // при изменении активности вкладки
