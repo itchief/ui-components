@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>JavaScript SimpleAdaptiveSlider - Слайдер для сайта на чистом JavaScript [Example 01]</title>
   <!-- Подключаем CSS слайдера -->
-  <link rel="stylesheet" href="../simple-adaptive-slider.min.css">
+  <link rel="stylesheet" href="css/simple-adaptive-slider.css">
   <!-- Подключаем JS слайдера -->
-  <script defer src="../simple-adaptive-slider.dev.js"></script>
+  <script defer src="js/simple-adaptive-slider.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       // инициализация слайдера
-      var slider = new SimpleAdaptiveSlider('.slider', {
-        loop: true,
+      var slider = new ItcSimpleSlider('.slider', {
+        loop: false,
         autoplay: false,
         swipe: true
       });
