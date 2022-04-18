@@ -12,7 +12,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       // инициализация слайдера
-      var slider = new ItcSimpleSlider('.slider', {
+      var slider = new ItcSimpleSlider('.itcss', {
         loop: false,
         autoplay: false,
         swipe: true
@@ -28,15 +28,15 @@
     }
 
     /* дополнительные стили для этого примера */
-    .slider__items {
+    .itcss__items {
       counter-reset: slide;
     }
 
-    .slider__item {
+    .itcss__item {
       counter-increment: slide;
     }
 
-    .slider__item>div::before {
+    .itcss__item>div::before {
       content: counter(slide);
       position: absolute;
       top: 10px;
@@ -51,25 +51,25 @@
 
 <body>
   <!-- Разметка слайдера -->
-  <div class="slider">
-    <div class="slider__wrapper">
-      <div class="slider__items">
-        <div class="slider__item">
+  <div class="itcss">
+    <div class="itcss__wrapper">
+      <div class="itcss__items">
+        <div class="itcss__item">
           <div style="height: 250px; background: #3f51b5;"></div>
         </div>
-        <div class="slider__item">
+        <div class="itcss__item">
           <div style="height: 250px; background: #607d8b;"></div>
         </div>
-        <div class="slider__item">
+        <div class="itcss__item">
           <div style="height: 250px; background: #f44336;"></div>
         </div>
-        <div class="slider__item">
+        <div class="itcss__item">
           <div style="height: 250px; background: #4caf50;"></div>
         </div>
       </div>
     </div>
-    <a class="slider__control slider__control_prev" href="#" role="button" data-slide="prev"></a>
-    <a class="slider__control slider__control_next" href="#" role="button" data-slide="next"></a>
+    <a class="itcss__control itcss__control_prev" href="#" role="button" data-slide="prev"></a>
+    <a class="itcss__control itcss__control_next" href="#" role="button" data-slide="next"></a>
   </div>
 </body>
 

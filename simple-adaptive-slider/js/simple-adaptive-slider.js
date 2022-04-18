@@ -1,5 +1,5 @@
 /**
- * SimpleAdaptiveSlider by Itchief v2.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
+ * SimpleAdaptiveSlider by itchief v2.0.1 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
  * Copyright 2020 - 2022 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
@@ -7,22 +7,26 @@
 class ItcSimpleSlider {
 
   // базовые классы и селекторы
-  static CLASS_NAME_ITEM_ACTIVE = 'slider__item_active';
-  static CLASS_NAME_INDICATOR_ACTIVE = 'slider__indicator_active';
-  static CLASS_NAME_INDICATOR = 'slider__indicator';
-  static CLASS_NAME_INDICATORS = 'slider__indicators';
-  static CLASS_NAME_BUTTON_SHOW = 'slider__control_show';
-  static SELECTOR_ITEM = '.slider__item';
-  static SELECTOR_ITEM_ACTIVE = '.slider__item_active';
-  static SELECTOR_ITEMS = '.slider__items';
-  static SELECTOR_INDICATOR_ACTIVE = '.slider__indicator_active';
-  static SELECTOR_WRAPPER = '.slider__wrapper';
-  static SELECTOR_NEXT_PREV = '.slider__control';
-  static SELECTOR_NEXT_BUTTON = '.slider__control_next';
-  static SELECTOR_PREV_BUTTON = '.slider__control_prev';
-  // индикаторы
-  static INDICATOR_WRAPPER_ELEMENT = 'ol';
-  static INDICATOR_ITEM_ELEMENT = 'li';
+  static PREFIX = 'itcss';
+  static CLASS_NAME_ITEM = `${ItcSimpleSlider.PREFIX}__item`;
+  static CLASS_NAME_ITEM_ACTIVE = `${ItcSimpleSlider.PREFIX}__item_active`;
+  static CLASS_NAME_ITEMS = `${ItcSimpleSlider.PREFIX}__items`;
+  static CLASS_NAME_INDICATOR = `${ItcSimpleSlider.PREFIX}__indicator`;
+  static CLASS_NAME_INDICATOR_ACTIVE = `${ItcSimpleSlider.PREFIX}__indicator_active`;
+  static CLASS_NAME_INDICATORS = `${ItcSimpleSlider.PREFIX}__indicators`;
+  static CLASS_NAME_CONTROL = `${ItcSimpleSlider.PREFIX}__control`;
+  static CLASS_NAME_CONTROL_PREV = `${ItcSimpleSlider.PREFIX}__control_prev`;
+  static CLASS_NAME_CONTROL_NEXT = `${ItcSimpleSlider.PREFIX}__control_next`;
+  static CLASS_NAME_CONTROL_SHOW = `${ItcSimpleSlider.PREFIX}__control_show`;
+  static SELECTOR_ITEMS = `.${ItcSimpleSlider.CLASS_NAME_ITEMS}`;
+  static SELECTOR_ITEM = `.${ItcSimpleSlider.CLASS_NAME_ITEM}`;
+  static SELECTOR_ITEM_ACTIVE = `.${ItcSimpleSlider.CLASS_NAME_ITEM_ACTIVE}`;
+  static SELECTOR_INDICATOR_ACTIVE = `.${ItcSimpleSlider.CLASS_NAME_INDICATOR_ACTIVE}`;
+  static SELECTOR_INDICATORS = `.${ItcSimpleSlider.CLASS_NAME_INDICATORS}`;
+  static SELECTOR_WRAPPER = `.${ItcSimpleSlider.PREFIX}__wrapper`;
+  static SELECTOR_CONTROL = `.${ItcSimpleSlider.CLASS_NAME_CONTROL}`;
+  static SELECTOR_CONTROL_NEXT = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_NEXT}`;
+  static SELECTOR_CONTROL_PREV = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_PREV }`;
   // порог для переключения слайда (20%)
   static SWIPE_THRESHOLD = 20;
   // класс для отключения transition
@@ -60,20 +64,20 @@ class ItcSimpleSlider {
     this._intervalId = null;
     // конфигурация слайдера (по умолчанию)
     const defaultConfig = {
-      loop: true,
       autoplay: false,
+      loop: true,
+      indicators: true,
       interval: 5000,
       swipe: true,
     };
     this._config = Object.assign(defaultConfig, config);
-
     this._elItems.dataset.translate = 0;
     // добавляем к слайдам data-атрибуты
-    for (var i = 0, length = this._elsItem.length; i < length; i++) {
-      this._elsItem[i].dataset.order = i;
-      this._elsItem[i].dataset.index = i;
-      this._elsItem[i].dataset.translate = 0;
-    }
+    this._elsItem.forEach((item, index) => {
+      item.dataset.order = index;
+      item.dataset.index = index;
+      item.dataset.translate = 0;
+    });
     // перемещаем последний слайд перед первым
     if (this._config.loop) {
       var count = this._elsItem.length - 1;
@@ -106,17 +110,19 @@ class ItcSimpleSlider {
     const elIndicatorNew = this._el.querySelector(`[data-slide-to="${this._currentIndex}"]`);
     elIndicatorNew ? elIndicatorNew.classList.add(ItcSimpleSlider.CLASS_NAME_INDICATOR_ACTIVE) : null;
 
-    const elPrevBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_PREV_BUTTON);
-    const elNextBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_NEXT_BUTTON);
-    elPrevBtn ? elPrevBtn.classList.add(ItcSimpleSlider.CLASS_NAME_BUTTON_SHOW) : null;
-    elNextBtn ? elNextBtn.classList.add(ItcSimpleSlider.CLASS_NAME_BUTTON_SHOW) : null;
+    const elPrevBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_CONTROL_PREV);
+    const elNextBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_CONTROL_NEXT);
+    elPrevBtn ? elPrevBtn.classList.add(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW) : null;
+    elNextBtn ? elNextBtn.classList.add(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW) : null;
     if (!this._config.loop && this._currentIndex === 0) {
-      elPrevBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_BUTTON_SHOW);
+      elPrevBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW);
     } else if (!this._config.loop && this._currentIndex === this._elsItem.length - 1) {
-      elNextBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_BUTTON_SHOW);
+      elNextBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW);
     }
 
-    this._el.dispatchEvent(new CustomEvent('active.itc.slider', { bubbles: true }));
+    this._el.dispatchEvent(new CustomEvent('active.itc.slider', {
+      bubbles: true
+    }));
   }
 
   // смена слайдов
@@ -193,27 +199,26 @@ class ItcSimpleSlider {
 
   // добавление индикаторов
   _addIndicators() {
-    if (!this._el.querySelector('.' + ItcSimpleSlider.CLASS_NAME_INDICATORS)) {
-      let htmlString = `<ol class="${ItcSimpleSlider.CLASS_NAME_INDICATORS}">`;
-      for (let i = 0, length = this._elsItem.length; i < length; i++) {
-        htmlString += `<li class="${ItcSimpleSlider.CLASS_NAME_INDICATOR}" data-slide-to="${i}"></li>`
-      }
-      htmlString += '</ol>';
-      this._el.insertAdjacentHTML('beforeend', htmlString);
+    if (this._el.querySelector(ItcSimpleSlider.SELECTOR_INDICATORS) || !this._config.indicators) {
+      return;
     }
+    let html = '';
+    for (let i = 0, length = this._elsItem.length; i < length; i++) {
+      html += `<li class="${ItcSimpleSlider.CLASS_NAME_INDICATOR}" data-slide-to="${i}"></li>`
+    }
+    this._el.insertAdjacentHTML('beforeend', `<ol class="${ItcSimpleSlider.CLASS_NAME_INDICATORS}">${html}</ol>`);
   }
 
   // refresh extreme values
   _refreshExtremeValues() {
-    var $itemList = this._elsItem;
-    this._minOrder = parseInt($itemList[0].dataset.order);
+    this._minOrder = parseInt(this._elsItem[0].dataset.order);
     this._maxOrder = this._minOrder;
-    this._$itemWithMinOrder = $itemList[0];
+    this._$itemWithMinOrder = this._elsItem[0];
     this._$itemWithMaxOrder = this._$itemWithMinOrder;
-    this._minTranslate = parseInt($itemList[0].dataset.translate);
+    this._minTranslate = parseInt(this._elsItem[0].dataset.translate);
     this._maxTranslate = this._minTranslate;
-    for (var i = 0, length = $itemList.length; i < length; i++) {
-      var $item = $itemList[i];
+    for (var i = 0, length = this._elsItem.length; i < length; i++) {
+      var $item = this._elsItem[i];
       var order = parseInt($item.dataset.order);
       if (order < this._minOrder) {
         this._minOrder = order;
@@ -276,7 +281,7 @@ class ItcSimpleSlider {
     function onClick(e) {
       var $target = e.target;
       this._autoplay('stop');
-      if ($target.classList.contains('slider__control')) {
+      if ($target.classList.contains(ItcSimpleSlider.CLASS_NAME_CONTROL)) {
         e.preventDefault();
         this._direction = $target.dataset.slide;
         this._move();
@@ -317,7 +322,7 @@ class ItcSimpleSlider {
 
     function onSwipeStart(e) {
       this._autoplay('stop');
-      if (e.target.closest('.slider__control')) {
+      if (e.target.closest(ItcSimpleSlider.CLASS_NAME_CONTROL)) {
         return;
       }
       var event = e.type.search('touch') === 0 ? e.touches[0] : e;

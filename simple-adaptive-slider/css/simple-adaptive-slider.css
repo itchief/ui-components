@@ -5,7 +5,7 @@
   */
 
 /* стили для корневого элемента слайдера */
-.slider {
+.itcss {
   position: relative;
   overflow: hidden;
   max-width: 600px;
@@ -14,14 +14,14 @@
 }
 
 /* стили для wrapper */
-.slider__wrapper {
+.itcss__wrapper {
   position: relative;
   overflow: hidden;
   background-color: #eee;
 }
 
 /* стили для элемента, в котором непосредственно расположены элементы (слайды) */
-.slider__items {
+.itcss__items {
   display: flex;
   transition: transform 0.5s ease;
 }
@@ -32,14 +32,14 @@
 }
 
 /* стили для элементов */
-.slider__item {
+.itcss__item {
   flex: 0 0 100%;
   max-width: 100%;
   position: relative;
 }
 
 /* кнопки Prev и Next */
-.slider__control {
+.itcss__control {
   position: absolute;
   top: 50%;
   width: 40px;
@@ -54,26 +54,26 @@
   user-select: none;
 }
 
-.slider__control_show {
+.itcss__control_show {
   display: flex;
 }
 
-.slider__control:hover,
-.slider__control:focus {
+.itcss__control:hover,
+.itcss__control:focus {
   color: #fff;
   text-decoration: none;
   opacity: 0.7;
 }
 
-.slider__control_prev {
+.itcss__control_prev {
   left: 0;
 }
 
-.slider__control_next {
+.itcss__control_next {
   right: 0;
 }
 
-.slider__control::before {
+.itcss__control::before {
   content: '';
   display: inline-block;
   width: 20px;
@@ -82,16 +82,16 @@
   background-size: 100% 100%;
 }
 
-.slider__control_prev::before {
+.itcss__control_prev::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 }
 
-.slider__control_next::before {
+.itcss__control_next::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
 
 /* Индикаторы */
-.slider__indicators {
+.itcss__indicators {
   position: absolute;
   left: 0;
   right: 0;
@@ -104,7 +104,7 @@
   user-select: none;
 }
 
-.slider__indicator {
+.itcss__indicator {
   flex: 0 1 auto;
   width: 30px;
   height: 4px;
@@ -117,6 +117,6 @@
   cursor: pointer;
 }
 
-.slider__indicator_active {
+.itcss__indicator_active {
   background-color: #fff;
 }
