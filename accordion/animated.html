@@ -23,21 +23,23 @@
       box-sizing: border-box;
     }
   </style>
-  <link href="css/accordion.css" rel="stylesheet">
-  <script src="js/accordion.js"></script>
+  <link href="css/animated-accordion.css" rel="stylesheet">
+  <script src="js/animated-accordion.js"></script>
 </head>
 
 <body>
 
 
-  <div class="accordion" style="max-width: 30rem; margin: 1rem auto 2rem;">
-    <div class="accordion__item accordion__item_show">
+  <div id="accordion" class="accordion" style="max-width: 30rem; margin: 1rem auto;">
+    <div class="accordion__item">
       <div class="accordion__header">
         Заголовок 1
       </div>
       <div class="accordion__body">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur et numquam optio, aut consequuntur iure magni
-        tempore quo, velit, quos ipsum perferendis sit quidem sapiente voluptatem nesciunt rerum soluta amet.
+        <div class="accordion__content">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati consequuntur autem, mollitia rem aperiam
+          fugit eos officia vel quidem quis officiis dolores porro beatae veritatis tenetur. Culpa ex libero a!
+        </div>
       </div>
     </div>
     <div class="accordion__item">
@@ -45,8 +47,11 @@
         Заголовок 2
       </div>
       <div class="accordion__body">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Non earum deleniti recusandae placeat rem eius quod
-        aliquid adipisci nemo alias debitis corporis pariatur quibusdam est, porro fuga id iure vero?
+        <div class="accordion__content">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea dignissimos a autem perspiciatis sit eum
+          exercitationem expedita omnis ipsam voluptate veritatis dolores similique eligendi, earum quasi officia in
+          facilis dolorum!
+        </div>
       </div>
     </div>
     <div class="accordion__item">
@@ -54,11 +59,16 @@
         Заголовок 3
       </div>
       <div class="accordion__body">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid repellat dicta vel sapiente laudantium minima
-        porro voluptatem nam, alias aliquam qui quasi eveniet odit fugiat eius aspernatur nesciunt veniam expedita!
+        <div class="accordion__content">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta pariatur dolore consectetur perferendis libero
+          nam sit magni voluptatibus voluptates autem nesciunt, praesentium quidem deserunt ipsa totam esse ullam? Quod,
+          maiores!
+        </div>
       </div>
     </div>
   </div>
+
+
 
   <script>
     new ItcAccordion(document.querySelector('.accordion'), {

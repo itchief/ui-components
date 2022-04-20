@@ -27,9 +27,11 @@
   background-repeat: no-repeat;
   background-size: 1.25rem;
   content: "";
+  transition: transform 0.2s ease-out;
 }
 
-.accordion__item_show .accordion__header::after {
+.accordion__item_show .accordion__header::after,
+.accordion__item_slidedown .accordion__header::after {
   transform: rotate(-180deg);
 }
 
@@ -42,9 +44,8 @@
   border-bottom-left-radius: 0.25rem;
 }
 
-.accordion__body {
+.accordion__content {
   padding: 0.75rem 1rem;
-  overflow: hidden;
   background: #fff;
   border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;

@@ -1,5 +1,5 @@
 class ItcAccordion {
-  constructor (target, config) {
+  constructor(target, config) {
     this._el = typeof target === 'string' ? document.querySelector(target) : target;
     const defaultConfig = {
       alwaysOpen: true
@@ -14,12 +14,12 @@ class ItcAccordion {
         return;
       }
       if (!this._config.alwaysOpen) {
-        const elOpenItem = this._el.querySelector('.accordion__item:not(.accordion__item_hidden)');
+        const elOpenItem = this._el.querySelector('.accordion__item_show');
         if (elOpenItem) {
-          elOpenItem !== elHeader.parentElement ? elOpenItem.classList.add('accordion__item_hidden') : null;
+          elOpenItem !== elHeader.parentElement ? elOpenItem.classList.toggle('accordion__item_show') : null;
         }
       }
-      elHeader.parentElement.classList.toggle('accordion__item_hidden');
+      elHeader.parentElement.classList.toggle('accordion__item_show');
     });
   }
 }
