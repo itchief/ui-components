@@ -15,6 +15,7 @@
     "no-empty": "off",
     "max-len": "off",
     "space-before-function-paren": "off",
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    "no-unused-vars": "warn"
   }
 }
