@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "User Interface Components",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/itchief/ui-components.git"
@@ -17,6 +14,18 @@
   },
   "homepage": "https://github.com/itchief/ui-components#readme",
   "devDependencies": {
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "prettier": "^2.6.2",
+    "stylelint": "^14.7.1",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-rational-order": "^0.0.4",
+    "stylelint-config-standard": "^25.0.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-prettier": "^2.0.0",
+    "stylelint-scss": "^4.2.0"
+  },
+  "scripts": {
+    "stylelint": "stylelint '**/*{.css,.scss}'",
+    "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix"
   }
 }

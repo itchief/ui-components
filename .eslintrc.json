@@ -1,6 +1,7 @@
 {
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true
   },
   "extends": [
     "eslint:recommended",
@@ -12,6 +13,8 @@
     "no-prototype-builtins": "off",
     "getter-return": "off",
     "no-empty": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "space-before-function-paren": "off",
+    "comma-dangle": "off"
   }
 }
