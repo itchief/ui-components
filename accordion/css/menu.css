@@ -45,10 +45,30 @@
 }
 
 .accordion__content {
-  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-bottom-right-radius: 0.25rem;
   border-bottom-left-radius: 0.25rem;
+}
+
+.accordion__content a {
+  position: relative;
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #212529;
+  text-decoration: none;
+  background-color: #fff;
+  border: 1px solid rgb(0 0 0 / 12.5%);
+}
+
+.accordion__content a:last-child {
+  border-bottom-right-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+.accordion__content a:hover {
+  background-color: #f8f9fa;
 }
 
 .accordion__item:not(.accordion__item_show) .accordion__body {
