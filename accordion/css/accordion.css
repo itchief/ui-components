@@ -50,6 +50,11 @@
   border-bottom-left-radius: 0.25rem;
 }
 
+.accordion__item:not(.accordion__item_show) .accordion__header {
+  border-bottom-right-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
 .accordion__item:not(.accordion__item_show) .accordion__body {
   display: none;
 }

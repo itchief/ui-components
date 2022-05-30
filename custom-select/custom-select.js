@@ -1,26 +1,26 @@
-const CLASS_NAME_SELECT = 'select';
-const CLASS_NAME_ACTIVE = 'select_show';
-const CLASS_NAME_SELECTED = 'select__option_selected';
-const SELECTOR_ACTIVE = '.select_show';
-const SELECTOR_DATA = '[data-select]';
-const SELECTOR_DATA_TOGGLE = '[data-select="toggle"]';
-const SELECTOR_OPTION_SELECTED = '.select__option_selected';
-
 class CustomSelect {
+  static CLASS_NAME_SELECT = 'select';
+  static CLASS_NAME_ACTIVE = 'select_show';
+  static CLASS_NAME_SELECTED = 'select__option_selected';
+  static SELECTOR_ACTIVE = '.select_show';
+  static SELECTOR_DATA = '[data-select]';
+  static SELECTOR_DATA_TOGGLE = '[data-select="toggle"]';
+  static SELECTOR_OPTION_SELECTED = '.select__option_selected';
+
   constructor(target, params) {
     this._elRoot = typeof target === 'string' ? document.querySelector(target) : target;
     this._params = params || {};
     this._onClickFn = this._onClick.bind(this);
-    if (this._params['options']) {
-      this._elRoot.classList.add(CLASS_NAME_SELECT);
+    if (this._params.options) {
+      this._elRoot.classList.add(CustomSelect.CLASS_NAME_SELECT);
       this._elRoot.innerHTML = CustomSelect.template(this._params);
     }
-    this._elToggle = this._elRoot.querySelector(SELECTOR_DATA_TOGGLE);
+    this._elToggle = this._elRoot.querySelector(CustomSelect.SELECTOR_DATA_TOGGLE);
     this._elRoot.addEventListener('click', this._onClickFn);
   }
   _onClick(e) {
     const target = e.target;
-    const type = target.closest(SELECTOR_DATA).dataset.select;
+    const type = target.closest(CustomSelect.SELECTOR_DATA).dataset.select;
     switch (type) {
       case 'toggle':
         this.toggle();
@@ -32,11 +32,11 @@ class CustomSelect {
   }
   _update(option) {
     option = option.closest('.select__option');
-    const selected = this._elRoot.querySelector(SELECTOR_OPTION_SELECTED);
+    const selected = this._elRoot.querySelector(CustomSelect.SELECTOR_OPTION_SELECTED);
     if (selected) {
-      selected.classList.remove(CLASS_NAME_SELECTED);
+      selected.classList.remove(CustomSelect.CLASS_NAME_SELECTED);
     }
-    option.classList.add(CLASS_NAME_SELECTED);
+    option.classList.add(CustomSelect.CLASS_NAME_SELECTED);
     this._elToggle.textContent = option.textContent;
     this._elToggle.value = option.dataset['value'];
     this._elToggle.dataset.index = option.dataset['index'];
@@ -45,9 +45,9 @@ class CustomSelect {
     return option.dataset['value'];
   }
   _reset() {
-    const selected = this._elRoot.querySelector(SELECTOR_OPTION_SELECTED);
+    const selected = this._elRoot.querySelector(CustomSelect.SELECTOR_OPTION_SELECTED);
     if (selected) {
-      selected.classList.remove(CLASS_NAME_SELECTED);
+      selected.classList.remove(CustomSelect.CLASS_NAME_SELECTED);
     }
     this._elToggle.textContent = 'Выберите из списка';
     this._elToggle.value = '';
@@ -57,23 +57,23 @@ class CustomSelect {
     return '';
   }
   _changeValue(option) {
-    if (option.classList.contains(CLASS_NAME_SELECTED)) {
+    if (option.classList.contains(CustomSelect.CLASS_NAME_SELECTED)) {
       return;
     }
     this._update(option);
     this.hide();
   }
   show() {
-    document.querySelectorAll(SELECTOR_ACTIVE).forEach(select => {
-      select.classList.remove(CLASS_NAME_ACTIVE);
+    document.querySelectorAll(CustomSelect.SELECTOR_ACTIVE).forEach(select => {
+      select.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
     });
-    this._elRoot.classList.add(CLASS_NAME_ACTIVE);
+    this._elRoot.classList.add(CustomSelect.CLASS_NAME_ACTIVE);
   }
   hide() {
-    this._elRoot.classList.remove(CLASS_NAME_ACTIVE);
+    this._elRoot.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
   }
   toggle() {
-    if (this._elRoot.classList.contains(CLASS_NAME_ACTIVE)) {
+    if (this._elRoot.classList.contains(CustomSelect.CLASS_NAME_ACTIVE)) {
       this.hide();
     } else {
       this.show();
@@ -136,8 +136,8 @@ CustomSelect.template = params => {
 
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.select')) {
-    document.querySelectorAll(SELECTOR_ACTIVE).forEach(select => {
-      select.classList.remove(CLASS_NAME_ACTIVE);
+    document.querySelectorAll(CustomSelect.SELECTOR_ACTIVE).forEach(select => {
+      select.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
     });
   }
 });

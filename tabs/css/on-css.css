@@ -1,0 +1,72 @@
+.tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs__links {
+  display: flex;
+  order: 0;
+  width: 100%;
+  margin-right: auto;
+  margin-bottom: 10px;
+  margin-left: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  background-color: #fff;
+  border: 1px solid #e3f2fd;
+  box-shadow: 0 2px 4px 0 #e3f2fd;
+}
+
+.tabs__links > a {
+  display: inline-block;
+  padding: 6px 10px;
+  color: #1976d2;
+  text-align: center;
+  text-decoration: none;
+}
+
+.tabs__links > a:hover {
+  background-color: rgb(227 242 253 / 30%);
+}
+
+#content-2:target ~ .tabs__links > a[href="#content-2"],
+#content-3:target ~ .tabs__links > a[href="#content-3"] {
+  background-color: #bbdefb;
+  cursor: default;
+}
+
+.tabs > .tabs__links > a[href="#content-1"] {
+  background-color: #bbdefb;
+  cursor: default;
+}
+
+#content-2:target ~ .tabs__links > a[href="#content-1"]:not(:hover),
+#content-3:target ~ .tabs__links > a[href="#content-1"]:not(:hover) {
+  background-color: #fff;
+  cursor: pointer;
+}
+
+#content-2:target ~ .tabs__links > a[href="#content-1"]:hover,
+#content-3:target ~ .tabs__links > a[href="#content-1"]:hover {
+  background-color: rgb(227 242 253 / 30%);
+  cursor: pointer;
+}
+
+.tabs > div:not(.tabs__links) {
+  display: none;
+  order: 1;
+}
+
+.tabs > div:target {
+  display: block;
+}
+
+#content-1 {
+  display: block;
+}
+
+#content-2:target ~ #content-1,
+#content-3:target ~ #content-1 {
+  display: none;
+}

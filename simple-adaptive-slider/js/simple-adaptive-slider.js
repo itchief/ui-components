@@ -5,7 +5,6 @@
  */
 
 class ItcSimpleSlider {
-
   // базовые классы и селекторы
   static PREFIX = 'itcss';
   static CLASS_NAME_ITEM = `${ItcSimpleSlider.PREFIX}__item`;
@@ -147,8 +146,8 @@ class ItcSimpleSlider {
         return;
       }
     }
-    var step = this._direction === 'next' ? -1 : 1;
-    var transform = this._transform + step;
+    const step = this._direction === 'next' ? -1 : 1;
+    const transform = this._transform + step;
     if (this._direction === 'next') {
       if (++this._currentIndex > this._elsItem.length - 1) {
         this._currentIndex -= this._elsItem.length;
@@ -161,24 +160,24 @@ class ItcSimpleSlider {
     this._transform = transform;
     this._elItems.dataset.translate = transform;
     translateX = transform * this._width;
-    this._elItems.style.transform = 'translateX(' + translateX + 'px)';
+    this._elItems.style.transform = `translateX(${translateX}px)`;
     this._elItems.dispatchEvent(new CustomEvent('transition-start', {
-      bubbles: true
+      bubbles: true,
     }));
     this._setActiveClass();
   }
 
   // функция для перемещения к слайду по индексу
   _moveTo(index, useTransition) {
-    var currentIndex = this._currentIndex;
+    const currentIndex = this._currentIndex;
     this._direction = index > currentIndex ? 'next' : 'prev';
-    for (var i = 0; i < Math.abs(index - currentIndex); i++) {
+    for (let i = 0; i < Math.abs(index - currentIndex); i++) {
       this._move(useTransition);
     }
   }
 
   // метод для автоматической смены слайдов
-  _autoplay = function (action) {
+  _autoplay(action) {
     if (!this._config.autoplay) {
       return;
     }
@@ -188,14 +187,12 @@ class ItcSimpleSlider {
       return;
     }
     if (this._intervalId === null) {
-      this._intervalId = setInterval(function () {
-          this._direction = 'next';
-          this._move();
-        }.bind(this),
-        this._config.interval
-      );
+      this._intervalId = setInterval(() => {
+        this._direction = 'next';
+        this._move();
+      }, this._config.interval);
     }
-  }
+  };
 
   // добавление индикаторов
   _addIndicators() {
@@ -217,17 +214,17 @@ class ItcSimpleSlider {
     this._$itemWithMaxOrder = this._$itemWithMinOrder;
     this._minTranslate = parseInt(this._elsItem[0].dataset.translate);
     this._maxTranslate = this._minTranslate;
-    for (var i = 0, length = this._elsItem.length; i < length; i++) {
+    for (let i = 0, length = this._elsItem.length; i < length; i++) {
       var $item = this._elsItem[i];
       var order = parseInt($item.dataset.order);
       if (order < this._minOrder) {
         this._minOrder = order;
         this._$itemWithMinOrder = $item;
-        this._minTranslate = parseInt($item.dataset.translate);
+        this._minTranslate = parseInt($item.dataset.translate, 10);
       } else if (order > this._maxOrder) {
         this._maxOrder = order;
         this._$itemWithMaxOrder = $item;
-        this._maxTranslate = parseInt($item.dataset.translate);
+        this._maxTranslate = parseInt($item.dataset.translate, 10);
       }
     }
   }
@@ -425,23 +422,21 @@ class ItcSimpleSlider {
     }
     // swipe
     if (this._config.swipe) {
-      var supportsPassive = false;
+      let supportsPassive = false;
       try {
-        var opts = Object.defineProperty({}, 'passive', {
-          get: function () {
+        const opts = Object.defineProperty({}, 'passive', {
+          get() {
             supportsPassive = true;
           },
         });
         window.addEventListener('testPassiveListener', null, opts);
       } catch (err) {}
-      this._el.addEventListener('touchstart', onSwipeStart.bind(this),
-        supportsPassive ? {
-          passive: false
-        } : false);
-      this._el.addEventListener('touchmove', onSwipeMove.bind(this),
-        supportsPassive ? {
-          passive: false
-        } : false);
+      this._el.addEventListener('touchstart', onSwipeStart.bind(this), supportsPassive ? {
+        passive: false
+      } : false);
+      this._el.addEventListener('touchmove', onSwipeMove.bind(this), supportsPassive ? {
+        passive: false
+      } : false);
       this._el.addEventListener('mousedown', onSwipeStart.bind(this));
       this._el.addEventListener('mousemove', onSwipeMove.bind(this));
       document.addEventListener('touchend', onSwipeEnd.bind(this));
@@ -453,10 +448,10 @@ class ItcSimpleSlider {
     document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
 
     function onResizeObserver(entries) {
-      var contentBoxSize = entries[0].contentBoxSize;
-      var contentRect = entries[0].contentRect;
-      var newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
-      var newTranslateX;
+      const contentBoxSize = entries[0].contentBoxSize;
+      const contentRect = entries[0].contentRect;
+      const newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
+      let newTranslateX;
       if (this._width.toFixed(1) === newWidth.toFixed(1)) {
         return;
       }
@@ -464,43 +459,38 @@ class ItcSimpleSlider {
       this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
       this._width = parseInt(newWidth.toFixed(1), 10);
       newTranslateX = newWidth * parseInt(this._elItems.dataset.translate, 10);
-      this._elItems.style.transform = 'translateX(' + newTranslateX + 'px)';
-      var $items = this._elsItem;
-      for (var i = 0; i < $items.length; i++) {
-        var translateX = parseInt($items[i].dataset.translate);
+      this._elItems.style.transform = `translateX(${newTranslateX}px)`;
+      const $items2 = this._elsItem;
+      for (let i = 0; i < $items2.length; i++) {
+        const translateX = parseInt($items2[i].dataset.translate);
         newTranslateX = translateX * newWidth;
-        $items[i].style.transform = 'translateX(' + newTranslateX + 'px)';
+        $items2[i].style.transform = `translateX(${newTranslateX}px)`;
       }
       if (this._config.loop) {
         this._autoplay();
       }
     }
     if (this._supportResizeObserver) {
-      var resizeObserver = new ResizeObserver(onResizeObserver.bind(this));
+      const resizeObserver = new ResizeObserver(onResizeObserver.bind(this));
       resizeObserver.observe(this._elWrapper);
       return;
     }
   }
-
   // перейти к следующему слайду
   next() {
     this._direction = 'next';
     this._move();
   }
-
   // перейти к предыдущему слайду
   prev() {
     this._direction = 'prev';
     this._move();
   }
-
   // управление автоматической сменой слайдов
-  autoplay(action) {
+  autoplay() {
     this._autoplay('stop');
   }
-
   moveTo(index, useTransition) {
     this._moveTo(index, useTransition);
   }
-
 }
