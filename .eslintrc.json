@@ -18,6 +18,7 @@
       {
         "allowForLoopAfterthoughts": true
       }
-    ]
+    ],
+    "no-unused-vars": "warn"
   }
 }
