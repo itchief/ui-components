@@ -20,6 +20,7 @@
       }
     ],
     "no-unused-vars": "warn",
-    "prefer-destructuring": "warn"
+    "prefer-destructuring": "warn",
+    "comma-dangle": "off"
   }
 }
