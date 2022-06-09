@@ -7,21 +7,21 @@ class ItcMoveEl {
   _init() {
     this._els.forEach((el, index) => {
       this._data[index] = {
-        el: el,
+        el,
         parent: el.parentElement,
         position: [...el.parentElement.children].indexOf(el),
         moves: JSON.parse(el.dataset.moveEl.replaceAll('\'', '"')),
         state: -1
-      }
+      };
     });
-    const resizeObserver = new ResizeObserver(entries => {
-      const width = entries[0].contentRect['width'];
-      this._data.forEach(item => {
-        let newState = item['state'];
+    const resizeObserver = new ResizeObserver((entries) => {
+      const width = entries[0].contentRect.width;
+      this._data.forEach((item) => {
+        let newState = item.state;
         let minWidth = 0;
         let maxWidth = 0;
         let isChange = false;
-        item['moves'].forEach((breakpoint, index) => {
+        item.moves.forEach((breakpoint, index) => {
           const bpMin = breakpoint['bp-min'];
           const bpMax = breakpoint['bp-max'];
           if (width >= bpMin && bpMax === undefined && bpMin >= minWidth) {
@@ -40,8 +40,8 @@ class ItcMoveEl {
           }
         });
         newState = isChange ? newState : -1;
-        if (item['state'] !== newState) {
-          item['state'] = newState;
+        if (item.state !== newState) {
+          item.state = newState;
           this._move(item);
         }
       });

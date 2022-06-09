@@ -2,7 +2,7 @@
  * Toast (https://github.com/itchief/ui-components/tree/master/toast)
  * Copyright 2020 - 2021 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
-**/
+ **/
 
 class Toast {
   constructor(params) {
@@ -37,8 +37,14 @@ class Toast {
       this._el.classList.remove('toast_showing');
       this._el.classList.remove('toast_show');
       this._el.remove();
-    }, {once : true});
-    const event = new CustomEvent('hide.toast', { detail: { target: this._el } });
+    }, {
+      once: true
+    });
+    const event = new CustomEvent('hide.toast', {
+      detail: {
+        target: this._el
+      }
+    });
     document.dispatchEvent(event);
   }
   _create() {

@@ -21,13 +21,10 @@ class CustomSelect {
   _onClick(e) {
     const target = e.target;
     const type = target.closest(CustomSelect.SELECTOR_DATA).dataset.select;
-    switch (type) {
-      case 'toggle':
-        this.toggle();
-        break;
-      case 'option':
-        this._changeValue(target);
-        break;
+    if (type === 'toggle') {
+      this.toggle();
+    } else if (type === 'option') {
+      this._changeValue(target);
     }
   }
   _update(option) {
@@ -113,7 +110,7 @@ CustomSelect.template = params => {
   const name = params['name'];
   const options = params['options'];
   const targetValue = params['targetValue'];
-  let items = [];
+  const items = [];
   let selectedIndex = -1;
   let selectedValue = '';
   let selectedContent = 'Выберите из списка';
@@ -132,7 +129,6 @@ CustomSelect.template = params => {
     <ul class="select__options">${items.join('')}</ul>
   </div>`;
 };
-
 
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.select')) {
