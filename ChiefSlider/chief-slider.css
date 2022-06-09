@@ -16,7 +16,7 @@
 }
 
 .slider__wrapper {
-  /*overflow: hidden;*/
+  /* overflow: hidden; */
 }
 
 .slider__items {
@@ -40,25 +40,25 @@
   position: absolute;
   top: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 40px;
+  height: 50px;
   color: #fff;
   text-align: center;
-  height: 50px;
+  background: rgb(0 0 0 / 20%);
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.2);
 }
 
 .slider__control_hide {
   display: none;
 }
 
-.slider__control[data-slide='prev'] {
+.slider__control[data-slide="prev"] {
   left: 0;
 }
 
-.slider__control[data-slide='next'] {
+.slider__control[data-slide="next"] {
   right: 0;
 }
 
@@ -66,12 +66,12 @@
 .slider__control:focus {
   color: #fff;
   text-decoration: none;
+  background: rgb(0 0 0 / 30%);
   outline: 0;
-  background: rgba(0, 0, 0, 0.3);
 }
 
 .slider__control::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -79,11 +79,11 @@
   background-size: 100% 100%;
 }
 
-.slider__control[data-slide='prev']::before {
+.slider__control[data-slide="prev"]::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 }
 
-.slider__control[data-slide='next']::before {
+.slider__control[data-slide="next"]::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
 
@@ -97,29 +97,29 @@
   z-index: 15;
   display: flex;
   justify-content: center;
-  padding-left: 0;
-  margin-right: 15%;
-  margin-left: 15%;
-  list-style: none;
   margin-top: 0;
+  margin-right: 15%;
   margin-bottom: 0;
+  margin-left: 15%;
+  padding-left: 0;
+  list-style: none;
 }
 
 .slider__indicators li {
-  box-sizing: content-box;
   flex: 0 1 auto;
+  box-sizing: content-box;
   width: 30px;
   height: 5px;
   margin-right: 3px;
   margin-left: 3px;
   text-indent: -999px;
-  cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgb(255 255 255 / 50%);
   background-clip: padding-box;
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
+  cursor: pointer;
 }
 
 .slider__indicators li.active {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgb(255 255 255 / 90%);
 }
