@@ -30,6 +30,22 @@ class ItcSimpleSlider {
   static SWIPE_THRESHOLD = 20;
   // класс для отключения transition
   static TRANSITION_NONE = 'transition-none';
+  // Определите, поддерживает ли текущий клиент пассивные события
+  static checkSupportPassiveEvents() {
+    let passiveSupported = false;
+    try {
+      const options = Object.defineProperty({}, 'passive', {
+        get() {
+          passiveSupported = true;
+        },
+      });
+      window.addEventListener('testPassiveListener', null, options);
+      window.removeEventListener('testPassiveListener', null, options);
+    } catch (error) {
+      passiveSupported = false;
+    }
+    return passiveSupported;
+  }
 
   constructor(target, config) {
     this._el = typeof target === 'string' ? document.querySelector(target) : target;
@@ -421,21 +437,9 @@ class ItcSimpleSlider {
     }
     // swipe
     if (this._config.swipe) {
-      let supportsPassive = false;
-      try {
-        const opts = Object.defineProperty({}, 'passive', {
-          get() {
-            supportsPassive = true;
-          },
-        });
-        window.addEventListener('testPassiveListener', null, opts);
-      } catch (err) {}
-      this._el.addEventListener('touchstart', onSwipeStart.bind(this), supportsPassive ? {
-        passive: false,
-      } : false);
-      this._el.addEventListener('touchmove', onSwipeMove.bind(this), supportsPassive ? {
-        passive: false,
-      } : false);
+      const options = ItcSimpleSlider.checkSupportPassiveEvents() ? { passive: true } : false;
+      this._el.addEventListener('touchstart', onSwipeStart.bind(this), options);
+      this._el.addEventListener('touchmove', onSwipeMove.bind(this), options);
       this._el.addEventListener('mousedown', onSwipeStart.bind(this));
       this._el.addEventListener('mousemove', onSwipeMove.bind(this));
       document.addEventListener('touchend', onSwipeEnd.bind(this));
