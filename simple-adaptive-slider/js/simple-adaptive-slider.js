@@ -224,11 +224,11 @@ class ItcSimpleSlider {
 
   // refresh extreme values
   _refreshExtremeValues() {
-    this._minOrder = parseInt(this._elsItem[0].dataset.order);
+    this._minOrder = parseInt(this._elsItem[0].dataset.order, 10);
     this._maxOrder = this._minOrder;
     this._$itemWithMinOrder = this._elsItem[0];
     this._$itemWithMaxOrder = this._$itemWithMinOrder;
-    this._minTranslate = parseInt(this._elsItem[0].dataset.translate);
+    this._minTranslate = parseInt(this._elsItem[0].dataset.translate, 10);
     this._maxTranslate = this._minTranslate;
     for (let i = 0, length = this._elsItem.length; i < length; i++) {
       const $item = this._elsItem[i];
