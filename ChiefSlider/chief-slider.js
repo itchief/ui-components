@@ -298,12 +298,14 @@ class ChiefSlider {
       if (transform < -endTransformValue || transform > 0) {
         return;
       }
-      this._$controlPrev.classList.remove(CLASS_CONTROL_HIDE);
-      this._$controlNext.classList.remove(CLASS_CONTROL_HIDE);
-      if (transform === -endTransformValue) {
-        this._$controlNext.classList.add(CLASS_CONTROL_HIDE);
-      } else if (transform === 0) {
-        this._$controlPrev.classList.add(CLASS_CONTROL_HIDE);
+      if (this._$controlPrev) {
+        this._$controlPrev.classList.remove(CLASS_CONTROL_HIDE);
+        this._$controlNext.classList.remove(CLASS_CONTROL_HIDE);
+        if (transform === -endTransformValue) {
+          this._$controlNext.classList.add(CLASS_CONTROL_HIDE);
+        } else if (transform === 0) {
+          this._$controlPrev.classList.add(CLASS_CONTROL_HIDE);
+        }
       }
     }
     const activeIndex = [];
