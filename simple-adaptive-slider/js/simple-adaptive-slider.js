@@ -385,11 +385,10 @@ class ItcSimpleSlider {
         return;
       }
       if (!this._config.loop) {
-        if (this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0) {
-          diffPosX /= 7;
-        }
-        if (this._currentIndex <= 0 && diffPosX <= 0) {
-          diffPosX /= 7;
+        const isBeforeFirst = this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0;
+        const isAfterLast = this._currentIndex <= 0 && diffPosX <= 0;
+        if (isBeforeFirst || isAfterLast) {
+          diffPosX = 0;
         }
       }
       const value = (diffPosX / this._elWrapper.getBoundingClientRect().width) * 100;
