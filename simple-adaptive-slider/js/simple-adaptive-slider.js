@@ -25,7 +25,7 @@ class ItcSimpleSlider {
   static SELECTOR_WRAPPER = `.${ItcSimpleSlider.PREFIX}__wrapper`;
   static SELECTOR_CONTROL = `.${ItcSimpleSlider.CLASS_NAME_CONTROL}`;
   static SELECTOR_CONTROL_NEXT = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_NEXT}`;
-  static SELECTOR_CONTROL_PREV = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_PREV }`;
+  static SELECTOR_CONTROL_PREV = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_PREV}`;
   // порог для переключения слайда (20%)
   static SWIPE_THRESHOLD = 20;
   // класс для отключения transition
@@ -168,10 +168,8 @@ class ItcSimpleSlider {
       if (++this._currentIndex > this._elsItem.length - 1) {
         this._currentIndex -= this._elsItem.length;
       }
-    } else {
-      if (--this._currentIndex < 0) {
-        this._currentIndex += this._elsItem.length;
-      }
+    } else if (--this._currentIndex < 0) {
+      this._currentIndex += this._elsItem.length;
     }
     this._transform = transform;
     this._elItems.dataset.translate = transform;
@@ -208,7 +206,7 @@ class ItcSimpleSlider {
         this._move();
       }, this._config.interval);
     }
-  };
+  }
 
   // добавление индикаторов
   _addIndicators() {
@@ -360,17 +358,15 @@ class ItcSimpleSlider {
       }
       e.preventDefault();
       if (!this._config.loop) {
-        if (this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0) {
-          diffPosX /= 4;
-        }
-        if (this._currentIndex <= 0 && diffPosX <= 0) {
+        const isBeforeFirst = this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0;
+        const isAfterLast = this._currentIndex <= 0 && diffPosX <= 0;
+        if (isBeforeFirst || isAfterLast) {
           diffPosX /= 4;
         }
       }
-      const value = (diffPosX / this._elWrapper.getBoundingClientRect().width);
-      let translateX = this._transform - value;
+      this._width = this._elWrapper.getBoundingClientRect().width;
       this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
-      translateX *= this._width;
+      const translateX = this._transform * this._width - diffPosX;
       this._elItems.style.transform = `translateX(${translateX}px)`;
     }
 
