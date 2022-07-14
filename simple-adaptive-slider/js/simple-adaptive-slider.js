@@ -432,7 +432,7 @@ class ItcSimpleSlider {
     }
     // swipe
     if (this._config.swipe) {
-      const options = ItcSimpleSlider.checkSupportPassiveEvents() ? { passive: true } : false;
+      const options = ItcSimpleSlider.checkSupportPassiveEvents() ? { passive: false } : false;
       this._el.addEventListener('touchstart', onSwipeStart.bind(this), options);
       this._el.addEventListener('touchmove', onSwipeMove.bind(this), options);
       this._el.addEventListener('mousedown', onSwipeStart.bind(this));
