@@ -8,6 +8,14 @@ const todo = {
         elemItem.remove();
       } else {
         elemItem.dataset.todoState = action;
+        const lexicon = {
+          active: 'восстановлено',
+          completed: 'завершено',
+          deleted: 'удалено'
+        };
+        const elTodoDate = elemItem.querySelector('.todo__date');
+        const html = `<span>${lexicon[action]}: ${new Date().toLocaleString().slice(0, -3)}</span>`;
+        elTodoDate.insertAdjacentHTML('beforeend', html);
       }
       this.save();
     } else if (target.classList.contains('todo__add')) {
@@ -25,8 +33,14 @@ const todo = {
     document.dispatchEvent(new Event('todo-item-add'));
   },
   create(text) {
+    const date = JSON.stringify({ add: new Date().toLocaleString().slice(0, -3) });
     return `<li class="todo__item" data-todo-state="active">
-      <span class="todo__task"><a href="#">${text}</a></span>
+      <span class="todo__task">
+        <a href="#">${text}</a>
+        <span class="todo__date" data-todo-date="${date}">
+          <span>добавлено: ${new Date().toLocaleString().slice(0, -3)}</span>
+        </span>
+      </span>
       <span class="todo__action todo__action_restore" data-todo-action="active"></span>
       <span class="todo__action todo__action_complete" data-todo-action="completed"></span>
       <span class="todo__action todo__action_delete" data-todo-action="deleted"></span></li>`;
@@ -47,6 +61,6 @@ const todo = {
   save() {
     localStorage.setItem('todo', document.querySelector('.todo__items').innerHTML);
   }
-}
+};
 
 todo.init();
