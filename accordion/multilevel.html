@@ -24,7 +24,7 @@
     }
   </style>
   <link href="css/multilevel-accordion.css" rel="stylesheet">
-  <script src="js/animated-accordion.js"></script>
+  <script src="js/multilevel-accordion.js"></script>
 </head>
 
 <body>
@@ -62,6 +62,20 @@
                 </div>
                 <a href="#">Пункт 1.2.4</a>
                 <a href="#">Пункт 1.2.5</a>
+                <div class="accordion__item">
+                  <div class="accordion__header">
+                    Пункт 1.2.6
+                  </div>
+                  <div class="accordion__body">
+                    <div class="accordion__content">
+                      <a href="#">Пункт 1.2.6.1</a>
+                      <a href="#">Пункт 1.2.6.2</a>
+                      <a href="#">Пункт 1.2.6.3</a>
+                      <a href="#">Пункт 1.2.6.4</a>
+                      <a href="#">Пункт 1.2.6.5</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -103,7 +117,7 @@
 
   <script>
     new ItcAccordion(document.querySelector('.accordion'), {
-      alwaysOpen: true
+      alwaysOpen: false
     });
   </script>
 
