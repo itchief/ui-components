@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Accordion</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      text-align: left;
+      background-color: #fff;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+  </style>
+  <link href="css/animated-accordion-2.css" rel="stylesheet">
+  <script src="js/animated-accordion-2.js"></script>
+</head>
+
+<body>
+
+
+  <div id="accordion" class="accordion" style="max-width: 30rem; margin: 1rem auto;">
+    <div class="accordion__item">
+      <div class="accordion__header">
+        Заголовок 1
+      </div>
+      <div class="accordion__body">
+        <div class="accordion__content">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati consequuntur autem, mollitia rem aperiam
+          fugit eos officia vel quidem quis officiis dolores porro beatae veritatis tenetur. Culpa ex libero a!
+        </div>
+      </div>
+    </div>
+    <div class="accordion__item">
+      <div class="accordion__header">
+        Заголовок 2
+      </div>
+      <div class="accordion__body">
+        <div class="accordion__content">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea dignissimos a autem perspiciatis sit eum
+          exercitationem expedita omnis ipsam voluptate veritatis dolores similique eligendi, earum quasi officia in
+          facilis dolorum!
+        </div>
+      </div>
+    </div>
+    <div class="accordion__item">
+      <div class="accordion__header">
+        Заголовок 3
+      </div>
+      <div class="accordion__body">
+        <div class="accordion__content">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta pariatur dolore consectetur perferendis libero
+          nam sit magni voluptatibus voluptates autem nesciunt, praesentium quidem deserunt ipsa totam esse ullam? Quod,
+          maiores!
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    new ItcAccordion(document.querySelector('.accordion'), {
+      alwaysOpen: false
+    });
+  </script>
+
+</body>
+
+</html>
