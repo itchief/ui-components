@@ -49,7 +49,7 @@ class ItcSlider {
     this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
     this._elWrapper = this._el.querySelector(ItcSlider.SEL_WRAPPER);
     this._elItems = this._el.querySelector(ItcSlider.SEL_ITEMS);
-    this._elItemList = this._el.querySelectorAll(ItcSlider.SEL_ITEM);
+    this._elsItem = this._el.querySelectorAll(ItcSlider.SEL_ITEM);
     this._elBtnPrev = this._el.querySelector(ItcSlider.SEL_PREV);
     this._elBtnNext = this._el.querySelector(ItcSlider.SEL_NEXT);
     this._elIndicatorList = this._el.querySelectorAll(ItcSlider.SEL_INDICATOR);
@@ -83,7 +83,7 @@ class ItcSlider {
     };
     this._config = Object.assign(this._config, config);
     // create some constants
-    this._widthItem = this._elItemList[0].getBoundingClientRect().width;
+    this._widthItem = this._elsItem[0].getBoundingClientRect().width;
     this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
     this._itemsInVisibleArea = Math.round(this._widthWrapper / this._widthItem);
     // initial setting properties
@@ -91,7 +91,7 @@ class ItcSlider {
     this._widthStep = this._widthItem;
     const itemsInVisibleArea = this._itemsInVisibleArea;
     // добавляем data-атрибуты к .slider__item
-    this._elItemList.forEach((el, index) => {
+    this._elsItem.forEach((el, index) => {
       el.dataset.index = index;
       el.dataset.order = index;
       el.dataset.translate = 0;
@@ -99,11 +99,11 @@ class ItcSlider {
     });
     if (this._config.loop) {
       // перемещаем последний слайд перед первым
-      const count = this._elItemList.length - 1;
-      const translate = -this._elItemList.length * this._widthStep;
-      this._elItemList[count].dataset.order = -1;
-      this._elItemList[count].dataset.translate = translate;
-      this._elItemList[count].style.transform = `translateX(${translate}px)`;
+      const count = this._elsItem.length - 1;
+      const translate = -this._elsItem.length * this._widthItem;
+      this._elsItem[count].dataset.order = -1;
+      this._elsItem[count].dataset.translate = translate;
+      this._elsItem[count].style.transform = `translateX(${translate}px)`;
       this._refreshExtremeValues();
     } else if (this._elBtnPrev) {
       this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
@@ -222,26 +222,16 @@ class ItcSlider {
     document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
   }
   _refreshExtremeValues() {
-    const $itemList = this._elItemList;
-    this._minOrder = +$itemList[0].dataset.order;
-    this._maxOrder = this._minOrder;
-    this._$itemByMinOrder = $itemList[0];
-    this._$itemByMaxOrder = $itemList[0];
-    this._minTranslate = +$itemList[0].dataset.translate;
-    this._maxTranslate = this._minTranslate;
-    for (let i = 0, length = $itemList.length; i < length; i++) {
-      const $item = $itemList[i];
-      const order = +$item.dataset.order;
-      if (order < this._minOrder) {
-        this._minOrder = order;
-        this._$itemByMinOrder = $item;
-        this._minTranslate = +$item.dataset.translate;
-      } else if (order > this._maxOrder) {
-        this._maxOrder = order;
-        this._$itemByMaxOrder = $item;
-        this._maxTranslate = +$item.dataset.translate;
-      }
-    }
+    const els = Object.values(this._elsItem).map((el) => el);
+    const orders = els.map((item) => Number(item.dataset.order));
+    this._minOrder = Math.min(...orders);
+    this._maxOrder = Math.max(...orders);
+    const min = orders.indexOf(this._minOrder);
+    const max = orders.indexOf(this._maxOrder);
+    this._$itemByMinOrder = els[min];
+    this._$itemByMaxOrder = els[max];
+    this._minTranslate = Number(this._$itemByMinOrder.dataset.translate);
+    this._maxTranslate = Number(this._$itemByMaxOrder.dataset.translate);
   }
   _balancingItems() {
     if (!this._balancingItemsFlag) {
@@ -249,7 +239,7 @@ class ItcSlider {
     }
     const $wrapperClientRect = this._elWrapper.getBoundingClientRect();
     const widthHalfItem = $wrapperClientRect.width / this._itemsInVisibleArea / 2;
-    const count = this._elItemList.length;
+    const count = this._elsItem.length;
     let translate;
     let clientRect;
     if (this._direction === 'next') {
@@ -286,7 +276,7 @@ class ItcSlider {
   }
   _setActiveClass() {
     const activeItems = this._activeItems;
-    const $itemList = this._elItemList;
+    const $itemList = this._elsItem;
     for (let i = 0, length = $itemList.length; i < length; i++) {
       const $item = $itemList[i];
       const index = +$item.dataset.index;
@@ -299,7 +289,7 @@ class ItcSlider {
   }
   _updateIndicators() {
     const $indicatorList = this._elIndicatorList;
-    const $itemList = this._elItemList;
+    const $itemList = this._elsItem;
     if (!$indicatorList.length) {
       return;
     }
@@ -316,7 +306,7 @@ class ItcSlider {
     const step = this._direction === 'next' ? -this._widthStep : this._widthStep;
     const transform = this._transform + step;
     if (!this._config.loop) {
-      const endTransformValue = this._widthStep * (this._elItemList.length - this._itemsInVisibleArea);
+      const endTransformValue = this._widthStep * (this._elsItem.length - this._itemsInVisibleArea);
       if (transform < -endTransformValue || transform > 0) {
         return;
       }
@@ -340,8 +330,8 @@ class ItcSlider {
         index = this._activeItems[i];
         index += 1;
         newIndex = index;
-        if (newIndex > this._elItemList.length - 1) {
-          newIndex -= this._elItemList.length;
+        if (newIndex > this._elsItem.length - 1) {
+          newIndex -= this._elsItem.length;
         }
         activeIndex.push(newIndex);
       }
@@ -351,7 +341,7 @@ class ItcSlider {
         index -= 1;
         newIndex = index;
         if (newIndex < 0) {
-          newIndex += this._elItemList.length;
+          newIndex += this._elsItem.length;
         }
         activeIndex.push(newIndex);
       }
@@ -419,7 +409,7 @@ class ItcSlider {
   }
   _refresh() {
     // create some constants
-    const $itemList = this._elItemList;
+    const $itemList = this._elsItem;
     const widthItem = $itemList[0].getBoundingClientRect().width;
     const widthWrapper = this._elWrapper.getBoundingClientRect().width;
     const itemsInVisibleArea = Math.round(widthWrapper / widthItem);
