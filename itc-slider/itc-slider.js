@@ -414,11 +414,9 @@ class ItcSlider {
     const widthItem = $itemList[0].getBoundingClientRect().width;
     const widthWrapper = this._elWrapper.getBoundingClientRect().width;
     const countActiveEls = Math.round(widthWrapper / widthItem);
-
     if (widthItem === this._widthStep && countActiveEls === this._countActiveEls) {
       return;
     }
-
     this._autoplay('stop');
 
     this._elItems.classList.add(ItcSlider.TRANSITION_OFF);
@@ -461,17 +459,18 @@ class ItcSlider {
       return;
     }
 
-    // translate last item before first
-    const count = $itemList.length - 1;
-    // const translate = -$itemList.length * 100;
-    const translate = -$itemList.length * this._widthStep;
-    $itemList[count].dataset.order = -1;
-    $itemList[count].dataset.translate = translate;
-    $itemList[count].style.transform = `translateX(${translate}px)`;
+    this._initial();
     // update values of extreme properties
     this._refreshExtremeValues();
     // calling _autoplay
     this._autoplay();
+  }
+  _initial() {
+    const lastIndex = this._elsItem.length - 1;
+    const translate = -(lastIndex + 1) * this._widthItem;
+    this._elsItem[lastIndex].dataset.order = -1;
+    this._elsItem[lastIndex].dataset.translate = translate;
+    this._elsItem[lastIndex].style.transform = `translateX(${translate}px)`;
   }
   next() {
     this._moveToNext();
