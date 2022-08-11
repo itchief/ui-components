@@ -1,21 +1,21 @@
 /**
- * ChiefSlider by Itchief v3.0.0 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
+ * ItcSlider by itchief v3.0.0 (https://github.com/itchief/ui-components/tree/master/itc-slider)
  * Copyright 2020 - 2022 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
 
 class ItcSlider {
-  static WRAPPER_SELECTOR = '.slider__wrapper';
-  static ITEMS_SELECTOR = '.slider__items';
-  static ITEM_SELECTOR = '.slider__item';
-  static CONTROL_CLASS = 'slider__control';
-  static SELECTOR_PREV = '.slider__control[data-slide="prev"]';
-  static SELECTOR_NEXT = '.slider__control[data-slide="next"]';
-  static SELECTOR_INDICATOR = '.slider__indicators>li';
-  static SLIDER_TRANSITION_OFF = 'slider_disable-transition';
+  static CLASS_CONTROL = 'slider__control';
   static CLASS_CONTROL_HIDE = 'slider__control_hide';
   static CLASS_ITEM_ACTIVE = 'slider__item_active';
   static CLASS_INDICATOR_ACTIVE = 'active';
+  static SEL_WRAPPER = '.slider__wrapper';
+  static SEL_ITEM = '.slider__item';
+  static SEL_ITEMS = '.slider__items';
+  static SEL_PREV = '.slider__control[data-slide="prev"]';
+  static SEL_NEXT = '.slider__control[data-slide="next"]';
+  static SEL_INDICATOR = '.slider__indicators>li';
+  static TRANSITION_OFF = 'slider_disable-transition';
 
   static contains = [];
 
@@ -38,22 +38,21 @@ class ItcSlider {
       });
       this.contains.push({ el, slider: new ItcSlider(el, params) });
       el.dataset.sliderId = this.contains.length;
-      el.querySelectorAll('.slider__control').forEach((el) => {
-        el.dataset.sliderTarget = this.contains.length;
+      el.querySelectorAll('.slider__control').forEach((btn) => {
+        btn.dataset.sliderTarget = this.contains.length;
       });
     });
   }
 
   constructor(selector, config) {
-    // элементы слайдера
-    const $root = typeof selector === 'string' ? document.querySelector(selector) : selector;
-    this._$root = $root;
-    this._$wrapper = $root.querySelector(ItcSlider.WRAPPER_SELECTOR);
-    this._$items = $root.querySelector(ItcSlider.ITEMS_SELECTOR);
-    this._$itemList = $root.querySelectorAll(ItcSlider.ITEM_SELECTOR);
-    this._$controlPrev = $root.querySelector(ItcSlider.SELECTOR_PREV);
-    this._$controlNext = $root.querySelector(ItcSlider.SELECTOR_NEXT);
-    this._$indicatorList = $root.querySelectorAll(ItcSlider.SELECTOR_INDICATOR);
+    // получаем элементы
+    this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    this._elWrapper = this._el.querySelector(ItcSlider.SEL_WRAPPER);
+    this._elItems = this._el.querySelector(ItcSlider.SEL_ITEMS);
+    this._elItemList = this._el.querySelectorAll(ItcSlider.SEL_ITEM);
+    this._elBtnPrev = this._el.querySelector(ItcSlider.SEL_PREV);
+    this._elBtnNext = this._el.querySelector(ItcSlider.SEL_NEXT);
+    this._elIndicatorList = this._el.querySelectorAll(ItcSlider.SEL_INDICATOR);
     // экстремальные значения слайдов
     this._minOrder = 0;
     this._maxOrder = 0;
@@ -70,7 +69,7 @@ class ItcSlider {
     this._transform = 0;
     // swipe параметры
     this._hasSwipeState = false;
-    this.__swipeStartPos = 0;
+    this._swipeStartPos = 0;
     // slider properties
     this._transform = 0; // текущее значение трансформации
     this._intervalId = null;
@@ -84,41 +83,30 @@ class ItcSlider {
     };
     this._config = Object.assign(this._config, config);
     // create some constants
-    const $itemList = this._$itemList;
-    const widthItem = $itemList[0].offsetWidth;
-    // const widthWrapper = this._$wrapper.offsetWidth;
-    const widthWrapper = this._$wrapper.getBoundingClientRect().width;
-    const itemsInVisibleArea = Math.round(widthWrapper / widthItem);
+    this._widthItem = this._elItemList[0].getBoundingClientRect().width;
+    this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
+    this._itemsInVisibleArea = Math.round(this._widthWrapper / this._widthItem);
     // initial setting properties
-    this._widthItem = widthItem;
-    this._widthWrapper = widthWrapper;
-    this._itemsInVisibleArea = itemsInVisibleArea;
-    this._transformStep = 100 / itemsInVisibleArea;
-
-    this._widthStep = $itemList[0].getBoundingClientRect().width;
-
-    this._el = $root;
-
-    // initial setting order and translate items
-    for (let i = 0, length = $itemList.length; i < length; i++) {
-      $itemList[i].dataset.index = i;
-      $itemList[i].dataset.order = i;
-      $itemList[i].dataset.translate = 0;
-      if (i < itemsInVisibleArea) {
-        this._activeItems.push(i);
-      }
-    }
+    this._transformStep = 100 / this._itemsInVisibleArea;
+    this._widthStep = this._widthItem;
+    const itemsInVisibleArea = this._itemsInVisibleArea;
+    // добавляем data-атрибуты к .slider__item
+    this._elItemList.forEach((el, index) => {
+      el.dataset.index = index;
+      el.dataset.order = index;
+      el.dataset.translate = 0;
+      index < itemsInVisibleArea ? this._activeItems.push(index) : null;
+    });
     if (this._config.loop) {
       // перемещаем последний слайд перед первым
-      const count = $itemList.length - 1;
-      // const translate = -$itemList.length * 100;
-      const translate = -$itemList.length * this._widthStep;
-      $itemList[count].dataset.order = -1;
-      $itemList[count].dataset.translate = translate;
-      $itemList[count].style.transform = `translateX(${translate}px)`;
+      const count = this._elItemList.length - 1;
+      const translate = -this._elItemList.length * this._widthStep;
+      this._elItemList[count].dataset.order = -1;
+      this._elItemList[count].dataset.translate = translate;
+      this._elItemList[count].style.transform = `translateX(${translate}px)`;
       this._refreshExtremeValues();
-    } else if (this._$controlPrev) {
-      this._$controlPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
+    } else if (this._elBtnPrev) {
+      this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
     }
     this._setActiveClass();
     this._addEventListener();
@@ -126,14 +114,14 @@ class ItcSlider {
     this._autoplay();
   }
   _addEventListener() {
-    const $root = this._$root;
-    const $items = this._$items;
+    const $root = this._el;
+    const $items = this._elItems;
     const config = this._config;
 
     function onClick(e) {
       const $target = e.target;
       this._autoplay('stop');
-      if ($target.classList.contains(ItcSlider.CONTROL_CLASS)) {
+      if ($target.classList.contains(ItcSlider.CLASS_CONTROL)) {
         e.preventDefault();
         this._direction = $target.dataset.slide;
         this._move();
@@ -234,7 +222,7 @@ class ItcSlider {
     document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
   }
   _refreshExtremeValues() {
-    const $itemList = this._$itemList;
+    const $itemList = this._elItemList;
     this._minOrder = +$itemList[0].dataset.order;
     this._maxOrder = this._minOrder;
     this._$itemByMinOrder = $itemList[0];
@@ -259,10 +247,9 @@ class ItcSlider {
     if (!this._balancingItemsFlag) {
       return;
     }
-    const $wrapper = this._$wrapper;
-    const $wrapperClientRect = $wrapper.getBoundingClientRect();
+    const $wrapperClientRect = this._elWrapper.getBoundingClientRect();
     const widthHalfItem = $wrapperClientRect.width / this._itemsInVisibleArea / 2;
-    const count = this._$itemList.length;
+    const count = this._elItemList.length;
     let translate;
     let clientRect;
     if (this._direction === 'next') {
@@ -299,7 +286,7 @@ class ItcSlider {
   }
   _setActiveClass() {
     const activeItems = this._activeItems;
-    const $itemList = this._$itemList;
+    const $itemList = this._elItemList;
     for (let i = 0, length = $itemList.length; i < length; i++) {
       const $item = $itemList[i];
       const index = +$item.dataset.index;
@@ -311,8 +298,8 @@ class ItcSlider {
     }
   }
   _updateIndicators() {
-    const $indicatorList = this._$indicatorList;
-    const $itemList = this._$itemList;
+    const $indicatorList = this._elIndicatorList;
+    const $itemList = this._elItemList;
     if (!$indicatorList.length) {
       return;
     }
@@ -326,23 +313,20 @@ class ItcSlider {
     }
   }
   _move() {
-    // const step = this._direction === 'next' ? -this._transformStep : this._transformStep;
     const step = this._direction === 'next' ? -this._widthStep : this._widthStep;
-    let transform = this._transform + step;
+    const transform = this._transform + step;
     if (!this._config.loop) {
-      // const endTransformValue = this._transformStep * (this._$itemList.length - this._itemsInVisibleArea);
-      const endTransformValue = this._widthStep * (this._$itemList.length - this._itemsInVisibleArea);
-      // transform = Math.round(transform * 10) / 10;
+      const endTransformValue = this._widthStep * (this._elItemList.length - this._itemsInVisibleArea);
       if (transform < -endTransformValue || transform > 0) {
         return;
       }
-      if (this._$controlPrev) {
-        this._$controlPrev.classList.remove(ItcSlider.CLASS_CONTROL_HIDE);
-        this._$controlNext.classList.remove(ItcSlider.CLASS_CONTROL_HIDE);
+      if (this._elBtnPrev) {
+        this._elBtnPrev.classList.remove(ItcSlider.CLASS_CONTROL_HIDE);
+        this._elBtnNext.classList.remove(ItcSlider.CLASS_CONTROL_HIDE);
         if (transform === -endTransformValue) {
-          this._$controlNext.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
+          this._elBtnNext.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
         } else if (transform === 0) {
-          this._$controlPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
+          this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
         }
       }
     }
@@ -356,8 +340,8 @@ class ItcSlider {
         index = this._activeItems[i];
         index += 1;
         newIndex = index;
-        if (newIndex > this._$itemList.length - 1) {
-          newIndex -= this._$itemList.length;
+        if (newIndex > this._elItemList.length - 1) {
+          newIndex -= this._elItemList.length;
         }
         activeIndex.push(newIndex);
       }
@@ -367,7 +351,7 @@ class ItcSlider {
         index -= 1;
         newIndex = index;
         if (newIndex < 0) {
-          newIndex += this._$itemList.length;
+          newIndex += this._elItemList.length;
         }
         activeIndex.push(newIndex);
       }
@@ -376,8 +360,8 @@ class ItcSlider {
     this._setActiveClass();
     this._updateIndicators();
     this._transform = transform;
-    this._$items.style.transform = `translateX(${transform}px)`;
-    this._$items.dispatchEvent(new CustomEvent('transition-start', {
+    this._elItems.style.transform = `translateX(${transform}px)`;
+    this._elItems.dispatchEvent(new CustomEvent('transition-start', {
       bubbles: true,
     }));
   }
@@ -390,7 +374,7 @@ class ItcSlider {
     this._move();
   }
   _moveTo(index) {
-    const $indicatorList = this._$indicatorList;
+    const $indicatorList = this._elIndicatorList;
     let nearestIndex = null;
     let diff = null;
     let i;
@@ -435,9 +419,9 @@ class ItcSlider {
   }
   _refresh() {
     // create some constants
-    const $itemList = this._$itemList;
+    const $itemList = this._elItemList;
     const widthItem = $itemList[0].getBoundingClientRect().width;
-    const widthWrapper = this._$wrapper.getBoundingClientRect().width;
+    const widthWrapper = this._elWrapper.getBoundingClientRect().width;
     const itemsInVisibleArea = Math.round(widthWrapper / widthItem);
 
     if (widthItem === this._widthStep && itemsInVisibleArea === this._itemsInVisibleArea) {
@@ -446,8 +430,8 @@ class ItcSlider {
 
     this._autoplay('stop');
 
-    this._$items.classList.add(ItcSlider.SLIDER_TRANSITION_OFF);
-    this._$items.style.transform = 'translateX(0)';
+    this._elItems.classList.add(ItcSlider.TRANSITION_OFF);
+    this._elItems.style.transform = 'translateX(0)';
 
     // setting properties after reset
     this._widthItem = widthItem;
@@ -475,13 +459,13 @@ class ItcSlider {
     this._setActiveClass();
     this._updateIndicators();
     window.requestAnimationFrame(() => {
-      this._$items.classList.remove(ItcSlider.SLIDER_TRANSITION_OFF);
+      this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);
     });
 
     // hide prev arrow for non-infinite slider
     if (!this._config.loop) {
-      if (this._$controlPrev) {
-        this._$controlPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
+      if (this._elBtnPrev) {
+        this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
       }
       return;
     }
