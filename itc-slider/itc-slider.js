@@ -85,17 +85,18 @@ class ItcSlider {
     // create some constants
     this._widthItem = this._elsItem[0].getBoundingClientRect().width;
     this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
-    this._itemsInVisibleArea = Math.round(this._widthWrapper / this._widthItem);
+    // количество активных элементов
+    this._countActiveEls = Math.round(this._widthWrapper / this._widthItem);
     // initial setting properties
-    this._transformStep = 100 / this._itemsInVisibleArea;
+    this._transformStep = 100 / this._countActiveEls;
     this._widthStep = this._widthItem;
-    const itemsInVisibleArea = this._itemsInVisibleArea;
+    const countActiveEls = this._countActiveEls;
     // добавляем data-атрибуты к .slider__item
     this._elsItem.forEach((el, index) => {
       el.dataset.index = index;
       el.dataset.order = index;
       el.dataset.translate = 0;
-      index < itemsInVisibleArea ? this._activeItems.push(index) : null;
+      index < countActiveEls ? this._activeItems.push(index) : null;
     });
     if (this._config.loop) {
       // перемещаем последний слайд перед первым
@@ -238,7 +239,7 @@ class ItcSlider {
       return;
     }
     const $wrapperClientRect = this._elWrapper.getBoundingClientRect();
-    const widthHalfItem = $wrapperClientRect.width / this._itemsInVisibleArea / 2;
+    const widthHalfItem = $wrapperClientRect.width / this._countActiveEls / 2;
     const count = this._elsItem.length;
     let translate;
     let clientRect;
@@ -306,7 +307,7 @@ class ItcSlider {
     const step = this._direction === 'next' ? -this._widthStep : this._widthStep;
     const transform = this._transform + step;
     if (!this._config.loop) {
-      const endTransformValue = this._widthStep * (this._elsItem.length - this._itemsInVisibleArea);
+      const endTransformValue = this._widthStep * (this._elsItem.length - this._countActiveEls);
       if (transform < -endTransformValue || transform > 0) {
         return;
       }
@@ -412,9 +413,9 @@ class ItcSlider {
     const $itemList = this._elsItem;
     const widthItem = $itemList[0].getBoundingClientRect().width;
     const widthWrapper = this._elWrapper.getBoundingClientRect().width;
-    const itemsInVisibleArea = Math.round(widthWrapper / widthItem);
+    const countActiveEls = Math.round(widthWrapper / widthItem);
 
-    if (widthItem === this._widthStep && itemsInVisibleArea === this._itemsInVisibleArea) {
+    if (widthItem === this._widthStep && countActiveEls === this._countActiveEls) {
       return;
     }
 
@@ -426,9 +427,9 @@ class ItcSlider {
     // setting properties after reset
     this._widthItem = widthItem;
     this._widthWrapper = widthWrapper;
-    this._itemsInVisibleArea = itemsInVisibleArea;
+    this._countActiveEls = countActiveEls;
     this._transform = 0;
-    this._transformStep = 100 / itemsInVisibleArea;
+    this._transformStep = 100 / countActiveEls;
     this._widthStep = widthItem;
     this._isBalancing = false;
     this._activeItems = [];
@@ -441,7 +442,7 @@ class ItcSlider {
       $item.dataset.order = position;
       $item.dataset.translate = 0;
       $item.style.transform = 'translateX(0)';
-      if (position < itemsInVisibleArea) {
+      if (position < countActiveEls) {
         this._activeItems.push(position);
       }
     }
