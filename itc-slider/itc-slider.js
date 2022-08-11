@@ -52,7 +52,7 @@ class ItcSlider {
     this._elsItem = this._el.querySelectorAll(ItcSlider.SEL_ITEM);
     this._elBtnPrev = this._el.querySelector(ItcSlider.SEL_PREV);
     this._elBtnNext = this._el.querySelector(ItcSlider.SEL_NEXT);
-    this._elIndicatorList = this._el.querySelectorAll(ItcSlider.SEL_INDICATOR);
+    this._elsIndicator = this._el.querySelectorAll(ItcSlider.SEL_INDICATOR);
     // экстремальные значения слайдов
     this._minOrder = 0;
     this._maxOrder = 0;
@@ -103,9 +103,8 @@ class ItcSlider {
     } else if (this._elBtnPrev) {
       this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
     }
-    this._setActiveClass();
+    this._changeActiveItems();
     this._addEventListener();
-    this._updateIndicators();
     this._autoplay();
   }
   _addEventListener() {
@@ -267,29 +266,19 @@ class ItcSlider {
     // updating...
     requestAnimationFrame(this._balancingItems.bind(this));
   }
-  _setActiveClass() {
+  _changeActiveItems() {
     this._stateItems.forEach((item, index) => {
       if (item) {
         this._elsItem[index].classList.add(ItcSlider.CLASS_ITEM_ACTIVE);
       } else {
         this._elsItem[index].classList.remove(ItcSlider.CLASS_ITEM_ACTIVE);
       }
-    });
-  }
-  _updateIndicators() {
-    const $indicatorList = this._elIndicatorList;
-    const $itemList = this._elsItem;
-    if (!$indicatorList.length) {
-      return;
-    }
-    for (let index = 0, length = $itemList.length; index < length; index++) {
-      const $item = $itemList[index];
-      if ($item.classList.contains(ItcSlider.CLASS_ITEM_ACTIVE)) {
-        $indicatorList[index].classList.add(ItcSlider.CLASS_INDICATOR_ACTIVE);
-      } else {
-        $indicatorList[index].classList.remove(ItcSlider.CLASS_INDICATOR_ACTIVE);
+      if (this._elsIndicator.length && item) {
+        this._elsIndicator[index].classList.add(ItcSlider.CLASS_INDICATOR_ACTIVE);
+      } else if (this._elsIndicator.length && !item) {
+        this._elsIndicator[index].classList.remove(ItcSlider.CLASS_INDICATOR_ACTIVE);
       }
-    }
+    });
   }
   _move() {
     const step = this._direction === 'next' ? -this._widthItem : this._widthItem;
@@ -314,8 +303,7 @@ class ItcSlider {
     } else {
       this._stateItems = [...this._stateItems.slice(1), ...this._stateItems.slice(0, 1)];
     }
-    this._setActiveClass();
-    this._updateIndicators();
+    this._changeActiveItems();
     this._transform = transform;
     this._elItems.style.transform = `translateX(${transform}px)`;
     this._elItems.dispatchEvent(new CustomEvent('transition-start', {
@@ -331,31 +319,15 @@ class ItcSlider {
     this._move();
   }
   _moveTo(index) {
-    const $indicatorList = this._elIndicatorList;
-    let nearestIndex = null;
-    let diff = null;
-    let i;
-    let length;
-    for (i = 0, length = $indicatorList.length; i < length; i++) {
-      const $indicator = $indicatorList[i];
-      if ($indicator.classList.contains(ItcSlider.CLASS_INDICATOR_ACTIVE)) {
-        const slideTo = +$indicator.dataset.slideTo;
-        if (diff === null) {
-          nearestIndex = slideTo;
-          diff = Math.abs(index - nearestIndex);
-        } else if (Math.abs(index - slideTo) < diff) {
-          nearestIndex = slideTo;
-          diff = Math.abs(index - nearestIndex);
-        }
+    const delta = this._stateItems.reduce((acc, current, currentIndex) => {
+      const diff = current ? index - currentIndex : acc;
+      return Math.abs(diff) < Math.abs(acc) ? diff : acc;
+    }, this._stateItems.length);
+    if (delta !== 0) {
+      this._direction = delta > 0 ? 'next' : 'prev';
+      for (let i = 0; i < Math.abs(delta); i++) {
+        this._move();
       }
-    }
-    diff = index - nearestIndex;
-    if (diff === 0) {
-      return;
-    }
-    this._direction = diff > 0 ? 'next' : 'prev';
-    for (i = 1; i <= Math.abs(diff); i++) {
-      this._move();
     }
   }
   _autoplay(action) {
@@ -400,8 +372,7 @@ class ItcSlider {
       this._stateItems.push(index < countActiveEls ? 1 : 0);
     });
 
-    this._setActiveClass();
-    this._updateIndicators();
+    this._changeActiveItems();
     window.requestAnimationFrame(() => {
       this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);
     });
