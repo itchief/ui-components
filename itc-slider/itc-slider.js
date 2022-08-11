@@ -63,7 +63,7 @@ class ItcSlider {
     // направление смены слайдов (по умолчанию)
     this._direction = 'next';
     // determines whether the position of item needs to be determined
-    this._balancingItemsFlag = false;
+    this._isBalancing = false;
     this._activeItems = [];
     // текущее значение трансформации
     this._transform = 0;
@@ -143,15 +143,15 @@ class ItcSlider {
     }
 
     function onTransitionStart() {
-      if (this._balancingItemsFlag) {
+      if (this._isBalancing) {
         return;
       }
-      this._balancingItemsFlag = true;
+      this._isBalancing = true;
       window.requestAnimationFrame(this._balancingItems.bind(this));
     }
 
     function onTransitionEnd() {
-      this._balancingItemsFlag = false;
+      this._isBalancing = false;
     }
 
     function onResize() {
@@ -234,7 +234,7 @@ class ItcSlider {
     this._maxTranslate = Number(this._$itemByMaxOrder.dataset.translate);
   }
   _balancingItems() {
-    if (!this._balancingItemsFlag) {
+    if (!this._isBalancing) {
       return;
     }
     const $wrapperClientRect = this._elWrapper.getBoundingClientRect();
@@ -430,7 +430,7 @@ class ItcSlider {
     this._transform = 0;
     this._transformStep = 100 / itemsInVisibleArea;
     this._widthStep = widthItem;
-    this._balancingItemsFlag = false;
+    this._isBalancing = false;
     this._activeItems = [];
 
     // setting order and translate items after reset
