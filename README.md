@@ -10,7 +10,7 @@ UI Components - это набор веб-компонентов с открыт�
 - dynamic-move-elements (<a href="https://itchief.ru/javascript/custom-select">описание</a>)
 - forms - text-field (<a href="https://itchief.ru/html-and-css/styling-text-input">описание</a>)
 - itc-slider (<a href="https://itchief.ru/javascript/slider">описание</a>)
-- Modal (<a href="https://itchief.ru/javascript/modal-window">описание</a>)
+- modal (<a href="https://itchief.ru/javascript/modal-window">описание</a>)
 - simple-adaptive-slider (<a href="https://itchief.ru/javascript/simple-adaptive-slider">описание</a>)
 - simple-todo-list (<a href="https://itchief.ru/javascript/todo-list">описание</a>)
 - tabs (<a href="https://itchief.ru/javascript/tabs">описание</a>)
