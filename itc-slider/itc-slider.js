@@ -84,12 +84,11 @@ class ItcSlider {
     this._widthItem = this._elsItem[0].getBoundingClientRect().width;
     this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
     this._countActiveItems = Math.round(this._widthWrapper / this._widthItem);
-    const countActiveEls = this._countActiveItems;
     this._elsItem.forEach((el, index) => {
       el.dataset.index = index;
       el.dataset.order = index;
       el.dataset.translate = 0;
-      this._stateItems.push(index < countActiveEls ? 1 : 0);
+      this._stateItems.push(index < this._countActiveItems ? 1 : 0);
     });
 
     if (this._config.loop) {
