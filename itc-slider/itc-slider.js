@@ -81,58 +81,48 @@ class ItcSlider {
   }
 
   _addEventListener() {
-    const $root = this._el;
-    const $items = this._elItems;
-    const config = this._config;
-
-    function onClick(e) {
-      const $target = e.target;
+    this._el.addEventListener('click', (e) => {
       this._autoplay('stop');
-      if ($target.classList.contains(ItcSlider.CLASS_CONTROL)) {
+      if (e.target.classList.contains(ItcSlider.CLASS_CONTROL)) {
         e.preventDefault();
-        this._direction = $target.dataset.slide;
+        this._direction = e.target.dataset.slide;
         this._move();
-      } else if ($target.dataset.slideTo) {
-        const index = parseInt($target.dataset.slideTo, 10);
+      } else if (e.target.dataset.slideTo) {
+        const index = parseInt(e.target.dataset.slideTo, 10);
         this._moveTo(index);
       }
-      if (this._config.loop) {
-        this._autoplay();
-      }
-    }
-
-    function onMouseEnter() {
+      this._config.loop ? this._autoplay() : null;
+    });
+    this._el.addEventListener('mouseenter', () => {
       this._autoplay('stop');
-    }
-
-    function onMouseLeave() {
+    });
+    this._el.addEventListener('mouseleave', () => {
       this._autoplay();
+    });
+    if (this._config.refresh) {
+      window.addEventListener('resize', () => {
+        window.requestAnimationFrame(this._reset.bind(this));
+      });
     }
-
-    function onTransitionStart() {
-      if (this._isBalancing) {
-        return;
-      }
-      this._isBalancing = true;
-      window.requestAnimationFrame(this._balanceItems.bind(this));
+    if (this._config.loop) {
+      this._elItems.addEventListener('transition-start', () => {
+        if (this._isBalancing) {
+          return;
+        }
+        this._isBalancing = true;
+        window.requestAnimationFrame(this._balanceItems.bind(this));
+      });
+      this._elItems.addEventListener('transitionend', () => {
+        this._isBalancing = false;
+      });
     }
-
-    function onTransitionEnd() {
-      this._isBalancing = false;
-    }
-
-    function onResize() {
-      window.requestAnimationFrame(this._reset.bind(this));
-    }
-
-    function onSwipeStart(e) {
+    const onSwipeStart = (e) => {
       this._autoplay('stop');
       const event = e.type.search('touch') === 0 ? e.touches[0] : e;
       this._swipeX = event.clientX;
       this._isSwiping = true;
-    }
-
-    function onSwipeEnd(e) {
+    };
+    const onSwipeEnd = (e) => {
       if (!this._isSwiping) {
         return;
       }
@@ -149,44 +139,23 @@ class ItcSlider {
       if (this._config.loop) {
         this._autoplay();
       }
+    };
+    if (this._config.swipe) {
+      this._el.addEventListener('touchstart', onSwipeStart);
+      this._el.addEventListener('mousedown', onSwipeStart);
+      document.addEventListener('touchend', onSwipeEnd);
+      document.addEventListener('mouseup', onSwipeEnd);
     }
-
-    function onDragStart(e) {
+    this._el.addEventListener('dragstart', (e) => {
       e.preventDefault();
-    }
-
-    function onVisibilityChange() {
+    });
+    document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
         this._autoplay('stop');
-      } else if (document.visibilityState === 'visible') {
-        if (this._config.loop) {
-          this._autoplay();
-        }
+      } else if (document.visibilityState === 'visible' && this._config.loop) {
+        this._autoplay();
       }
-    }
-
-    $root.addEventListener('click', onClick.bind(this));
-    $root.addEventListener('mouseenter', onMouseEnter.bind(this));
-    $root.addEventListener('mouseleave', onMouseLeave.bind(this));
-    // on resize
-    if (config.refresh) {
-      window.addEventListener('resize', onResize.bind(this));
-    }
-    // on transitionstart and transitionend
-    if (config.loop) {
-      $items.addEventListener('transition-start', onTransitionStart.bind(this));
-      $items.addEventListener('transitionend', onTransitionEnd.bind(this));
-    }
-    // on touchstart and touchend
-    if (config.swipe) {
-      $root.addEventListener('touchstart', onSwipeStart.bind(this));
-      $root.addEventListener('mousedown', onSwipeStart.bind(this));
-      document.addEventListener('touchend', onSwipeEnd.bind(this));
-      document.addEventListener('mouseup', onSwipeEnd.bind(this));
-    }
-    $root.addEventListener('dragstart', onDragStart.bind(this));
-    // при изменении активности вкладки
-    document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
+    });
   }
   _updateExProperties() {
     const els = Object.values(this._elsItem).map((el) => el);
