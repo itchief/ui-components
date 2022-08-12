@@ -60,14 +60,9 @@ class ItcSlider {
     this._exTranslateMin = 0;
     this._exTranslateMax = 0;
 
-    this._stateItems = [];
-
-    this._transform = 0;
     this._direction = 'next';
 
     this._intervalId = null;
-
-    this._isBalancing = false;
 
     this._isSwiping = false;
     this._swipeX = 0;
@@ -81,25 +76,8 @@ class ItcSlider {
       ...config
     };
 
-    this._widthItem = this._elsItem[0].getBoundingClientRect().width;
-    this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
-    this._countActiveItems = Math.round(this._widthWrapper / this._widthItem);
-    this._elsItem.forEach((el, index) => {
-      el.dataset.index = index;
-      el.dataset.order = index;
-      el.dataset.translate = 0;
-      this._stateItems.push(index < this._countActiveItems ? 1 : 0);
-    });
-
-    if (this._config.loop) {
-      this._initial();
-      this._refreshExtremeValues();
-    } else if (this._elBtnPrev) {
-      this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
-    }
-    this._changeActiveItems();
+    this._setInitialValues();
     this._addEventListener();
-    this._autoplay();
   }
 
   _addEventListener() {
@@ -136,7 +114,7 @@ class ItcSlider {
         return;
       }
       this._isBalancing = true;
-      window.requestAnimationFrame(this._balancingItems.bind(this));
+      window.requestAnimationFrame(this._balanceItems.bind(this));
     }
 
     function onTransitionEnd() {
@@ -144,7 +122,7 @@ class ItcSlider {
     }
 
     function onResize() {
-      window.requestAnimationFrame(this._refresh.bind(this));
+      window.requestAnimationFrame(this._reset.bind(this));
     }
 
     function onSwipeStart(e) {
@@ -210,7 +188,7 @@ class ItcSlider {
     // при изменении активности вкладки
     document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
   }
-  _refreshExtremeValues() {
+  _updateExProperties() {
     const els = Object.values(this._elsItem).map((el) => el);
     const orders = els.map((item) => Number(item.dataset.order));
     this._exOrderMin = Math.min(...orders);
@@ -222,7 +200,7 @@ class ItcSlider {
     this._exTranslateMin = Number(this._exItemMin.dataset.translate);
     this._exTranslateMax = Number(this._exItemMax.dataset.translate);
   }
-  _balancingItems() {
+  _balanceItems() {
     if (!this._isBalancing) {
       return;
     }
@@ -242,7 +220,7 @@ class ItcSlider {
         $min.dataset.translate = translate;
         $min.style.transform = `translateX(${translate}px)`;
         // update values of extreme properties
-        this._refreshExtremeValues();
+        this._updateExProperties();
       }
     } else {
       const wrapperRight = $wrapperClientRect.right;
@@ -255,11 +233,11 @@ class ItcSlider {
         $max.dataset.translate = translate;
         $max.style.transform = `translateX(${translate}px)`;
         // update values of extreme properties
-        this._refreshExtremeValues();
+        this._updateExProperties();
       }
     }
     // updating...
-    requestAnimationFrame(this._balancingItems.bind(this));
+    requestAnimationFrame(this._balanceItems.bind(this));
   }
   _changeActiveItems() {
     this._stateItems.forEach((item, index) => {
@@ -341,8 +319,7 @@ class ItcSlider {
       }, this._config.interval);
     }
   }
-  _refresh() {
-    // create some constants
+  _reset() {
     const widthItem = this._elsItem[0].getBoundingClientRect().width;
     const widthWrapper = this._elWrapper.getBoundingClientRect().width;
     const countActiveEls = Math.round(widthWrapper / widthItem);
@@ -352,47 +329,37 @@ class ItcSlider {
     this._autoplay('stop');
     this._elItems.classList.add(ItcSlider.TRANSITION_OFF);
     this._elItems.style.transform = 'translateX(0)';
-
+    this._setInitialValues();
+    window.requestAnimationFrame(() => {
+      this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);
+    });
+  }
+  _setInitialValues() {
     this._transform = 0;
-    this._widthItem = widthItem;
-    this._widthWrapper = widthWrapper;
-    this._countActiveItems = countActiveEls;
+    this._stateItems = [];
     this._isBalancing = false;
-    this._stateItems.length = 0;
+    this._widthItem = this._elsItem[0].getBoundingClientRect().width;
+    this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
+    this._countActiveItems = Math.round(this._widthWrapper / this._widthItem);
     this._elsItem.forEach((el, index) => {
       el.dataset.index = index;
       el.dataset.order = index;
       el.dataset.translate = 0;
       el.style.transform = '';
-      this._stateItems.push(index < countActiveEls ? 1 : 0);
+      this._stateItems.push(index < this._countActiveItems ? 1 : 0);
     });
-
-    this._changeActiveItems();
-    window.requestAnimationFrame(() => {
-      this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);
-    });
-
-    // hide prev arrow for non-infinite slider
-    if (!this._config.loop) {
-      if (this._elBtnPrev) {
-        this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
-      }
-      return;
+    if (this._config.loop) {
+      const lastIndex = this._elsItem.length - 1;
+      const translate = -(lastIndex + 1) * this._widthItem;
+      this._elsItem[lastIndex].dataset.order = -1;
+      this._elsItem[lastIndex].dataset.translate = translate;
+      this._elsItem[lastIndex].style.transform = `translateX(${translate}px)`;
+      this._updateExProperties();
+    } else if (this._elBtnPrev) {
+      this._elBtnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
     }
-
-    this._initial();
-    // update values of extreme properties
-    this._refreshExtremeValues();
-    // calling _autoplay
+    this._changeActiveItems();
     this._autoplay();
-  }
-  _initial() {
-    // перемещаем последний слайд перед первым
-    const lastIndex = this._elsItem.length - 1;
-    const translate = -(lastIndex + 1) * this._widthItem;
-    this._elsItem[lastIndex].dataset.order = -1;
-    this._elsItem[lastIndex].dataset.translate = translate;
-    this._elsItem[lastIndex].style.transform = `translateX(${translate}px)`;
   }
   next() {
     this._moveToNext();
@@ -404,7 +371,7 @@ class ItcSlider {
     this._moveTo(index);
   }
   refresh() {
-    this._refresh();
+    this._reset();
   }
 }
 
