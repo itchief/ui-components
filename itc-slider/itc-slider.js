@@ -252,14 +252,6 @@ class ItcSlider {
       bubbles: true,
     }));
   }
-  _moveToNext() {
-    this._direction = 'next';
-    this._move();
-  }
-  _moveToPrev() {
-    this._direction = 'prev';
-    this._move();
-  }
   _moveTo(index) {
     const delta = this._stateItems.reduce((acc, current, currentIndex) => {
       const diff = current ? index - currentIndex : acc;
@@ -331,15 +323,17 @@ class ItcSlider {
     this._autoplay();
   }
   next() {
-    this._moveToNext();
+    this._direction = 'next';
+    this._move();
   }
   prev() {
-    this._moveToPrev();
+    this._direction = 'prev';
+    this._move();
   }
   moveTo(index) {
     this._moveTo(index);
   }
-  refresh() {
+  reset() {
     this._reset();
   }
 }
