@@ -19,13 +19,13 @@
     }
   </style>
   <!-- Подключаем CSS файл CustomSelect -->
-  <link rel="stylesheet" href="../custom-select.css">
+  <link rel="stylesheet" href="../itc-select.css">
   <!-- Подключаем JavaScript файл CustomSelect -->
-  <script defer src="../custom-select.js"></script>
+  <script defer src="../itc-select.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // инициализируем #select-1 как CustomSelect -->
-      new CustomSelect('#select-1', {
+      // инициализируем #select-1 как ItcSelect -->
+      new ItcSelect('#select-1', {
         name: 'car',
         options: [
           ['volkswagen', 'Volkswagen'],
@@ -34,45 +34,47 @@
           ['nissan', 'Nissan']
         ]
       });
-      // инициализируем #select-2 как CustomSelect -->
-      new CustomSelect('#select-2');
-    })
+      // инициализируем #select-2 как ItcSelect -->
+      new ItcSelect('#select-2');
+    });
   </script>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div style="display: flex;">
-      <div style="flex: 0 0 50%; padding: 15px;">
+  <div style="display: flex;">
+    <div style="flex: 0 0 50%; padding: 15px;">
 
-        <!-- селект #select-1 -->
-        <div id="select-1"></div>
+      <!-- селект #select-1 -->
+      <div id="select-1"></div>
 
-      </div>
-      <div style="flex: 0 0 50%; padding: 15px;">
-
-        <!-- селект #select-2 -->
-        <div class="select" id="select-2">
-          <button type="button" class="select__toggle" name="numbers" value="two" data-select="toggle" data-index="1">
-            Two
-          </button>
-          <div class="select__dropdown">
-            <ul class="select__options">
-              <li class="select__option" data-select="option" data-value="one" data-index="0">One</li>
-              <li class="select__option select__option_selected" data-select="option" data-value="two" data-index="1">Two</li>
-              <li class="select__option" data-select="option" data-value="three" data-index="2">Three</li>
-              <li class="select__option" data-select="option" data-value="four" data-index="3">Four</li>
-              <li class="select__option" data-select="option" data-value="five" data-index="4">Five</li>
-            </ul>
-          </div>
-        </div>
-
-      </div>
     </div>
+    <div style="flex: 0 0 50%; padding: 15px;">
 
+      <!-- селект #select-2 -->
+      <div class="itc-select" id="select-2">
+        <button type="button" class="itc-select__toggle" name="numbers" value="two" data-select="toggle" data-index="1">
+          Two
+        </button>
+        <div class="itc-select__dropdown">
+          <ul class="itc-select__options">
+            <li class="itc-select__option" data-select="option" data-value="one" data-index="0">One</li>
+            <li class="itc-select__option itc-select__option_selected" data-select="option" data-value="two" data-index="1">
+              Two
+            </li>
+            <li class="itc-select__option" data-select="option" data-value="three" data-index="2">Three</li>
+            <li class="itc-select__option" data-select="option" data-value="four" data-index="3">Four</li>
+            <li class="itc-select__option" data-select="option" data-value="five" data-index="4">Five</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
   </div>
+
+</div>
 </body>
 
 </html>

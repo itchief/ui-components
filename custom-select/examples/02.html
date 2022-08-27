@@ -19,13 +19,13 @@
     }
   </style>
   <!-- Подключаем CSS файл CustomSelect -->
-  <link rel="stylesheet" href="../custom-select.css">
+  <link rel="stylesheet" href="../itc-select.css">
   <!-- Подключаем JavaScript файл CustomSelect -->
-  <script defer src="../custom-select.js"></script>
+  <script defer src="../itc-select.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // инициализируем #select-1 как CustomSelect -->
-      const registrationSelect = new CustomSelect('#registration-select', {
+      const registrationSelect = new ItcSelect('#registration-select', {
         name: 'registration', // значение атрибута name у кнопки
         targetValue: 'RegularRegistration', // значение по умолчанию
         options: [
@@ -35,24 +35,22 @@
           ['RegularRegistration4', '4Regular Registration <span class="price">($35.00)</span> <span class="sub-name">Breakfast pastries and refreshments included</span>']
         ], // опции
       });
-
-
-    })
+    });
   </script>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div style="display: flex;">
-      <div style="padding: 15px;">
-        <!-- селект #registration-select -->
-        <div class="select" id="registration-select"></div>
-      </div>
+  <div style="display: flex;">
+    <div style="padding: 15px;">
+      <!-- селект #registration-select -->
+      <div class="itc-select" id="registration-select"></div>
     </div>
-
   </div>
+
+</div>
 </body>
 
 </html>
