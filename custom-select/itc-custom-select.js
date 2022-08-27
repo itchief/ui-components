@@ -1,4 +1,4 @@
-class ItcSelect {
+class ItcCustomSelect {
   static EL = 'itc-select';
   static EL_SHOW = 'itc-select_show';
   static EL_OPTION = 'itc-select__option';
@@ -149,4 +149,4 @@ class ItcSelect {
   }
 }
 
-ItcSelect.hideOpenSelect();
+ItcCustomSelect.hideOpenSelect();
