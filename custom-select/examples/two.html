@@ -19,13 +19,13 @@
     }
   </style>
   <!-- Подключаем CSS файл CustomSelect -->
-  <link rel="stylesheet" href="../itc-select.css">
+  <link rel="stylesheet" href="../itc-custom-select.css">
   <!-- Подключаем JavaScript файл CustomSelect -->
-  <script defer src="../itc-select.js"></script>
+  <script defer src="../itc-custom-select.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // инициализируем #select-1 как ItcSelect -->
-      new ItcSelect('#select-1', {
+      new ItcCustomSelect('#select-1', {
         name: 'car',
         options: [
           ['volkswagen', 'Volkswagen'],
@@ -35,7 +35,7 @@
         ]
       });
       // инициализируем #select-2 как ItcSelect -->
-      new ItcSelect('#select-2');
+      new ItcCustomSelect('#select-2');
     });
   </script>
 </head>

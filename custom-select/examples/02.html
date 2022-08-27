@@ -19,13 +19,13 @@
     }
   </style>
   <!-- Подключаем CSS файл CustomSelect -->
-  <link rel="stylesheet" href="../itc-select.css">
+  <link rel="stylesheet" href="../itc-custom-select.css">
   <!-- Подключаем JavaScript файл CustomSelect -->
-  <script defer src="../itc-select.js"></script>
+  <script defer src="../itc-custom-select.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // инициализируем #select-1 как CustomSelect -->
-      const registrationSelect = new ItcSelect('#registration-select', {
+      const registrationSelect = new ItcCustomSelect('#registration-select', {
         name: 'registration', // значение атрибута name у кнопки
         targetValue: 'RegularRegistration', // значение по умолчанию
         options: [
