@@ -1,4 +1,4 @@
-class CustomSelect {
+class ItcSelect {
   static CLASS_NAME_SELECT = 'select';
   static CLASS_NAME_ACTIVE = 'select_show';
   static CLASS_NAME_SELECTED = 'select__option_selected';
@@ -12,15 +12,15 @@ class CustomSelect {
     this._params = params || {};
     this._onClickFn = this._onClick.bind(this);
     if (this._params.options) {
-      this._elRoot.classList.add(CustomSelect.CLASS_NAME_SELECT);
-      this._elRoot.innerHTML = CustomSelect.template(this._params);
+      this._elRoot.classList.add(ItcSelect.CLASS_NAME_SELECT);
+      this._elRoot.innerHTML = ItcSelect.template(this._params);
     }
-    this._elToggle = this._elRoot.querySelector(CustomSelect.SELECTOR_DATA_TOGGLE);
+    this._elToggle = this._elRoot.querySelector(ItcSelect.SELECTOR_DATA_TOGGLE);
     this._elRoot.addEventListener('click', this._onClickFn);
   }
   _onClick(e) {
-    const target = e.target;
-    const type = target.closest(CustomSelect.SELECTOR_DATA).dataset.select;
+    const { target } = e;
+    const type = target.closest(ItcSelect.SELECTOR_DATA).dataset.select;
     if (type === 'toggle') {
       this.toggle();
     } else if (type === 'option') {
@@ -28,23 +28,23 @@ class CustomSelect {
     }
   }
   _update(option) {
-    option = option.closest('.select__option');
-    const selected = this._elRoot.querySelector(CustomSelect.SELECTOR_OPTION_SELECTED);
+    const elOption = option.closest('.select__option');
+    const selected = this._elRoot.querySelector(ItcSelect.SELECTOR_OPTION_SELECTED);
     if (selected) {
-      selected.classList.remove(CustomSelect.CLASS_NAME_SELECTED);
+      selected.classList.remove(ItcSelect.CLASS_NAME_SELECTED);
     }
-    option.classList.add(CustomSelect.CLASS_NAME_SELECTED);
-    this._elToggle.textContent = option.textContent;
-    this._elToggle.value = option.dataset['value'];
-    this._elToggle.dataset.index = option.dataset['index'];
+    elOption.classList.add(ItcSelect.CLASS_NAME_SELECTED);
+    this._elToggle.textContent = elOption.textContent;
+    this._elToggle.value = elOption.dataset.value;
+    this._elToggle.dataset.index = elOption.dataset.index;
     this._elRoot.dispatchEvent(new CustomEvent('select.change'));
     this._params.onSelected ? this._params.onSelected(this, option) : null;
-    return option.dataset['value'];
+    return elOption.dataset.value;
   }
   _reset() {
-    const selected = this._elRoot.querySelector(CustomSelect.SELECTOR_OPTION_SELECTED);
+    const selected = this._elRoot.querySelector(ItcSelect.SELECTOR_OPTION_SELECTED);
     if (selected) {
-      selected.classList.remove(CustomSelect.CLASS_NAME_SELECTED);
+      selected.classList.remove(ItcSelect.CLASS_NAME_SELECTED);
     }
     this._elToggle.textContent = 'Выберите из списка';
     this._elToggle.value = '';
@@ -54,23 +54,23 @@ class CustomSelect {
     return '';
   }
   _changeValue(option) {
-    if (option.classList.contains(CustomSelect.CLASS_NAME_SELECTED)) {
+    if (option.classList.contains(ItcSelect.CLASS_NAME_SELECTED)) {
       return;
     }
     this._update(option);
     this.hide();
   }
   show() {
-    document.querySelectorAll(CustomSelect.SELECTOR_ACTIVE).forEach(select => {
-      select.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
+    document.querySelectorAll(ItcSelect.SELECTOR_ACTIVE).forEach((select) => {
+      select.classList.remove(ItcSelect.CLASS_NAME_ACTIVE);
     });
-    this._elRoot.classList.add(CustomSelect.CLASS_NAME_ACTIVE);
+    this._elRoot.classList.add(ItcSelect.CLASS_NAME_ACTIVE);
   }
   hide() {
-    this._elRoot.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
+    this._elRoot.classList.remove(ItcSelect.CLASS_NAME_ACTIVE);
   }
   toggle() {
-    if (this._elRoot.classList.contains(CustomSelect.CLASS_NAME_ACTIVE)) {
+    if (this._elRoot.classList.contains(ItcSelect.CLASS_NAME_ACTIVE)) {
       this.hide();
     } else {
       this.show();
@@ -85,7 +85,7 @@ class CustomSelect {
   set value(value) {
     let isExists = false;
     this._elRoot.querySelectorAll('.select__option').forEach((option) => {
-      if (option.dataset['value'] === value) {
+      if (option.dataset.value === value) {
         isExists = true;
         return this._update(option);
       }
@@ -95,21 +95,21 @@ class CustomSelect {
     }
   }
   get selectedIndex() {
-    return this._elToggle.dataset['index'];
+    return this._elToggle.dataset.index;
   }
   set selectedIndex(index) {
     const option = this._elRoot.querySelector(`.select__option[data-index="${index}"]`);
     if (option) {
-      return this._update(option);
+      this._update(option);
     }
-    return this._reset();
+    this._reset();
   }
 }
 
-CustomSelect.template = params => {
-  const name = params['name'];
-  const options = params['options'];
-  const targetValue = params['targetValue'];
+ItcSelect.template = (params) => {
+  const { name } = params;
+  const { options } = params;
+  const { targetValue } = params;
   const items = [];
   let selectedIndex = -1;
   let selectedValue = '';
@@ -132,8 +132,8 @@ CustomSelect.template = params => {
 
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.select')) {
-    document.querySelectorAll(CustomSelect.SELECTOR_ACTIVE).forEach(select => {
-      select.classList.remove(CustomSelect.CLASS_NAME_ACTIVE);
+    document.querySelectorAll(ItcSelect.SELECTOR_ACTIVE).forEach((select) => {
+      select.classList.remove(ItcSelect.CLASS_NAME_ACTIVE);
     });
   }
 });
