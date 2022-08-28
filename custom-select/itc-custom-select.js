@@ -39,7 +39,13 @@ class ItcCustomSelect {
       }
     });
   }
-
+  static create(target, params) {
+    this._el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (this._el) {
+      return new this(target, params);
+    }
+    return null;
+  }
   constructor(target, params) {
     this._el = typeof target === 'string' ? document.querySelector(target) : target;
     this._params = params || {};
