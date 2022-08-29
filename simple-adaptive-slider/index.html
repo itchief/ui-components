@@ -10,9 +10,9 @@
   <!-- Подключаем JS слайдера -->
   <script defer src="js/simple-adaptive-slider.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', () => {
       // инициализация слайдера
-      var slider = new ItcSimpleSlider('.itcss', {
+      const slider = new ItcSimpleSlider('.itcss', {
         loop: true,
         autoplay: true,
         swipe: true
