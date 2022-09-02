@@ -46,6 +46,11 @@ class ItcSimpleSlider {
     }
     return passiveSupported;
   }
+  // для Safari translateX вызывает мерцание при смене слайдов, а translate3d задействует GPU вместо CPU
+  static getTransform(x) {
+    return `translate3d(${x}px, 0, 0.00001px)`;
+    // return `translateX(${x}px)`;
+  }
 
   constructor(target, config) {
     this._el = typeof target === 'string' ? document.querySelector(target) : target;
@@ -100,7 +105,9 @@ class ItcSimpleSlider {
       this._elsItem[count].dataset.order = -1;
       this._elsItem[count].dataset.translate = -this._elsItem.length;
       const translateX = translate * this._width;
-      this._elsItem[count].style.transform = `translateX(${translateX}px)`;
+      this._elsItem[count].style.willChange = 'transform';
+      this._elsItem[count].style.transform = ItcSimpleSlider.getTransform(translateX);
+
     }
     // добавляем индикаторы к слайдеру
     this._addIndicators();
@@ -149,7 +156,8 @@ class ItcSimpleSlider {
     }
     if (this._direction === 'none') {
       translateX = this._transform * this._width;
-      this._elItems.style.transform = `translateX(${translateX}px)`;
+      this._elItems.style.willChange = 'transform';
+      this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
       return;
     }
     if (!this._config.loop) {
@@ -174,7 +182,8 @@ class ItcSimpleSlider {
     this._transform = transform;
     this._elItems.dataset.translate = transform;
     translateX = transform * this._width;
-    this._elItems.style.transform = `translateX(${translateX}px)`;
+    this._elItems.style.willChange = 'transform';
+    this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
     this._elItems.dispatchEvent(new CustomEvent('transition-start', {
       bubbles: true,
     }));
@@ -265,7 +274,8 @@ class ItcSimpleSlider {
         translate += count;
         $min.dataset.translate = translate;
         translateX = translate * this._width;
-        $min.style.transform = `translateX(${translateX}px)`;
+        $min.style.willChange = 'transform';
+        $min.style.transform = ItcSimpleSlider.getTransform(translateX);
         this._refreshExtremeValues();
       }
     } else if (this._direction === 'prev') {
@@ -278,7 +288,9 @@ class ItcSimpleSlider {
         translate -= count;
         $max.dataset.translate = translate;
         translateX = translate * this._width;
-        $max.style.transform = `translateX(${translateX}px)`;
+        // $max.style.transform = `translateX(${translateX}px)`;
+        $max.style.willChange = 'transform';
+        $max.style.transform = ItcSimpleSlider.getTransform(translateX);
         this._refreshExtremeValues();
       }
     }
@@ -367,7 +379,8 @@ class ItcSimpleSlider {
       this._width = this._elWrapper.getBoundingClientRect().width;
       this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
       const translateX = this._transform * this._width - diffPosX;
-      this._elItems.style.transform = `translateX(${translateX}px)`;
+      this._elItems.style.willChange = 'transform';
+      this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
     }
 
     function onSwipeEnd(e) {
@@ -457,12 +470,14 @@ class ItcSimpleSlider {
       this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
       this._width = parseInt(newWidth.toFixed(1), 10);
       newTranslateX = newWidth * parseInt(this._elItems.dataset.translate, 10);
-      this._elItems.style.transform = `translateX(${newTranslateX}px)`;
+      this._elItems.style.willChange = 'transform';
+      this._elItems.style.transform = ItcSimpleSlider.getTransform(newTranslateX);
       const $items2 = this._elsItem;
       for (let i = 0; i < $items2.length; i++) {
         const translateX = parseInt($items2[i].dataset.translate, 10);
         newTranslateX = translateX * newWidth;
-        $items2[i].style.transform = `translateX(${newTranslateX}px)`;
+        $items2[i].style.willChange = 'transform';
+        $items2[i].style.transform = ItcSimpleSlider.getTransform(newTranslateX);
       }
       if (this._config.loop) {
         this._autoplay();
