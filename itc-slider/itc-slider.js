@@ -60,6 +60,9 @@ class ItcSlider {
     this._exTranslateMin = 0;
     this._exTranslateMax = 0;
 
+    const styleElItems = window.getComputedStyle(this._elItems);
+    this._delay = Math.round(parseFloat(styleElItems.transitionDuration) * 200);
+
     this._direction = 'next';
 
     this._intervalId = null;
@@ -188,7 +191,7 @@ class ItcSlider {
         this._exItemMin.dataset.order = this._exOrderMin + countItems;
         const translate = this._exTranslateMin + countItems * this._widthItem;
         this._exItemMin.dataset.translate = translate;
-        this._exItemMin.style.transform = `translateX(${translate}px)`;
+        this._exItemMin.style.transform = `translate3D(${translate}px, 0px, 0px)`;
         this._updateExProperties();
       }
     } else {
@@ -197,11 +200,13 @@ class ItcSlider {
         this._exItemMax.dataset.order = this._exOrderMax - countItems;
         const translate = this._exTranslateMax - countItems * this._widthItem;
         this._exItemMax.dataset.translate = translate;
-        this._exItemMax.style.transform = `translateX(${translate}px)`;
+        this._exItemMax.style.transform = `translate3D(${translate}px, 0px, 0px)`;
         this._updateExProperties();
       }
     }
-    window.requestAnimationFrame(this._balanceItems.bind(this));
+    window.setTimeout(() => {
+      window.requestAnimationFrame(this._balanceItems.bind(this));
+    }, this._delay);
   }
 
   _changeActiveItems() {
@@ -244,7 +249,7 @@ class ItcSlider {
     }
     this._changeActiveItems();
     this._transform = transform;
-    this._elItems.style.transform = `translateX(${transform}px)`;
+    this._elItems.style.transform = `translate3D(${transform}px, 0px, 0px)`;
     this._elItems.dispatchEvent(new CustomEvent('itcslider-start', {
       bubbles: true
     }));
@@ -282,7 +287,7 @@ class ItcSlider {
       const translate = -(lastIndex + 1) * this._widthItem;
       this._elsItem[lastIndex].dataset.order = -1;
       this._elsItem[lastIndex].dataset.translate = translate;
-      this._elsItem[lastIndex].style.transform = `translateX(${translate}px)`;
+      this._elsItem[lastIndex].style.transform = `translate3D(${translate}px, 0px, 0px)`;
       this._updateExProperties();
     } else if (this._btnPrev) {
       this._btnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
@@ -300,7 +305,7 @@ class ItcSlider {
     }
     this._autoplay('stop');
     this._elItems.classList.add(ItcSlider.TRANSITION_OFF);
-    this._elItems.style.transform = 'translateX(0)';
+    this._elItems.style.transform = 'translate3D(0px, 0px, 0px)';
     this._setInitialValues();
     window.requestAnimationFrame(() => {
       this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);

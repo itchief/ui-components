@@ -3,7 +3,7 @@
 *   site: https://itchief.ru/javascript/slider
 *   github: https://github.com/itchief/ui-components
 *
-* Copyright 2018-2021 Alexander Maltsev
+* Copyright 2018-2022 Alexander Maltsev
 * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
 */
 
@@ -22,6 +22,7 @@
 .slider__items {
   display: flex;
   transition: transform 0.5s ease;
+  will-change: transform;
 }
 
 .slider_disable-transition {
@@ -32,6 +33,7 @@
   flex: 0 0 100%;
   max-width: 100%;
   user-select: none;
+  will-change: transform;
 }
 
 /* кнопки влево и вправо */
@@ -99,10 +101,7 @@
   z-index: 15;
   display: flex;
   justify-content: center;
-  margin-top: 0;
-  margin-right: 15%;
-  margin-bottom: 0;
-  margin-left: 15%;
+  margin: 0 15%;
   padding-left: 0;
   list-style: none;
 }
