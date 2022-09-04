@@ -97,8 +97,8 @@ class ItcSimpleSlider {
       const translate = -this._elListItem.length;
       this._elListItem[count].dataset.order = '-1';
       this._elListItem[count].dataset.translate = `${-this._elListItem.length}`;
-      const translateX = translate * this._clientRect.width;
-      this._elListItem[count].style.transform = `translate3D(${translateX}px, 0px, 0px)`;
+      const valueX = translate * this._clientRect.width;
+      this._elListItem[count].style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
     }
     // добавляем индикаторы к слайдеру
     this._addIndicators();
@@ -134,7 +134,7 @@ class ItcSimpleSlider {
     this._elItems.classList.remove(this.constructor.TRANSITION_NONE);
     if (this._direction === 'none') {
       const valueX = this._transform * this._clientRect.width;
-      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
       return;
     }
     if (!this._config.loop) {
@@ -153,7 +153,7 @@ class ItcSimpleSlider {
     }
     this._elItems.dataset.translate = this._transform;
     const valueX = this._transform * this._clientRect.width;
-    this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+    this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
     this._elItems.dispatchEvent(new CustomEvent('moving.itc.slider', { bubbles: true }));
     this._changeActiveItems();
     if (!this._isBalancing) {
@@ -227,7 +227,7 @@ class ItcSimpleSlider {
         this._exItemMin.dataset.order = `${this._exOrderMin + this._elListItem.length}`;
         this._exItemMin.dataset.translate = `${this._exTranslateMin + this._elListItem.length}`;
         const valueX = (this._exTranslateMin + this._elListItem.length) * this._clientRect.width;
-        this._exItemMin.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+        this._exItemMin.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
         this._updateExProperties();
       }
     } else {
@@ -236,7 +236,7 @@ class ItcSimpleSlider {
         this._exItemMax.dataset.order = `${this._exOrderMax - this._elListItem.length}`;
         this._exItemMax.dataset.translate = `${this._exTranslateMax - this._elListItem.length}`;
         const valueX = (this._exTranslateMax - this._elListItem.length) * this._clientRect.width;
-        this._exItemMax.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+        this._exItemMax.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
         this._updateExProperties();
       }
     }
@@ -282,7 +282,7 @@ class ItcSimpleSlider {
       }
       this._elItems.classList.add(this.constructor.TRANSITION_NONE);
       const valueX = this._transform * this._clientRect.width - diffPosX;
-      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
     };
     const onSwipeEnd = (e) => {
       if (!this._hasSwipeState) {
@@ -377,11 +377,10 @@ class ItcSimpleSlider {
         this._elItems.classList.add(this.constructor.TRANSITION_NONE);
         this._clientRect = contentRect;
         const newValueX = contentRect.width * Number(this._elItems.dataset.translate);
-        this._elItems.style.transform = `translate3D(${newValueX}px, 0px, 0px)`;
+        this._elItems.style.transform = `translate3D(${newValueX}px, 0px, 0.1px)`;
         this._elListItem.forEach((el) => {
-          const translateX = Number(el.dataset.translate);
-          const valueX = translateX * contentRect.width;
-          el.style.transform = `translate3D(${valueX}px, 0px, 0px)`;
+          const valueX = Number(el.dataset.translate) * contentRect.width;
+          el.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
         });
         this._autoplay();
       });
