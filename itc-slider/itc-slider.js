@@ -61,7 +61,7 @@ class ItcSlider {
     this._exTranslateMax = 0;
 
     const styleElItems = window.getComputedStyle(this._elItems);
-    this._delay = Math.round(parseFloat(styleElItems.transitionDuration) * 200);
+    this._delay = Math.round(parseFloat(styleElItems.transitionDuration) * 50);
 
     this._direction = 'next';
 

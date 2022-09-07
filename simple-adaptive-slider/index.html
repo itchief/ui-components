@@ -7,24 +7,12 @@
   <title>JavaScript SimpleAdaptiveSlider - Слайдер для сайта на чистом JavaScript [Example 01]</title>
   <!-- Подключаем CSS слайдера -->
   <link rel="stylesheet" href="css/simple-adaptive-slider.css">
-  <!-- Подключаем JS слайдера -->
-  <script defer src="js/simple-adaptive-slider.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // инициализация слайдера
-      const slider = new ItcSimpleSlider('.itcss', {
-        loop: true,
-        autoplay: true,
-        swipe: true
-      });
-    });
-  </script>
   <style>
     /* стили для элемента body */
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-        sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
     }
 
     /* дополнительные стили для этого примера */
@@ -47,6 +35,18 @@
       font-weight: bold;
     }
   </style>
+  <!-- Подключаем JS слайдера -->
+  <script defer src="js/simple-adaptive-slider.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // активация слайдера
+      new ItcSimpleSlider('.itcss', {
+        loop: true,
+        autoplay: true,
+        swipe: true
+      });
+    });
+  </script>
 </head>
 
 <body>
@@ -68,8 +68,8 @@
         </div>
       </div>
     </div>
-    <a class="itcss__control itcss__control_prev" href="#" role="button" data-slide="prev"></a>
-    <a class="itcss__control itcss__control_next" href="#" role="button" data-slide="next"></a>
+    <button class="itcss__btn itcss__btn_prev" role="button" data-slide="prev"></button>
+    <button class="itcss__btn itcss__btn_next" role="button" data-slide="next"></button>
   </div>
 </body>
 

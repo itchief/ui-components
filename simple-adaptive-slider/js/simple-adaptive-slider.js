@@ -1,5 +1,8 @@
+/* eslint-disable no-param-reassign,getter-return */
+// noinspection DuplicatedCode
+
 /**
- * SimpleAdaptiveSlider by itchief v2.0.1 (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
+ * SimpleAdaptiveSlider by itchief (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
  * Copyright 2020 - 2022 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
@@ -7,25 +10,14 @@
 class ItcSimpleSlider {
   // базовые классы и селекторы
   static PREFIX = 'itcss';
-  static CLASS_NAME_ITEM = `${ItcSimpleSlider.PREFIX}__item`;
-  static CLASS_NAME_ITEM_ACTIVE = `${ItcSimpleSlider.PREFIX}__item_active`;
-  static CLASS_NAME_ITEMS = `${ItcSimpleSlider.PREFIX}__items`;
-  static CLASS_NAME_INDICATOR = `${ItcSimpleSlider.PREFIX}__indicator`;
-  static CLASS_NAME_INDICATOR_ACTIVE = `${ItcSimpleSlider.PREFIX}__indicator_active`;
-  static CLASS_NAME_INDICATORS = `${ItcSimpleSlider.PREFIX}__indicators`;
-  static CLASS_NAME_CONTROL = `${ItcSimpleSlider.PREFIX}__control`;
-  static CLASS_NAME_CONTROL_PREV = `${ItcSimpleSlider.PREFIX}__control_prev`;
-  static CLASS_NAME_CONTROL_NEXT = `${ItcSimpleSlider.PREFIX}__control_next`;
-  static CLASS_NAME_CONTROL_SHOW = `${ItcSimpleSlider.PREFIX}__control_show`;
-  static SELECTOR_ITEMS = `.${ItcSimpleSlider.CLASS_NAME_ITEMS}`;
-  static SELECTOR_ITEM = `.${ItcSimpleSlider.CLASS_NAME_ITEM}`;
-  static SELECTOR_ITEM_ACTIVE = `.${ItcSimpleSlider.CLASS_NAME_ITEM_ACTIVE}`;
-  static SELECTOR_INDICATOR_ACTIVE = `.${ItcSimpleSlider.CLASS_NAME_INDICATOR_ACTIVE}`;
-  static SELECTOR_INDICATORS = `.${ItcSimpleSlider.CLASS_NAME_INDICATORS}`;
-  static SELECTOR_WRAPPER = `.${ItcSimpleSlider.PREFIX}__wrapper`;
-  static SELECTOR_CONTROL = `.${ItcSimpleSlider.CLASS_NAME_CONTROL}`;
-  static SELECTOR_CONTROL_NEXT = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_NEXT}`;
-  static SELECTOR_CONTROL_PREV = `.${ItcSimpleSlider.CLASS_NAME_CONTROL_PREV}`;
+  static EL_WRAPPER = `${ItcSimpleSlider.PREFIX}__wrapper`;
+  static EL_ITEM = `${ItcSimpleSlider.PREFIX}__item`;
+  static EL_ITEM_ACTIVE = `${ItcSimpleSlider.PREFIX}__item_active`;
+  static EL_ITEMS = `${ItcSimpleSlider.PREFIX}__items`;
+  static EL_INDICATOR = `${ItcSimpleSlider.PREFIX}__indicator`;
+  static EL_INDICATOR_ACTIVE = `${ItcSimpleSlider.PREFIX}__indicator_active`;
+  static EL_INDICATORS = `${ItcSimpleSlider.PREFIX}__indicators`;
+  static EL_CONTROL = `${ItcSimpleSlider.PREFIX}__btn`;
   // порог для переключения слайда (20%)
   static SWIPE_THRESHOLD = 20;
   // класс для отключения transition
@@ -46,156 +38,136 @@ class ItcSimpleSlider {
     }
     return passiveSupported;
   }
-  // для Safari translateX вызывает мерцание при смене слайдов, а translate3d задействует GPU вместо CPU
-  static getTransform(x) {
-    return `translate3d(${x}px, 0, 0.00001px)`;
-    // return `translateX(${x}px)`;
-  }
 
   constructor(target, config) {
     this._el = typeof target === 'string' ? document.querySelector(target) : target;
-    this._elWrapper = this._el.querySelector(ItcSimpleSlider.SELECTOR_WRAPPER);
-    this._elItems = this._el.querySelector(ItcSimpleSlider.SELECTOR_ITEMS);
-    this._elsItem = this._el.querySelectorAll(ItcSimpleSlider.SELECTOR_ITEM);
-    // текущий индекс
-    this._currentIndex = 0;
+    this._elWrapper = this._el.querySelector(`.${this.constructor.EL_WRAPPER}`);
+    this._elItems = this._el.querySelector(`.${this.constructor.EL_ITEMS}`);
+    this._elListItem = this._el.querySelectorAll(`.${this.constructor.EL_ITEM}`);
+
     // экстремальные значения слайдов
-    this._minOrder = 0;
-    this._maxOrder = 0;
-    this._$itemWithMinOrder = null;
-    this._$itemWithMaxOrder = null;
-    this._minTranslate = 0;
-    this._maxTranslate = 0;
+    this._exOrderMin = 0;
+    this._exOrderMax = 0;
+    this._exItemMin = null;
+    this._exItemMax = null;
+    this._exTranslateMin = 0;
+    this._exTranslateMax = 0;
+
+    this._states = [];
+
+    this._isBalancing = false;
+
     // направление смены слайдов (по умолчанию)
     this._direction = 'next';
-    // флаг, который показывает, что идёт процесс уравновешивания слайдов
-    this._balancingItemsFlag = false;
     // текущее значение трансформации
     this._transform = 0;
 
-    this._width = this._elWrapper.getBoundingClientRect().width;
+    this._clientRect = this._elWrapper.getBoundingClientRect();
 
     this._supportResizeObserver = typeof window.ResizeObserver !== 'undefined';
+
+    const styleElItems = window.getComputedStyle(this._elItems);
+    this._delay = Math.round(parseFloat(styleElItems.transitionDuration) * 50);
 
     // swipe параметры
     this._hasSwipeState = false;
     this._swipeStartPosX = 0;
     // id таймера
     this._intervalId = null;
-    // конфигурация слайдера (по умолчанию)
-    const defaultConfig = {
-      autoplay: false,
+    this._config = {
       loop: true,
-      indicators: true,
+      autoplay: false,
       interval: 5000,
+      indicators: true,
       swipe: true,
+      ...config
     };
-    this._config = Object.assign(defaultConfig, config);
-    this._elItems.dataset.translate = 0;
+    this._elItems.dataset.translate = '0';
     // добавляем к слайдам data-атрибуты
-    this._elsItem.forEach((item, index) => {
-      item.dataset.order = index;
-      item.dataset.index = index;
-      item.dataset.translate = 0;
+    this._elListItem.forEach((item, index) => {
+      item.dataset.order = `${index}`;
+      item.dataset.index = `${index}`;
+      item.dataset.translate = '0';
+      this._states.push(index === 0 ? 1 : 0);
     });
+
     // перемещаем последний слайд перед первым
     if (this._config.loop) {
-      const count = this._elsItem.length - 1;
-      const translate = -this._elsItem.length;
-      this._elsItem[count].dataset.order = -1;
-      this._elsItem[count].dataset.translate = -this._elsItem.length;
-      const translateX = translate * this._width;
-      this._elsItem[count].style.willChange = 'transform';
-      this._elsItem[count].style.transform = ItcSimpleSlider.getTransform(translateX);
-
+      const count = this._elListItem.length - 1;
+      const translate = -this._elListItem.length;
+      this._elListItem[count].dataset.order = '-1';
+      this._elListItem[count].dataset.translate = `${-this._elListItem.length}`;
+      const valueX = translate * this._clientRect.width;
+      this._elListItem[count].style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
     }
     // добавляем индикаторы к слайдеру
     this._addIndicators();
+    this._elListIndicator = document.querySelectorAll(`.${this.constructor.EL_INDICATOR}`);
     // обновляем экстремальные значения переменных
-    this._refreshExtremeValues();
+    this._updateExProperties();
     // помечаем активные элементы
-    this._setActiveClass();
+    this._changeActiveItems();
     // назначаем обработчики
     this._addEventListener();
     // запускаем автоматическую смену слайдов
     this._autoplay();
   }
 
-  _setActiveClass() {
-    const elActive = this._el.querySelector(ItcSimpleSlider.SELECTOR_ITEM_ACTIVE);
-    elActive ? elActive.classList.remove(ItcSimpleSlider.CLASS_NAME_ITEM_ACTIVE) : null;
-    const elActiveNew = this._el.querySelector(`[data-index="${this._currentIndex}"]`);
-    elActiveNew ? elActiveNew.classList.add(ItcSimpleSlider.CLASS_NAME_ITEM_ACTIVE) : null;
-
-    const elIndicatorActive = this._el.querySelector(ItcSimpleSlider.SELECTOR_INDICATOR_ACTIVE);
-    elIndicatorActive ? elIndicatorActive.classList.remove(ItcSimpleSlider.CLASS_NAME_INDICATOR_ACTIVE) : null;
-    const elIndicatorNew = this._el.querySelector(`[data-slide-to="${this._currentIndex}"]`);
-    elIndicatorNew ? elIndicatorNew.classList.add(ItcSimpleSlider.CLASS_NAME_INDICATOR_ACTIVE) : null;
-
-    const elPrevBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_CONTROL_PREV);
-    const elNextBtn = this._el.querySelector(ItcSimpleSlider.SELECTOR_CONTROL_NEXT);
-    elPrevBtn ? elPrevBtn.classList.add(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW) : null;
-    elNextBtn ? elNextBtn.classList.add(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW) : null;
-    if (!this._config.loop && this._currentIndex === 0) {
-      elPrevBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW);
-    } else if (!this._config.loop && this._currentIndex === this._elsItem.length - 1) {
-      elNextBtn.classList.remove(ItcSimpleSlider.CLASS_NAME_CONTROL_SHOW);
-    }
-
-    this._el.dispatchEvent(new CustomEvent('active.itc.slider', {
-      bubbles: true,
-    }));
+  _changeActiveItems() {
+    this._states.forEach((item, index) => {
+      if (item) {
+        this._elListItem[index].classList.add(this.constructor.EL_ITEM_ACTIVE);
+      } else {
+        this._elListItem[index].classList.remove(this.constructor.EL_ITEM_ACTIVE);
+      }
+      if (this._elListIndicator.length && item) {
+        this._elListIndicator[index].classList.add(this.constructor.EL_INDICATOR_ACTIVE);
+      } else if (this._elListIndicator.length && !item) {
+        this._elListIndicator[index].classList.remove(this.constructor.EL_INDICATOR_ACTIVE);
+      }
+    });
+    this._el.dispatchEvent(new CustomEvent('change.itc.slider', { bubbles: true }));
   }
 
   // смена слайдов
-  _move(useTransition) {
-    let translateX;
-    this._elItems.classList.remove(ItcSimpleSlider.TRANSITION_NONE);
-    if (useTransition === false) {
-      this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
-    }
+  _move() {
+    this._elItems.classList.remove(this.constructor.TRANSITION_NONE);
     if (this._direction === 'none') {
-      translateX = this._transform * this._width;
-      this._elItems.style.willChange = 'transform';
-      this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
+      const valueX = this._transform * this._clientRect.width;
+      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
       return;
     }
     if (!this._config.loop) {
-      const condition = this._currentIndex + 1 >= this._elsItem.length;
-      if (condition && this._direction === 'next') {
+      const isNotMovePrev = this._states[0] && this._direction === 'prev';
+      const isNotMoveNext = this._states[this._states.length - 1] && this._direction === 'next';
+      if (isNotMovePrev || isNotMoveNext) {
         this._autoplay('stop');
         return;
       }
-      if (this._currentIndex <= 0 && this._direction === 'prev') {
-        return;
-      }
     }
-    const step = this._direction === 'next' ? -1 : 1;
-    const transform = this._transform + step;
+    this._transform += this._direction === 'next' ? -1 : 1;
     if (this._direction === 'next') {
-      if (++this._currentIndex > this._elsItem.length - 1) {
-        this._currentIndex -= this._elsItem.length;
-      }
-    } else if (--this._currentIndex < 0) {
-      this._currentIndex += this._elsItem.length;
+      this._states = [...this._states.slice(-1), ...this._states.slice(0, -1)];
+    } else if (this._direction === 'prev') {
+      this._states = [...this._states.slice(1), ...this._states.slice(0, 1)];
     }
-    this._transform = transform;
-    this._elItems.dataset.translate = transform;
-    translateX = transform * this._width;
-    this._elItems.style.willChange = 'transform';
-    this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
-    this._elItems.dispatchEvent(new CustomEvent('transition-start', {
-      bubbles: true,
-    }));
-    this._setActiveClass();
+    this._elItems.dataset.translate = this._transform;
+    const valueX = this._transform * this._clientRect.width;
+    this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+    this._elItems.dispatchEvent(new CustomEvent('moving.itc.slider', { bubbles: true }));
+    this._changeActiveItems();
+    if (!this._isBalancing) {
+      this._isBalancing = true;
+      window.requestAnimationFrame(this._balanceItems.bind(this));
+    }
   }
 
   // функция для перемещения к слайду по индексу
-  _moveTo(index, useTransition) {
-    const currentIndex = this._currentIndex;
-    this._direction = index > currentIndex ? 'next' : 'prev';
-    for (let i = 0; i < Math.abs(index - currentIndex); i++) {
-      this._move(useTransition);
+  _moveTo(index) {
+    const currIndex = this._states.indexOf(1);
+    this._direction = index > currIndex ? 'next' : 'prev';
+    for (let i = 0; i < Math.abs(index - currIndex); i++) {
+      this._move();
     }
   }
 
@@ -219,132 +191,65 @@ class ItcSimpleSlider {
 
   // добавление индикаторов
   _addIndicators() {
-    if (this._el.querySelector(ItcSimpleSlider.SELECTOR_INDICATORS) || !this._config.indicators) {
+    const el = this._el.querySelector(`.${this.constructor.EL_INDICATORS}`);
+    if (el || !this._config.indicators) {
       return;
     }
-    let html = '';
-    for (let i = 0, length = this._elsItem.length; i < length; i++) {
-      html += `<li class="${ItcSimpleSlider.CLASS_NAME_INDICATOR}" data-slide-to="${i}"></li>`;
+    let rows = '';
+    for (let i = 0, { length } = this._elListItem; i < length; i++) {
+      rows += `<li class="${this.constructor.EL_INDICATOR}" data-slide-to="${i}"></li>`;
     }
-    this._el.insertAdjacentHTML('beforeend', `<ol class="${ItcSimpleSlider.CLASS_NAME_INDICATORS}">${html}</ol>`);
+    const html = `<ol class="${this.constructor.EL_INDICATORS}">${rows}</ol>`;
+    this._el.insertAdjacentHTML('beforeend', html);
   }
 
   // refresh extreme values
-  _refreshExtremeValues() {
-    this._minOrder = parseInt(this._elsItem[0].dataset.order, 10);
-    this._maxOrder = this._minOrder;
-    this._$itemWithMinOrder = this._elsItem[0];
-    this._$itemWithMaxOrder = this._$itemWithMinOrder;
-    this._minTranslate = parseInt(this._elsItem[0].dataset.translate, 10);
-    this._maxTranslate = this._minTranslate;
-    for (let i = 0, length = this._elsItem.length; i < length; i++) {
-      const $item = this._elsItem[i];
-      const order = parseInt($item.dataset.order, 10);
-      if (order < this._minOrder) {
-        this._minOrder = order;
-        this._$itemWithMinOrder = $item;
-        this._minTranslate = parseInt($item.dataset.translate, 10);
-      } else if (order > this._maxOrder) {
-        this._maxOrder = order;
-        this._$itemWithMaxOrder = $item;
-        this._maxTranslate = parseInt($item.dataset.translate, 10);
-      }
-    }
+  _updateExProperties() {
+    const els = Object.values(this._elListItem).map((el) => el);
+    const orders = els.map((item) => Number(item.dataset.order));
+    this._exOrderMin = Math.min(...orders);
+    this._exOrderMax = Math.max(...orders);
+    const min = orders.indexOf(this._exOrderMin);
+    const max = orders.indexOf(this._exOrderMax);
+    this._exItemMin = els[min];
+    this._exItemMax = els[max];
+    this._exTranslateMin = Number(this._exItemMin.dataset.translate);
+    this._exTranslateMax = Number(this._exItemMax.dataset.translate);
   }
 
-  // balancing items
-  _balancingItems() {
-    if (!this._balancingItemsFlag) {
+  _balanceItems() {
+    if (!this._isBalancing) {
       return;
     }
-    const $wrapper = this._elWrapper;
-    const wrapperRect = $wrapper.getBoundingClientRect();
-    const halfWidthItem = wrapperRect.width / 2;
-    const count = this._elsItem.length;
-    let translate;
-    let clientRect;
-    let translateX;
     if (this._direction === 'next') {
-      const wrapperLeft = wrapperRect.left;
-      const $min = this._$itemWithMinOrder;
-      translate = this._minTranslate;
-      clientRect = $min.getBoundingClientRect();
-      if (clientRect.right < wrapperLeft - halfWidthItem) {
-        $min.dataset.order = this._minOrder + count;
-        translate += count;
-        $min.dataset.translate = translate;
-        translateX = translate * this._width;
-        $min.style.willChange = 'transform';
-        $min.style.transform = ItcSimpleSlider.getTransform(translateX);
-        this._refreshExtremeValues();
+      const exItemRight = this._exItemMin.getBoundingClientRect().right;
+      if (exItemRight < this._clientRect.left - this._clientRect.width / 2) {
+        this._exItemMin.dataset.order = `${this._exOrderMin + this._elListItem.length}`;
+        this._exItemMin.dataset.translate = `${this._exTranslateMin + this._elListItem.length}`;
+        const valueX = (this._exTranslateMin + this._elListItem.length) * this._clientRect.width;
+        this._exItemMin.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+        this._updateExProperties();
       }
-    } else if (this._direction === 'prev') {
-      const wrapperRight = wrapperRect.right;
-      const $max = this._$itemWithMaxOrder;
-      translate = this._maxTranslate;
-      clientRect = $max.getBoundingClientRect();
-      if (clientRect.left > wrapperRight + halfWidthItem) {
-        $max.dataset.order = this._maxOrder - count;
-        translate -= count;
-        $max.dataset.translate = translate;
-        translateX = translate * this._width;
-        // $max.style.transform = `translateX(${translateX}px)`;
-        $max.style.willChange = 'transform';
-        $max.style.transform = ItcSimpleSlider.getTransform(translateX);
-        this._refreshExtremeValues();
+    } else {
+      const exItemLeft = this._exItemMax.getBoundingClientRect().left;
+      if (exItemLeft > this._clientRect.right + this._clientRect.width / 2) {
+        this._exItemMax.dataset.order = `${this._exOrderMax - this._elListItem.length}`;
+        this._exItemMax.dataset.translate = `${this._exTranslateMax - this._elListItem.length}`;
+        const valueX = (this._exTranslateMax - this._elListItem.length) * this._clientRect.width;
+        this._exItemMax.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+        this._updateExProperties();
       }
     }
-    requestAnimationFrame(this._balancingItems.bind(this));
+    window.setTimeout(() => {
+      window.requestAnimationFrame(this._balanceItems.bind(this));
+    }, this._delay);
   }
 
   // adding listeners
   _addEventListener() {
-    const $items = this._elItems;
-    function onClick(e) {
-      const $target = e.target;
+    const onSwipeStart = (e) => {
       this._autoplay('stop');
-      if ($target.classList.contains(ItcSimpleSlider.CLASS_NAME_CONTROL)) {
-        e.preventDefault();
-        this._direction = $target.dataset.slide;
-        this._move();
-      } else if ($target.dataset.slideTo) {
-        e.preventDefault();
-        const index = parseInt($target.dataset.slideTo, 10);
-        this._moveTo(index);
-      }
-      if (this._config.loop) {
-        this._autoplay();
-      }
-    }
-
-    function onTransitionStart() {
-      if (this._balancingItemsFlag) {
-        return;
-      }
-      this._balancingItemsFlag = true;
-      window.requestAnimationFrame(this._balancingItems.bind(this));
-    }
-
-    function onTransitionEnd() {
-      this._balancingItemsFlag = false;
-      this._el.dispatchEvent(new CustomEvent('transition-end', {
-        bubbles: true,
-      }));
-    }
-
-    function onMouseEnter() {
-      this._autoplay('stop');
-    }
-
-    function onMouseLeave() {
-      if (this._config.loop) {
-        this._autoplay();
-      }
-    }
-
-    function onSwipeStart(e) {
-      this._autoplay('stop');
-      if (e.target.closest(`.${ItcSimpleSlider.CLASS_NAME_CONTROL}`)) {
+      if (e.target.closest(`.${this.constructor.EL_CONTROL}`)) {
         return;
       }
       const event = e.type.search('touch') === 0 ? e.touches[0] : e;
@@ -352,9 +257,8 @@ class ItcSimpleSlider {
       this._swipeStartPosY = event.clientY;
       this._hasSwipeState = true;
       this._hasSwiping = false;
-    }
-
-    function onSwipeMove(e) {
+    };
+    const onSwipeMove = (e) => {
       if (!this._hasSwipeState) {
         return;
       }
@@ -370,20 +274,17 @@ class ItcSimpleSlider {
       }
       e.preventDefault();
       if (!this._config.loop) {
-        const isBeforeFirst = this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0;
-        const isAfterLast = this._currentIndex <= 0 && diffPosX <= 0;
-        if (isBeforeFirst || isAfterLast) {
+        const isNotMoveFirst = this._states[0] && diffPosX <= 0;
+        const isNotMoveLast = this._states[this._states.length - 1] && diffPosX >= 0;
+        if (isNotMoveFirst || isNotMoveLast) {
           diffPosX /= 4;
         }
       }
-      this._width = this._elWrapper.getBoundingClientRect().width;
-      this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
-      const translateX = this._transform * this._width - diffPosX;
-      this._elItems.style.willChange = 'transform';
-      this._elItems.style.transform = ItcSimpleSlider.getTransform(translateX);
-    }
-
-    function onSwipeEnd(e) {
+      this._elItems.classList.add(this.constructor.TRANSITION_NONE);
+      const valueX = this._transform * this._clientRect.width - diffPosX;
+      this._elItems.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+    };
+    const onSwipeEnd = (e) => {
       if (!this._hasSwipeState) {
         return;
       }
@@ -394,18 +295,18 @@ class ItcSimpleSlider {
         return;
       }
       if (!this._config.loop) {
-        const isBeforeFirst = this._currentIndex + 1 >= this._elsItem.length && diffPosX >= 0;
-        const isAfterLast = this._currentIndex <= 0 && diffPosX <= 0;
-        if (isBeforeFirst || isAfterLast) {
+        const isNotMoveFirst = this._states[0] && diffPosX <= 0;
+        const isNotMoveLast = this._states[this._states.length - 1] && diffPosX >= 0;
+        if (isNotMoveFirst || isNotMoveLast) {
           diffPosX = 0;
         }
       }
-      const value = (diffPosX / this._elWrapper.getBoundingClientRect().width) * 100;
-      this._elItems.classList.remove(ItcSimpleSlider.TRANSITION_NONE);
-      if (value > ItcSimpleSlider.SWIPE_THRESHOLD) {
+      const value = (diffPosX / this._clientRect.width) * 100;
+      this._elItems.classList.remove(this.constructor.TRANSITION_NONE);
+      if (value > this.constructor.SWIPE_THRESHOLD) {
         this._direction = 'next';
         this._move();
-      } else if (value < -ItcSimpleSlider.SWIPE_THRESHOLD) {
+      } else if (value < -this.constructor.SWIPE_THRESHOLD) {
         this._direction = 'prev';
         this._move();
       } else {
@@ -413,81 +314,115 @@ class ItcSimpleSlider {
         this._move();
       }
       this._hasSwipeState = false;
-      if (this._config.loop) {
-        this._autoplay();
-      }
-    }
-
-    function onDragStart(e) {
-      e.preventDefault();
-    }
-
-    function onVisibilityChange() {
-      if (document.visibilityState === 'hidden') {
-        this._autoplay('stop');
-      } else if (document.visibilityState === 'visible') {
-        if (this._config.loop) {
-          this._autoplay();
-        }
-      }
-    }
+      this._autoplay();
+    };
     // click
-    this._el.addEventListener('click', onClick.bind(this));
+    this._el.addEventListener('click', (e) => {
+      const $target = e.target;
+      this._autoplay('stop');
+      if ($target.classList.contains(this.constructor.EL_CONTROL)) {
+        e.preventDefault();
+        this._direction = $target.dataset.slide;
+        this._move();
+      } else if ($target.dataset.slideTo) {
+        e.preventDefault();
+        const index = parseInt($target.dataset.slideTo, 10);
+        this._moveTo(index);
+      }
+      this._autoplay();
+    });
+
     // transitionstart and transitionend
     if (this._config.loop) {
-      $items.addEventListener('transition-start', onTransitionStart.bind(this));
-      $items.addEventListener('transitionend', onTransitionEnd.bind(this));
+      this._elItems.addEventListener('transitionend', () => {
+        this._isBalancing = false;
+      });
     }
     // mouseenter and mouseleave
-    if (this._config.autoplay) {
-      this._el.addEventListener('mouseenter', onMouseEnter.bind(this));
-      this._el.addEventListener('mouseleave', onMouseLeave.bind(this));
-    }
+    this._el.addEventListener('mouseenter', () => {
+      this._autoplay('stop');
+    });
+    this._el.addEventListener('mouseleave', () => {
+      this._autoplay();
+    });
     // swipe
     if (this._config.swipe) {
-      const options = ItcSimpleSlider.checkSupportPassiveEvents() ? { passive: false } : false;
-      this._el.addEventListener('touchstart', onSwipeStart.bind(this), options);
-      this._el.addEventListener('touchmove', onSwipeMove.bind(this), options);
-      this._el.addEventListener('mousedown', onSwipeStart.bind(this));
-      this._el.addEventListener('mousemove', onSwipeMove.bind(this));
-      document.addEventListener('touchend', onSwipeEnd.bind(this));
-      document.addEventListener('mouseup', onSwipeEnd.bind(this));
-      document.addEventListener('mouseout', onSwipeEnd.bind(this));
+      const options = this.constructor.checkSupportPassiveEvents() ? { passive: false } : false;
+      this._el.addEventListener('touchstart', onSwipeStart, options);
+      this._el.addEventListener('touchmove', onSwipeMove, options);
+      this._el.addEventListener('mousedown', onSwipeStart);
+      this._el.addEventListener('mousemove', onSwipeMove);
+      document.addEventListener('touchend', onSwipeEnd);
+      document.addEventListener('mouseup', onSwipeEnd);
+      document.addEventListener('mouseout', onSwipeEnd);
     }
-    this._el.addEventListener('dragstart', onDragStart.bind(this));
+    this._el.addEventListener('dragstart', (e) => {
+      e.preventDefault();
+    });
     // при изменении активности вкладки
-    document.addEventListener('visibilitychange', onVisibilityChange.bind(this));
-
-    function onResizeObserver(entries) {
-      const contentBoxSize = entries[0].contentBoxSize;
-      const contentRect = entries[0].contentRect;
-      const newWidth = contentRect ? contentRect.width : (contentBoxSize[0] || contentBoxSize).inlineSize;
-      let newTranslateX;
-      if (this._width.toFixed(1) === newWidth.toFixed(1)) {
-        return;
-      }
-      this._autoplay('stop');
-      this._elItems.classList.add(ItcSimpleSlider.TRANSITION_NONE);
-      this._width = parseInt(newWidth.toFixed(1), 10);
-      newTranslateX = newWidth * parseInt(this._elItems.dataset.translate, 10);
-      this._elItems.style.willChange = 'transform';
-      this._elItems.style.transform = ItcSimpleSlider.getTransform(newTranslateX);
-      const $items2 = this._elsItem;
-      for (let i = 0; i < $items2.length; i++) {
-        const translateX = parseInt($items2[i].dataset.translate, 10);
-        newTranslateX = translateX * newWidth;
-        $items2[i].style.willChange = 'transform';
-        $items2[i].style.transform = ItcSimpleSlider.getTransform(newTranslateX);
-      }
-      if (this._config.loop) {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && this._config.loop) {
         this._autoplay();
+      } else {
+        this._autoplay('stop');
       }
-    }
+    });
     if (this._supportResizeObserver) {
-      const resizeObserver = new ResizeObserver(onResizeObserver.bind(this));
+      const resizeObserver = new ResizeObserver((entries) => {
+        const { contentRect } = entries[0];
+        if (Math.round(this._clientRect.width * 10) === Math.round(contentRect.width * 10)) {
+          return;
+        }
+        this._clientRect = contentRect;
+        const newValueX = contentRect.width * Number(this._elItems.dataset.translate);
+        this.reset(newValueX, true);
+        this._autoplay();
+      });
       resizeObserver.observe(this._elWrapper);
     }
   }
+
+  reset(newValueX = 0, recalc = false) {
+    this._autoplay('stop');
+    this._elItems.classList.add(this.constructor.TRANSITION_NONE);
+    this._elItems.style.transform = `translate3D(${newValueX}px, 0px, 0.1px)`;
+    this._elListItem.forEach((el) => {
+      const valueX = recalc ? Number(el.dataset.translate) * this._clientRect.width : 0;
+      el.style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+    });
+    if (!recalc) {
+      this._transform = 0;
+      this._states = [];
+      this._elItems.dataset.translate = '0';
+      this._elListItem = this._el.querySelectorAll(`.${this.constructor.EL_ITEM}`);
+      // добавляем к слайдам data-атрибуты
+      this._elListItem.forEach((item, index) => {
+        item.dataset.order = `${index}`;
+        item.dataset.index = `${index}`;
+        item.dataset.translate = '0';
+        this._states.push(index === 0 ? 1 : 0);
+      });
+      // перемещаем последний слайд перед первым
+      if (this._config.loop) {
+        const count = this._elListItem.length - 1;
+        const translate = -this._elListItem.length;
+        this._elListItem[count].dataset.order = '-1';
+        this._elListItem[count].dataset.translate = `${-this._elListItem.length}`;
+        const valueX = translate * this._clientRect.width;
+        this._elListItem[count].style.transform = `translate3D(${valueX}px, 0px, 0.1px)`;
+      }
+      this._el.querySelector(`.${this.constructor.EL_INDICATORS}`).remove();
+      // добавляем индикаторы к слайдеру
+      this._addIndicators();
+      this._elListIndicator = document.querySelectorAll(`.${this.constructor.EL_INDICATOR}`);
+      // обновляем экстремальные значения переменных
+      this._updateExProperties();
+      // помечаем активные элементы
+      this._changeActiveItems();
+    }
+    this._autoplay();
+  }
+
   // перейти к следующему слайду
   next() {
     this._direction = 'next';
@@ -502,7 +437,7 @@ class ItcSimpleSlider {
   autoplay() {
     this._autoplay('stop');
   }
-  moveTo(index, useTransition) {
-    this._moveTo(index, useTransition);
+  moveTo(index) {
+    this._moveTo(index);
   }
 }

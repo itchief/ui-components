@@ -29,7 +29,7 @@
   "scripts": {
     "stylelint": "stylelint '**/*{.css,.scss}'",
     "stylelint:fix": "stylelint '**/*{.css,.scss}' --fix",
-    "js-minify": "terser simple-adaptive-slider/js/simple-adaptive-slider.js --compress --mangle --output simple-adaptive-slider/js/simple-adaptive-slider.min.js && terser simple-adaptive-slider/js/simple-adaptive-slider.dev.js --compress --mangle --output simple-adaptive-slider/js/simple-adaptive-slider.dev.min.js"
+    "js-minify": "terser simple-adaptive-slider/js/simple-adaptive-slider.js --compress --mangle --output simple-adaptive-slider/js/simple-adaptive-slider.min.js"
   },
   "dependencies": {
     "terser": "^5.15.0"
