@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
 
-export class ItcSlider {
+ class ItcSlider {
   static CLASS_CONTROL = 'slider__control';
   static CLASS_CONTROL_HIDE = 'slider__control_hide';
   static CLASS_ITEM_ACTIVE = 'slider__item_active';
@@ -224,6 +224,7 @@ export class ItcSlider {
       }
     });
   }
+
   _move() {
     const widthItem = this._direction === 'next' ? -this._widthItem : this._widthItem;
     const transform = this._transform + widthItem;
