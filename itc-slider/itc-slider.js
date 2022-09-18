@@ -5,17 +5,17 @@
  */
 
 export class ItcSlider {
-  static CLASS_CONTROL = 'slider__control';
-  static CLASS_CONTROL_HIDE = 'slider__control_hide';
-  static CLASS_ITEM_ACTIVE = 'slider__item_active';
-  static CLASS_INDICATOR_ACTIVE = 'active';
-  static SEL_WRAPPER = '.slider__wrapper';
-  static SEL_ITEM = '.slider__item';
-  static SEL_ITEMS = '.slider__items';
+  static CLASS_CONTROL = "slider__control";
+  static CLASS_CONTROL_HIDE = "slider__control_hide";
+  static CLASS_ITEM_ACTIVE = "slider__item_active";
+  static CLASS_INDICATOR_ACTIVE = "active";
+  static SEL_WRAPPER = ".slider__wrapper";
+  static SEL_ITEM = ".slider__item";
+  static SEL_ITEMS = ".slider__items";
   static SEL_PREV = '.slider__control[data-slide="prev"]';
   static SEL_NEXT = '.slider__control[data-slide="next"]';
-  static SEL_INDICATOR = '.slider__indicators>li';
-  static TRANSITION_OFF = 'slider_disable-transition';
+  static SEL_INDICATOR = ".slider__indicators>li";
+  static TRANSITION_OFF = "slider_disable-transition";
 
   static contains = [];
 
@@ -27,25 +27,28 @@ export class ItcSlider {
       const dataset = el.dataset;
       const params = {};
       Object.keys(dataset).forEach((key) => {
-        if (key === 'slider') {
+        if (key === "slider") {
           return;
         }
         let value = dataset[key];
-        value = value === 'true' ? true : value;
-        value = value === 'false' ? false : value;
+        value = value === "true" ? true : value;
+        value = value === "false" ? false : value;
         value = Number.isNaN(Number(value)) ? Number(value) : value;
         params[key] = value;
       });
       this.contains.push({ el, slider: new ItcSlider(el, params) });
       el.dataset.sliderId = this.contains.length;
-      el.querySelectorAll('.slider__control').forEach((btn) => {
+      el.querySelectorAll(".slider__control").forEach((btn) => {
         btn.dataset.sliderTarget = this.contains.length;
       });
     });
   }
 
   constructor(selector, config) {
-    this._el = typeof selector === 'string' ? document.querySelector(selector) : selector;
+    this._el =
+      typeof selector === "string"
+        ? document.querySelector(selector)
+        : selector;
     this._elWrapper = this._el.querySelector(ItcSlider.SEL_WRAPPER);
     this._elItems = this._el.querySelector(ItcSlider.SEL_ITEMS);
     this._elsItem = this._el.querySelectorAll(ItcSlider.SEL_ITEM);
@@ -63,7 +66,7 @@ export class ItcSlider {
     const styleElItems = window.getComputedStyle(this._elItems);
     this._delay = Math.round(parseFloat(styleElItems.transitionDuration) * 50);
 
-    this._direction = 'next';
+    this._direction = "next";
 
     this._intervalId = null;
 
@@ -71,13 +74,14 @@ export class ItcSlider {
     this._swipeX = 0;
 
     this._config = {
+      remove: false,
       margin: 0,
       loop: true,
       autoplay: false,
       interval: 5000,
       refresh: true,
       swipe: true,
-      ...config
+      ...config,
     };
 
     this._setInitialValues();
@@ -85,8 +89,8 @@ export class ItcSlider {
   }
 
   _addEventListener() {
-    this._el.addEventListener('click', (e) => {
-      this._autoplay('stop');
+    this._el.addEventListener("click", (e) => {
+      this._autoplay("stop");
       if (e.target.classList.contains(ItcSlider.CLASS_CONTROL)) {
         e.preventDefault();
         this._direction = e.target.dataset.slide;
@@ -97,32 +101,32 @@ export class ItcSlider {
       }
       this._config.loop ? this._autoplay() : null;
     });
-    this._el.addEventListener('mouseenter', () => {
-      this._autoplay('stop');
+    this._el.addEventListener("mouseenter", () => {
+      this._autoplay("stop");
     });
-    this._el.addEventListener('mouseleave', () => {
+    this._el.addEventListener("mouseleave", () => {
       this._autoplay();
     });
     if (this._config.refresh) {
-      window.addEventListener('resize', () => {
+      window.addEventListener("resize", () => {
         window.requestAnimationFrame(this._reset.bind(this));
       });
     }
     if (this._config.loop) {
-      this._elItems.addEventListener('itcslider-start', () => {
+      this._elItems.addEventListener("itcslider-start", () => {
         if (this._isBalancing) {
           return;
         }
         this._isBalancing = true;
         window.requestAnimationFrame(this._balanceItems.bind(this));
       });
-      this._elItems.addEventListener('transitionend', () => {
+      this._elItems.addEventListener("transitionend", () => {
         this._isBalancing = false;
       });
     }
     const onSwipeStart = (e) => {
-      this._autoplay('stop');
-      const event = e.type.search('touch') === 0 ? e.touches[0] : e;
+      this._autoplay("stop");
+      const event = e.type.search("touch") === 0 ? e.touches[0] : e;
       this._swipeX = event.clientX;
       this._isSwiping = true;
     };
@@ -130,13 +134,13 @@ export class ItcSlider {
       if (!this._isSwiping) {
         return;
       }
-      const event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
+      const event = e.type.search("touch") === 0 ? e.changedTouches[0] : e;
       const diffPos = this._swipeX - event.clientX;
       if (diffPos > 50) {
-        this._direction = 'next';
+        this._direction = "next";
         this._move();
       } else if (diffPos < -50) {
-        this._direction = 'prev';
+        this._direction = "prev";
         this._move();
       }
       this._isSwiping = false;
@@ -145,18 +149,18 @@ export class ItcSlider {
       }
     };
     if (this._config.swipe) {
-      this._el.addEventListener('touchstart', onSwipeStart);
-      this._el.addEventListener('mousedown', onSwipeStart);
-      document.addEventListener('touchend', onSwipeEnd);
-      document.addEventListener('mouseup', onSwipeEnd);
+      this._el.addEventListener("touchstart", onSwipeStart);
+      this._el.addEventListener("mousedown", onSwipeStart);
+      document.addEventListener("touchend", onSwipeEnd);
+      document.addEventListener("mouseup", onSwipeEnd);
     }
-    this._el.addEventListener('dragstart', (e) => {
+    this._el.addEventListener("dragstart", (e) => {
       e.preventDefault();
     });
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        this._autoplay('stop');
-      } else if (document.visibilityState === 'visible' && this._config.loop) {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        this._autoplay("stop");
+      } else if (document.visibilityState === "visible" && this._config.loop) {
         this._autoplay();
       }
     });
@@ -166,14 +170,14 @@ export class ItcSlider {
     if (!this._config.autoplay) {
       return;
     }
-    if (action === 'stop') {
+    if (action === "stop") {
       clearInterval(this._intervalId);
       this._intervalId = null;
       return;
     }
     if (this._intervalId === null) {
       this._intervalId = setInterval(() => {
-        this._direction = 'next';
+        this._direction = "next";
         this._move();
       }, this._config.interval);
     }
@@ -186,7 +190,7 @@ export class ItcSlider {
     const wrapperRect = this._elWrapper.getBoundingClientRect();
     const targetWidth = wrapperRect.width / this._countActiveItems / 2;
     const countItems = this._elsItem.length;
-    if (this._direction === 'next') {
+    if (this._direction === "next") {
       const exItemRectRight = this._exItemMin.getBoundingClientRect().right;
       if (exItemRectRight < wrapperRect.left - targetWidth) {
         this._exItemMin.dataset.order = this._exOrderMin + countItems;
@@ -218,17 +222,24 @@ export class ItcSlider {
         this._elsItem[index].classList.remove(ItcSlider.CLASS_ITEM_ACTIVE);
       }
       if (this._elsIndicator.length && item) {
-        this._elsIndicator[index].classList.add(ItcSlider.CLASS_INDICATOR_ACTIVE);
+        this._elsIndicator[index].classList.add(
+          ItcSlider.CLASS_INDICATOR_ACTIVE
+        );
       } else if (this._elsIndicator.length && !item) {
-        this._elsIndicator[index].classList.remove(ItcSlider.CLASS_INDICATOR_ACTIVE);
+        this._elsIndicator[index].classList.remove(
+          ItcSlider.CLASS_INDICATOR_ACTIVE
+        );
       }
     });
   }
+  
   _move() {
-    const widthItem = this._direction === 'next' ? -this._widthItem : this._widthItem;
+    const widthItem =
+      this._direction === "next" ? -this._widthItem : this._widthItem;
     const transform = this._transform + widthItem;
     if (!this._config.loop) {
-      const limit = this._widthItem * (this._elsItem.length - this._countActiveItems);
+      const limit =
+        this._widthItem * (this._elsItem.length - this._countActiveItems);
       if (transform < -limit || transform > 0) {
         return;
       }
@@ -242,17 +253,25 @@ export class ItcSlider {
         this._btnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
       }
     }
-    if (this._direction === 'next') {
-      this._stateItems = [...this._stateItems.slice(-1), ...this._stateItems.slice(0, -1)];
+    if (this._direction === "next") {
+      this._stateItems = [
+        ...this._stateItems.slice(-1),
+        ...this._stateItems.slice(0, -1),
+      ];
     } else {
-      this._stateItems = [...this._stateItems.slice(1), ...this._stateItems.slice(0, 1)];
+      this._stateItems = [
+        ...this._stateItems.slice(1),
+        ...this._stateItems.slice(0, 1),
+      ];
     }
     this._changeActiveItems();
     this._transform = transform;
     this._elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
-    this._elItems.dispatchEvent(new CustomEvent('itcslider-start', {
-      bubbles: true
-    }));
+    this._elItems.dispatchEvent(
+      new CustomEvent("itcslider-start", {
+        bubbles: true,
+      })
+    );
   }
 
   _moveTo(index) {
@@ -261,7 +280,7 @@ export class ItcSlider {
       return Math.abs(diff) < Math.abs(acc) ? diff : acc;
     }, this._stateItems.length);
     if (delta !== 0) {
-      this._direction = delta > 0 ? 'next' : 'prev';
+      this._direction = delta > 0 ? "next" : "prev";
       for (let i = 0; i < Math.abs(delta); i++) {
         this._move();
       }
@@ -272,14 +291,15 @@ export class ItcSlider {
     this._transform = 0;
     this._stateItems = [];
     this._isBalancing = false;
-    this._widthItem = this._elsItem[0].getBoundingClientRect().width + this._config.margin;
+    this._widthItem =
+      this._elsItem[0].getBoundingClientRect().width + this._config.margin;
     this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
     this._countActiveItems = Math.round(this._widthWrapper / this._widthItem);
     this._elsItem.forEach((el, index) => {
       el.dataset.index = index;
       el.dataset.order = index;
       el.dataset.translate = 0;
-      el.style.transform = '';
+      el.style.transform = "";
       this._stateItems.push(index < this._countActiveItems ? 1 : 0);
     });
     if (this._config.loop) {
@@ -287,7 +307,9 @@ export class ItcSlider {
       const translate = -(lastIndex + 1) * this._widthItem;
       this._elsItem[lastIndex].dataset.order = -1;
       this._elsItem[lastIndex].dataset.translate = translate;
-      this._elsItem[lastIndex].style.transform = `translate3D(${translate}px, 0px, 0.1px)`;
+      this._elsItem[
+        lastIndex
+      ].style.transform = `translate3D(${translate}px, 0px, 0.1px)`;
       this._updateExProperties();
     } else if (this._btnPrev) {
       this._btnPrev.classList.add(ItcSlider.CLASS_CONTROL_HIDE);
@@ -300,12 +322,15 @@ export class ItcSlider {
     const widthItem = this._elsItem[0].getBoundingClientRect().width;
     const widthWrapper = this._elWrapper.getBoundingClientRect().width;
     const countActiveEls = Math.round(widthWrapper / widthItem);
-    if (widthItem === this._widthItem && countActiveEls === this._countActiveItems) {
+    if (
+      widthItem === this._widthItem &&
+      countActiveEls === this._countActiveItems
+    ) {
       return;
     }
-    this._autoplay('stop');
+    this._autoplay("stop");
     this._elItems.classList.add(ItcSlider.TRANSITION_OFF);
-    this._elItems.style.transform = 'translate3D(0px, 0px, 0.1px)';
+    this._elItems.style.transform = "translate3D(0px, 0px, 0.1px)";
     this._setInitialValues();
     window.requestAnimationFrame(() => {
       this._elItems.classList.remove(ItcSlider.TRANSITION_OFF);
@@ -326,11 +351,11 @@ export class ItcSlider {
   }
 
   next() {
-    this._direction = 'next';
+    this._direction = "next";
     this._move();
   }
   prev() {
-    this._direction = 'prev';
+    this._direction = "prev";
     this._move();
   }
   moveTo(index) {
@@ -341,6 +366,6 @@ export class ItcSlider {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   ItcSlider.createInstances();
 });
