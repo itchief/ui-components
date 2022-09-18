@@ -71,6 +71,7 @@ class ItcSlider {
     this._swipeX = 0;
 
     this._config = {
+      margin: 0,
       loop: true,
       autoplay: false,
       interval: 5000,
@@ -223,7 +224,6 @@ class ItcSlider {
       }
     });
   }
-
   _move() {
     const widthItem = this._direction === 'next' ? -this._widthItem : this._widthItem;
     const transform = this._transform + widthItem;
@@ -272,7 +272,7 @@ class ItcSlider {
     this._transform = 0;
     this._stateItems = [];
     this._isBalancing = false;
-    this._widthItem = this._elsItem[0].getBoundingClientRect().width;
+    this._widthItem = this._elsItem[0].getBoundingClientRect().width + this._config.margin;
     this._widthWrapper = this._elWrapper.getBoundingClientRect().width;
     this._countActiveItems = Math.round(this._widthWrapper / this._widthItem);
     this._elsItem.forEach((el, index) => {
