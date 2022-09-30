@@ -1,8 +1,7 @@
 {
   "name": "ui-components",
   "version": "1.0.0",
-  "description": "User Interface Components",
-  "main": "index.js",
+  "description": "User Interface Web Components",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/itchief/ui-components.git"
