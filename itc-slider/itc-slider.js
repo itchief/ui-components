@@ -17,6 +17,19 @@ class ItcSlider {
   static SEL_INDICATOR = '.slider__indicators>li';
   static TRANSITION_OFF = 'slider_disable-transition';
 
+  static instances = [];
+
+  static getOrCreateInstance(target, config) {
+    const elSlider = typeof target === 'string' ? document.querySelector(target) : target;
+    const found = this.instances.find(el => el.target === elSlider);
+    if (found) {
+      return found.instance;
+    }
+    const slider = new this(elSlider, config);
+    this.instances.push({target: elSlider, instance: slider});
+    return this;
+  }
+
   static contains = [];
 
   static createInstances() {
