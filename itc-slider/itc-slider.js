@@ -132,6 +132,27 @@ class ItcSlider {
     this.#reset();
   }
 
+  dispose() {
+    this.#detachEvents();
+    const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
+    const activeClass = this.#state.prefix + this.constructor.#EL_ITEM_ACTIVE;
+    this.#autoplay('stop');
+    this.#state.elItems.classList.add(transitionNoneClass);
+    this.#state.elItems.style.transform = '';
+    this.#state.elListItem.forEach((el) => {
+      el.style.transform = '';
+      el.classList.remove(activeClass);
+    });
+    const selIndicators = `${this.#state.prefix}${this.constructor.#EL_INDICATOR_ACTIVE}`;
+    document.querySelectorAll(`.${selIndicators}`).forEach((el) => {
+      el.classList.remove(selIndicators);
+    })
+    this.#state.elItems.offsetHeight;
+    this.#state.elItems.classList.remove(transitionNoneClass);
+
+
+  }
+
   #onClick(e) {
     const classBtnPrev = this.#state.prefix + this.constructor.#BTN_PREV;
     const classBtnNext = this.#state.prefix + this.constructor.#BTN_NEXT;
@@ -209,24 +230,37 @@ class ItcSlider {
   }
 
   #attachEvents() {
-    this.#state.el.addEventListener('click', this.#onClick.bind(this));
-    this.#state.el.addEventListener('mouseenter', this.#onMouseEnter.bind(this));
-    this.#state.el.addEventListener('mouseleave', this.#onMouseLeave.bind(this));
-    if (this.#config.refresh) {
-      window.addEventListener('resize', this.#onResize.bind(this));
-    }
-    if (this.#config.loop) {
-      this.#state.elItems.addEventListener('itc-slider-transition-start', this.#onTransitionStart.bind(this));
-      this.#state.elItems.addEventListener('transitionend', this.#onTransitionEnd.bind(this));
-    }
-    if (this.#config.swipe) {
-      this.#state.el.addEventListener('touchstart', this.#onSwipeStart.bind(this));
-      this.#state.el.addEventListener('mousedown', this.#onSwipeStart.bind(this));
-      document.addEventListener('touchend', this.#onSwipeEnd.bind(this));
-      document.addEventListener('mouseup', this.#onSwipeEnd.bind(this));
-    }
-    this.#state.el.addEventListener('dragstart', this.#onDragStart.bind(this));
-    document.addEventListener('visibilitychange', this.#onVisibilityChange.bind(this));
+    this.#state.events = {
+      'click': [this.#state.el, this.#onClick.bind(this), true],
+      'mouseenter': [this.#state.el, this.#onMouseEnter.bind(this), true],
+      'mouseleave': [this.#state.el, this.#onMouseLeave.bind(this), true],
+      'resize': [window, this.#onResize.bind(this), this.#config.refresh],
+      'itc-slider-transition-start': [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
+      'transitionend': [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
+      'touchstart': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
+      'mousedown': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
+      'touchend': [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
+      'mouseup': [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
+      'dragstart': [this.#state.el, this.#onDragStart.bind(this), true],
+      'visibilitychange': [document, this.#onVisibilityChange.bind(this), true]
+    };
+    Object.keys(this.#state.events).forEach((type) => {
+      if (this.#state.events[type][2]) {
+        const el = this.#state.events[type][0];
+        const fn = this.#state.events[type][1];
+        el.addEventListener(type, fn);
+      }
+    });
+  }
+
+  #detachEvents() {
+    Object.keys(this.#state.events).forEach((type) => {
+      if (this.#state.events[type][2]) {
+        const el = this.#state.events[type][0];
+        const fn = this.#state.events[type][1];
+        el.removeEventListener(type, fn);
+      }
+    });
   }
 
   #autoplay(action) {
@@ -405,5 +439,5 @@ class ItcSlider {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  ItcSlider.createInstances();
+  // ItcSlider.createInstances();
 });

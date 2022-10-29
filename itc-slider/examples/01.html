@@ -26,11 +26,6 @@
       margin: 0 auto;
     }
 
-    .itc-slider-container {
-      padding-left: 0;
-      padding-right: 0;
-    }
-
     .itc-slider-items {
       counter-reset: slide;
     }
@@ -116,6 +111,17 @@
   </div>
 
 </div>
+
+  <script>
+    let el;
+    let slider;
+    document.addEventListener('DOMContentLoaded', () => {
+      ItcSlider.createInstances();
+      el = document.querySelector('.itc-slider');
+      slider = ItcSlider.getInstance(el);
+      console.log(slider);
+    });
+  </script>
 </body>
 
 </html>
