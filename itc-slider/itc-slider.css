@@ -7,29 +7,25 @@
 * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
 */
 
-.slider {
+.itc-slider {
   position: relative;
 }
 
-.slider__container {
+.itc-slider-wrapper {
   overflow: hidden;
 }
 
-.slider__wrapper {
-  /* overflow: hidden; */
-}
-
-.slider__items {
+.itc-slider-items {
   display: flex;
   transition: transform 0.5s ease;
   will-change: transform;
 }
 
-.slider_disable-transition {
+.itc-slider-transition-none {
   transition: none;
 }
 
-.slider__item {
+.itc-slider-item {
   flex: 0 0 100%;
   max-width: 100%;
   user-select: none;
@@ -37,8 +33,7 @@
 }
 
 /* кнопки влево и вправо */
-
-.slider__control {
+.itc-slider-btn {
   position: absolute;
   top: 50%;
   display: flex;
@@ -54,27 +49,27 @@
   cursor: pointer;
 }
 
-.slider__control_hide {
+.itc-slider-btn-hide {
   display: none;
 }
 
-.slider__control[data-slide="prev"] {
+.itc-slider-btn-prev {
   left: 0;
 }
 
-.slider__control[data-slide="next"] {
+.itc-slider-btn-next {
   right: 0;
 }
 
-.slider__control:hover,
-.slider__control:focus {
+.itc-slider-btn:hover,
+.itc-slider-btn:focus {
   color: #fff;
   text-decoration: none;
   background: rgb(0 0 0 / 30%);
   outline: 0;
 }
 
-.slider__control::before {
+.itc-slider-btn::before {
   content: "";
   display: inline-block;
   width: 20px;
@@ -83,17 +78,16 @@
   background-size: 100% 100%;
 }
 
-.slider__control[data-slide="prev"]::before {
+.itc-slider-btn-prev::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 }
 
-.slider__control[data-slide="next"]::before {
+.itc-slider-btn-next::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
 
 /* индикаторы */
-
-.slider__indicators {
+.itc-slider-indicators {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -106,7 +100,7 @@
   list-style: none;
 }
 
-.slider__indicators li {
+.itc-slider-indicator {
   flex: 0 1 auto;
   box-sizing: content-box;
   width: 30px;
@@ -121,6 +115,6 @@
   cursor: pointer;
 }
 
-.slider__indicators li.active {
+.itc-slider-indicator-active {
   background-color: rgb(255 255 255 / 90%);
 }

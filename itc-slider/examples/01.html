@@ -17,8 +17,8 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol';
+      'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol';
     }
 
     .container {
@@ -26,16 +26,16 @@
       margin: 0 auto;
     }
 
-    .slider__container {
+    .itc-slider-container {
       padding-left: 0;
       padding-right: 0;
     }
 
-    .slider__items {
+    .itc-slider-items {
       counter-reset: slide;
     }
 
-    .slider__item {
+    .itc-slider-item {
       -webkit-box-flex: 0;
       -ms-flex: 0 0 100%;
       flex: 0 0 100%;
@@ -45,7 +45,7 @@
       position: relative;
     }
 
-    .slider__item::before {
+    .itc-slider-item::before {
       content: counter(slide) "/5";
       position: absolute;
       top: 10px;
@@ -57,23 +57,23 @@
       display: block;
     }
 
-    .slider__item:nth-child(1) {
+    .itc-slider-item:nth-child(1) {
       background-color: #f44336;
     }
 
-    .slider__item:nth-child(2) {
+    .itc-slider-item:nth-child(2) {
       background-color: #9c27b0;
     }
 
-    .slider__item:nth-child(3) {
+    .itc-slider-item:nth-child(3) {
       background-color: #3f51b5;
     }
 
-    .slider__item:nth-child(4) {
+    .itc-slider-item:nth-child(4) {
       background-color: #03a9f4;
     }
 
-    .slider__item:nth-child(5) {
+    .itc-slider-item:nth-child(5) {
       background-color: #4caf50;
     }
   </style>
@@ -82,35 +82,40 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="slider" data-slider="itc-slider" data-loop="true" data-autoplay="false">
-      <div class="slider__container">
-        <div class="slider__wrapper">
-          <div class="slider__items">
-            <div class="slider__item">
-              <!-- Контент 1 слайда -->
-            </div>
-            <div class="slider__item">
-              <!-- Контент 2 слайда -->
-            </div>
-            <div class="slider__item">
-              <!-- Контент 3 слайда -->
-            </div>
-            <div class="slider__item">
-              <!-- Контент 4 слайда -->
-            </div>
-            <div class="slider__item">
-              <!-- Контент 5 слайда -->
-            </div>
-          </div>
+  <div class="itc-slider" data-slider="itc-slider" data-loop="true" data-autoplay="false">
+    <div class="itc-slider-wrapper">
+      <div class="itc-slider-items">
+        <div class="itc-slider-item">
+          <!-- Контент 1 слайда -->
+        </div>
+        <div class="itc-slider-item">
+          <!-- Контент 2 слайда -->
+        </div>
+        <div class="itc-slider-item">
+          <!-- Контент 3 слайда -->
+        </div>
+        <div class="itc-slider-item">
+          <!-- Контент 4 слайда -->
+        </div>
+        <div class="itc-slider-item">
+          <!-- Контент 5 слайда -->
         </div>
       </div>
-      <button class="slider__control" data-slide="prev"></button>
-      <button class="slider__control" data-slide="next"></button>
     </div>
-
+    <button class="itc-slider-btn itc-slider-btn-prev"></button>
+    <button class="itc-slider-btn itc-slider-btn-next"></button>
+    <ol class="itc-slider-indicators">
+      <li class="itc-slider-indicator" data-slide-to="0"></li>
+      <li class="itc-slider-indicator" data-slide-to="1"></li>
+      <li class="itc-slider-indicator" data-slide-to="2"></li>
+      <li class="itc-slider-indicator" data-slide-to="3"></li>
+      <li class="itc-slider-indicator" data-slide-to="4"></li>
+    </ol>
   </div>
+
+</div>
 </body>
 
 </html>
