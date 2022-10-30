@@ -149,8 +149,8 @@ class ItcSlider {
     })
     this.#state.elItems.offsetHeight;
     this.#state.elItems.classList.remove(transitionNoneClass);
-
-
+    const index = this.constructor.#instances.findIndex(el => el.target === this.#state.el);
+    this.constructor.#instances.splice(index, 1);
   }
 
   #onClick(e) {
@@ -439,5 +439,5 @@ class ItcSlider {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ItcSlider.createInstances();
+  ItcSlider.createInstances();
 });
