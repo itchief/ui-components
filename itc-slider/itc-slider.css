@@ -1,11 +1,11 @@
-/*!
-* ItcSlider
-*   site: https://itchief.ru/javascript/slider
-*   github: https://github.com/itchief/ui-components
-*
-* Copyright 2018-2022 Alexander Maltsev
-* Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
-*/
+/**
+ * ItcSlider
+ * @version 1.0.0
+ * @author https://github.com/itchief
+ * @copyright Alexander Maltsev 2020 - 2022
+ * @license MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
+ * @tutorial https://itchief.ru/javascript/slider
+ */
 
 .itc-slider {
   position: relative;
