@@ -10,12 +10,12 @@ class ItcSlider {
   static #EL_WRAPPER = 'wrapper';
   static #EL_ITEMS = 'items';
   static #EL_ITEM = 'item';
-  static #EL_ITEM_ACTIVE = 'item-active';
+  static #EL_ITEM_ACTIVE = 'item_active';
   static #EL_INDICATOR = 'indicator';
-  static #EL_INDICATOR_ACTIVE = 'indicator-active';
-  static #BTN_PREV = 'btn-prev';
-  static #BTN_NEXT = 'btn-next';
-  static #BTN_HIDE = 'btn-hide';
+  static #EL_INDICATOR_ACTIVE = 'indicator_active';
+  static #BTN_PREV = 'btn_prev';
+  static #BTN_NEXT = 'btn_next';
+  static #BTN_HIDE = 'btn_hide';
   static #TRANSITION_NONE = 'transition-none';
 
   static #instances = [];
@@ -28,7 +28,7 @@ class ItcSlider {
    * @param {Object} config
    * @param {String} prefix
    */
-  constructor(el, config = {}, prefix = 'itc-slider-') {
+  constructor(el, config = {}, prefix = 'itc-slider__') {
 
     this.#state = {
       prefix: prefix, // префикс для классов
@@ -235,7 +235,7 @@ class ItcSlider {
       'mouseenter': [this.#state.el, this.#onMouseEnter.bind(this), true],
       'mouseleave': [this.#state.el, this.#onMouseLeave.bind(this), true],
       'resize': [window, this.#onResize.bind(this), this.#config.refresh],
-      'itc-slider-transition-start': [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
+      'itc-slider__transition-start': [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
       'transitionend': [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
       'touchstart': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
       'mousedown': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
@@ -354,7 +354,7 @@ class ItcSlider {
     this.#updateClasses();
     this.#state.translate = transform;
     this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
-    this.#state.elItems.dispatchEvent(new CustomEvent('itc-slider-transition-start', {
+    this.#state.elItems.dispatchEvent(new CustomEvent('itc-slider__transition-start', {
       bubbles: true
     }));
   }
