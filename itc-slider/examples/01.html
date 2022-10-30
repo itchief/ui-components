@@ -4,8 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ItcSlider [Example 1]</title>
+  <title>ItcSlider - Example 01</title>
   <link rel="stylesheet" href="../itc-slider.css">
+  <script src="../itc-slider.js" defer></script>
   <style>
     *,
     *::before,
@@ -31,8 +32,6 @@
     }
 
     .itc-slider__item {
-      -webkit-box-flex: 0;
-      -ms-flex: 0 0 100%;
       flex: 0 0 100%;
       max-width: 100%;
       counter-increment: slide;
@@ -72,14 +71,13 @@
       background-color: #4caf50;
     }
   </style>
-  <script defer src="../itc-slider.js"></script>
 </head>
 
 <body>
 
 <div class="container">
 
-  <div class="itc-slider" data-slider="itc-slider" data-loop="true" data-autoplay="false">
+  <div class="itc-slider" data-slider="itc-slider" data-loop="false" data-autoplay="false">
     <div class="itc-slider__wrapper">
       <div class="itc-slider__items">
         <div class="itc-slider__item">
@@ -101,13 +99,6 @@
     </div>
     <button class="itc-slider__btn itc-slider__btn_prev"></button>
     <button class="itc-slider__btn itc-slider__btn_next"></button>
-    <ol class="itc-slider__indicators">
-      <li class="itc-slider__indicator" data-slide-to="0"></li>
-      <li class="itc-slider__indicator" data-slide-to="1"></li>
-      <li class="itc-slider__indicator" data-slide-to="2"></li>
-      <li class="itc-slider__indicator" data-slide-to="3"></li>
-      <li class="itc-slider__indicator" data-slide-to="4"></li>
-    </ol>
   </div>
 
 </div>

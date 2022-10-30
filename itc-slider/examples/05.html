@@ -3,10 +3,10 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>chiefSlider - Example 4</title>
-  <link rel="stylesheet" href="../itc-slider.css">
-  <script src="../itc-slider.js" defer></script>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>ItcSlider - Example 05</title>
+  <link href="../itc-slider.css" rel="stylesheet">
+  <script defer src="../itc-slider.js"></script>
   <style>
     *,
     *::before,
@@ -16,7 +16,9 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol';
     }
 
     .container {
@@ -26,7 +28,7 @@
 
     @media (min-width: 768px) {
       .container {
-        max-width: 700px;
+        max-width: 710px;
         margin: 0 auto;
       }
     }
@@ -38,47 +40,47 @@
       }
     }
 
-    .slider__wrapper {
+    .itc-slider {
       overflow: hidden;
-      margin-left: -5px;
-      margin-right: -5px;
+      padding-bottom: 35px;
     }
 
-    .slider__item {
-      flex: 0 0 100%;
-      max-width: 100%;
+    .itc-slider__wrapper {
+      margin-left: -10px;
+      margin-right: -10px;
     }
 
     @media (min-width: 768px) {
-      .slider__item {
+      .itc-slider__item {
         flex: 0 0 50%;
         max-width: 50%;
       }
     }
 
     @media (min-width: 1200px) {
-      .slider__item {
+      .itc-slider__item {
         flex: 0 0 33.3333333333%;
         max-width: 33.3333333333%;
       }
     }
 
-    .slider__item-content {
-      padding-left: 5px;
-      padding-right: 5px;
+    .card {
+      position: relative;
+      padding-left: 10px;
+      padding-right: 10px;
     }
 
-    .slider__content_header {
+    .card__header {
       position: relative;
     }
 
-    .slider__content_img {
+    .card__img {
       display: block;
       height: auto;
       max-width: 100%;
     }
 
-    .slider__content_section {
+    .card__section {
       position: absolute;
       bottom: 6px;
       left: 10px;
@@ -90,7 +92,7 @@
       line-height: 1;
     }
 
-    .slider__content_title {
+    .card__title {
       background: #fafafa;
       color: #424242;
       white-space: normal;
@@ -99,62 +101,56 @@
       line-height: 1.3;
       padding: 10px 15px;
       margin: 0;
-      height: 52px;
+      height: 72px;
     }
 
-    .slider__content_footer {
-      background: #fafafa;
+    .card__footer {
       display: flex;
-      padding: 20px 15px;
+      align-items: center;
+      justify-content: flex-start;
+      background: #fafafa;
+      padding: 10px 15px 15px;
       color: #616161;
     }
 
-    .slider__content_avatar {
-      flex: 0 0 40px;
-      max-width: 40px;
-    }
-
-    .slider__content_photo {
-      display: block;
-      height: auto;
-      max-width: 100%;
+    .card__photo {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
     }
 
-    .slider__content_author {
-      margin-left: 8px;
-      line-height: 40px;
+    .card__author {
+      margin-left: 6px;
     }
 
-    .slider__content_icon {
-      height: 18px;
-      margin-top: 12px;
+    .card__icon {
       margin-left: auto;
+      width: 18px;
+      max-height: 20px;
     }
 
-    .slider__content_views {
-      margin-left: 4px;
-      line-height: 40px;
+    .card__views {
+      margin-left: 6px;
     }
 
-    .slider__control {
+    .itc-slider__btn {
       background-color: unset;
     }
 
-    .slider__control:hover,
-    .slider__control:focus {
+    .itc-slider__btn:hover,
+    .itc-slider__btn:focus {
       background-color: rgba(0, 0, 0, 0.1);
     }
 
-    .slider__indicators {
-      bottom: -35px;
+    .itc-slider__indicators {
+      bottom: 0;
     }
 
-    .slider__indicators li {
+    .itc-slider__indicator {
       background-color: #eee;
     }
 
-    .slider__indicators li.active {
+    .itc-slider__indicator_active {
       background-color: #757575;
     }
   </style>
@@ -162,215 +158,162 @@
 
 <body>
 
-  <div class="container">
+<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="eye" viewBox="0 0 16 16">
+    <path
+      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+  </symbol>
+</svg>
 
-    <div class="slider" data-slider="itc-slider" data-loop="true" data-autoplay="true" data-interval="5000"
-      data-refresh="true">
-      <div class="slider__container">
-        <div class="slider__wrapper">
-          <div class="slider__items">
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
 
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-1.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Совет эксперта</span>
-                  </div>
-                  <h2 class="slider__content_title">Как самому сделать мыльные пузыри?</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-2.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Ирина</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">1250</span>
-                  </div>
+<div class="container">
 
-                </div>
-              </div>
-            </div>
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-2.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Подборка</span>
-                  </div>
-                  <h2 class="slider__content_title">15 самых полезных свойств черники</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-4.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Тамара</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">757</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-3.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Подборка</span>
-                  </div>
-                  <h2 class="slider__content_title">Лучшие фермерские рынки Майами</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-3.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Иван</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">320</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-4.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Подборка</span>
-                  </div>
-                  <h2 class="slider__content_title">Почему утята такие милые?</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-4.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Тамара</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">1855</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-5.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Подборка</span>
-                  </div>
-                  <h2 class="slider__content_title">Вкусный лимонад в жаркий день</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-2.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Ирина</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">2799</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-6.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Совет эксперта</span>
-                  </div>
-                  <h2 class="slider__content_title">10 заповедей счастливой женщины</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-4.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Тамара</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">1855</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            <div class="slider__item">
-              <div class="slider__item-container">
-                <div class="slider__item-content">
-
-                  <div class="slider__content_header">
-                    <img class="slider__content_img" src="images/s-7.jpg" alt="..." width="350" height="250"
-                      loading="lazy">
-                    <span class="slider__content_section">Совет эксперта</span>
-                  </div>
-                  <h2 class="slider__content_title">Влияние кофе на организм человека</h2>
-                  <div class="slider__content_footer">
-                    <div class="slider__content_avatar">
-                      <img class="slider__content_photo" src="https://itchief.ru/examples/images/photo-1.jpg" alt="">
-                    </div>
-                    <span class="slider__content_author">Арнольд</span>
-                    <svg class="slider__content_icon" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20">
-                      <path fill="currentColor"
-                        d="M10 5C6.947 5 4.16 6.747 2.12 9.61a.726.726 0 0 0 0 .799C4.16 13.253 6.947 15 10 15s5.84-1.747 7.88-4.61a.726.726 0 0 0 0-.799C15.84 6.747 13.053 5 10 5zm.213 8.513c-2.023.13-3.71-1.617-3.585-3.755.106-1.747 1.473-3.178 3.141-3.29 2.024-.13 3.71 1.618 3.585 3.755-.106 1.766-1.455 3.178-3.141 3.29zm-.089-1.617c-1.1.074-1.988-.874-1.934-2.026.053-.948.78-1.71 1.686-1.766 1.1-.074 1.988.874 1.934 2.026-.053.93-.798 1.71-1.686 1.766z">
-                      </path>
-                    </svg>
-                    <span class="slider__content_views">2107</span>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
+  <div class="itc-slider" data-autoplay="false" data-interval="5000" data-loop="true" data-refresh="true"
+       data-slider="itc-slider">
+    <div class="itc-slider__wrapper">
+      <div class="itc-slider__items">
+        <div class="itc-slider__item"><!-- Начало 1 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/1-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">Как самому сделать мыльные пузыри?</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-2.jpg">
+              <span class="card__author">Ирина</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1250</span>
+            </footer>
           </div>
-        </div>
+        </div> <!-- Конец 1 слайда -->
+        <div class="itc-slider__item"><!-- Начало 2 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/2-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">15 самых полезных свойств черники</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">757</span>
+            </footer>
+          </div>
+        </div><!-- Конец 2 слайда -->
+        <div class="itc-slider__item"><!-- Начало 3 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/3-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Лучшие фермерские рынки Майами</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-3.jpg">
+              <span class="card__author">Иван</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">320</span>
+            </footer>
+          </div>
+        </div><!-- Конец 3 слайда -->
+        <div class="itc-slider__item"><!-- Начало 4 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/4-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Почему утята такие милые?</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1855</span>
+            </footer>
+          </div>
+        </div><!-- Конец 4 слайда -->
+        <div class="itc-slider__item"><!-- Начало 5 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/5-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Вкусный лимонад в жаркий день</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-2.jpg">
+              <span class="card__author">Ирина</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">2799</span>
+            </footer>
+          </div>
+        </div><!-- Конец 5 слайда -->
+        <div class="itc-slider__item"><!-- Начало 6 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/6-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">10 заповедей счастливой женщины</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1855</span>
+            </footer>
+          </div>
+        </div><!-- Конец 6 слайда -->
+        <div class="itc-slider__item"><!-- Начало 7 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/7-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">Влияние кофе на организм человека</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-1.jpg">
+              <span class="card__author">Арнольд</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">2107</span>
+            </footer>
+          </div>
+        </div><!-- Конец 7 слайда -->
       </div>
-      <a href="#" class="slider__control" data-slide="prev"></a>
-      <a href="#" class="slider__control" data-slide="next"></a>
-      <ol class="slider__indicators">
-        <li data-slide-to="0"></li>
-        <li data-slide-to="1"></li>
-        <li data-slide-to="2"></li>
-        <li data-slide-to="3"></li>
-        <li data-slide-to="4"></li>
-        <li data-slide-to="5"></li>
-        <li data-slide-to="6"></li>
-      </ol>
     </div>
-
+    <button class="itc-slider__btn itc-slider__btn_prev"></button>
+    <button class="itc-slider__btn itc-slider__btn_next"></button>
+    <ol class="itc-slider__indicators">
+      <li class="itc-slider__indicator" data-slide-to="0"></li>
+      <li class="itc-slider__indicator" data-slide-to="1"></li>
+      <li class="itc-slider__indicator" data-slide-to="2"></li>
+      <li class="itc-slider__indicator" data-slide-to="3"></li>
+      <li class="itc-slider__indicator" data-slide-to="4"></li>
+      <li class="itc-slider__indicator" data-slide-to="5"></li>
+      <li class="itc-slider__indicator" data-slide-to="6"></li>
+    </ol>
   </div>
+</div>
 </body>
 
 </html>
