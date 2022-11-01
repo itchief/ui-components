@@ -77,7 +77,7 @@ class ItcSlider {
    * @param {Object} config
    * @param {String} prefix
    */
-  static getOrCreateInstance(target, config = {}, prefix) {
+  static getOrCreateInstance(target, config = {}, prefix = 'itc-slider__') {
     try {
       const elSlider = typeof target === 'string' ? document.querySelector(target) : target;
       const result = this.getInstance(elSlider);
