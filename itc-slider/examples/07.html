@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>ItcSlider - Example 06</title>
+  <link href="../itc-slider.css" rel="stylesheet">
+  <script defer src="../itc-slider.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol';
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #292b2c;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Стили модального окна */
+    .modal {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1050;
+      opacity: 0;
+      -webkit-transition: opacity 400ms ease-in;
+      -moz-transition: opacity 400ms ease-in;
+      transition: opacity 400ms ease-in;
+      pointer-events: none;
+    }
+
+    .modal-open {
+      opacity: 1;
+      pointer-events: auto;
+      overflow-y: auto;
+    }
+
+    .modal-dialog {
+      position: relative;
+      width: auto;
+      margin: 10px;
+    }
+
+    @media (min-width: 576px) {
+      .modal-dialog {
+        max-width: 600px;
+        margin: 30px auto;
+      }
+    }
+
+    .modal-content {
+      position: relative;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: .3rem;
+      outline: 0;
+    }
+
+    @media (min-width: 768px) {
+      .modal-content {
+        -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+      }
+    }
+
+    .modal-header {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 1px solid #eceeef;
+    }
+
+    .modal-title {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: 1.5;
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+
+    .close {
+      float: right;
+      font-family: sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: .5;
+      text-decoration: none;
+    }
+
+    .close:focus,
+    .close:hover {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: .75;
+    }
+
+    .modal-body {
+      position: relative;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      padding: 15px;
+      overflow: auto;
+    }
+
+    /* Стили слайдера */
+    .itc-slider {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .itc-slider__items {
+      counter-reset: slide;
+    }
+
+    .itc-slider__item {
+      -webkit-box-flex: 0;
+      -ms-flex: 0 0 50%;
+      flex: 0 0 50%;
+      max-width: 50%;
+      counter-increment: slide;
+      height: 250px;
+      position: relative;
+    }
+
+    .itc-slider__item::before {
+      content: counter(slide) "/5";
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: bold;
+      display: block;
+    }
+
+    .itc-slider__item:nth-child(1) {
+      background-color: #f44336;
+    }
+
+    .itc-slider__item:nth-child(2) {
+      background-color: #9c27b0;
+    }
+
+    .itc-slider__item:nth-child(3) {
+      background-color: #3f51b5;
+    }
+
+    .itc-slider__item:nth-child(4) {
+      background-color: #03a9f4;
+    }
+
+    .itc-slider__item:nth-child(5) {
+      background-color: #4caf50;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollbar = document.body.clientWidth - window.innerWidth + 'px';
+      let elSlider;
+      document.querySelector('[data-target="modal"]').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.style.overflow = 'hidden';
+        document.querySelector('#modal').style.marginLeft = scrollbar;
+        document.querySelector('#modal').classList.add('modal-open');
+        if (elSlider === undefined) {
+          elSlider = ItcSlider.getOrCreateInstance('.itc-slider', {loop: false});
+        } else {
+          elSlider.refresh();
+        }
+      });
+      document.querySelector('[data-target="close"]').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.style.overflow = 'visible';
+        document.querySelector('#modal').style.marginLeft = '0px';
+        document.querySelector('#modal').classList.remove('modal-open');
+        elSlider._autoplay('stop');
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+<h1 style="text-align: center; margin-top: 20px; margin-bottom: 20px;">Слайдер в модальном окне</h1>
+
+<div class="container">
+  <div style="text-align: center;">
+    <a data-target="modal" href="#">Открыть модальное окно</a>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Слайдер в модальном окне</h3>
+          <a class="close" data-target="close" href="#" title="Close">×</a>
+        </div>
+        <div class="modal-body">
+          <div class="itc-slider"><!-- Слайдер (начало) -->
+            <div class="itc-slider__wrapper">
+              <div class="itc-slider__items">
+                <div class="itc-slider__item">
+                  <!-- Контент 1 слайда -->
+                </div>
+                <div class="itc-slider__item">
+                  <!-- Контент 2 слайда -->
+                </div>
+                <div class="itc-slider__item">
+                  <!-- Контент 3 слайда -->
+                </div>
+                <div class="itc-slider__item">
+                  <!-- Контент 4 слайда -->
+                </div>
+                <div class="itc-slider__item">
+                  <!-- Контент 5 слайда -->
+                </div>
+              </div>
+            </div>
+            <button class="itc-slider__btn itc-slider__btn_prev"></button>
+            <button class="itc-slider__btn itc-slider__btn_next"></button>
+          </div><!-- Слайдер (конец) -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>
