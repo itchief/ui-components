@@ -95,9 +95,6 @@ class ItcSlider {
   // статический метод для активирования элементов как ItcSlider на основе data-атрибутов
   static createInstances() {
     document.querySelectorAll('[data-slider="itc-slider"]').forEach((el) => {
-      if (this.getInstance(el)) {
-        return;
-      }
       const dataset = el.dataset;
       const params = {};
       Object.keys(dataset).forEach((key) => {
@@ -438,6 +435,4 @@ class ItcSlider {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  ItcSlider.createInstances();
-});
+ItcSlider.createInstances();
