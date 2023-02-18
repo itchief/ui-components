@@ -151,6 +151,7 @@ class ItcSlider {
   }
 
   #onClick(e) {
+    e.preventDefault();
     const classBtnPrev = this.#state.prefix + this.constructor.#BTN_PREV;
     const classBtnNext = this.#state.prefix + this.constructor.#BTN_NEXT;
     this.#autoplay('stop');
@@ -177,10 +178,13 @@ class ItcSlider {
   }
 
   #onSwipeStart(e) {
-    this.#autoplay('stop');
-    const event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    this.#state.swipeX = event.clientX;
-    this.#state.isSwiping = true;
+    if (!e.target.closest('.itc-slider__btn')) {
+      e.preventDefault();
+      this.#autoplay('stop');
+      const event = e.type.search('touch') === 0 ? e.touches[0] : e;
+      this.#state.swipeX = event.clientX;
+      this.#state.isSwiping = true;
+    }
   }
 
   #onSwipeEnd(e) {
