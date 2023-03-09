@@ -178,13 +178,10 @@ class ItcSlider {
   }
 
   #onSwipeStart(e) {
-    if (!e.target.closest('.itc-slider__btn')) {
-      e.preventDefault();
-      this.#autoplay('stop');
-      const event = e.type.search('touch') === 0 ? e.touches[0] : e;
-      this.#state.swipeX = event.clientX;
-      this.#state.isSwiping = true;
-    }
+    this.#autoplay('stop');
+    const event = e.type.search('touch') === 0 ? e.touches[0] : e;
+    this.#state.swipeX = event.clientX;
+    this.#state.isSwiping = true;
   }
 
   #onSwipeEnd(e) {
