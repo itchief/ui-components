@@ -151,6 +151,9 @@ class ItcSlider {
   }
 
   #onClick(e) {
+    if (!(e.target.closest('.itc-slider__btn') || e.target.closest('.itc-slider__indicators'))) {
+      return;
+    }
     e.preventDefault();
     const classBtnPrev = this.#state.prefix + this.constructor.#BTN_PREV;
     const classBtnNext = this.#state.prefix + this.constructor.#BTN_NEXT;
