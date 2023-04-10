@@ -22,9 +22,10 @@
     *::after {
       box-sizing: border-box;
     }
+
   </style>
   <link href="css/toast.css" rel="stylesheet">
-  <script src="js/toast.js"></script>
+  <script src="js/toast.dev.js"></script>
 </head>
 
 <body style="min-height: 100vh;">
@@ -100,7 +101,7 @@
       const elContainer = e.target.closest('.toast-container');
       if (elContainer) {
         while (elContainer.querySelectorAll('.toast:not(.toast_showing)').length > maxItems) {
-         elContainer.querySelector('.toast').remove();
+          elContainer.querySelector('.toast').remove();
         }
       }
     })

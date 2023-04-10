@@ -383,8 +383,10 @@ class ItcSlider {
     this.#state.activeItems = [];
     // состояние элементов
     this.#state.isBalancing = false;
+    // получаем gap между слайдами
+    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap);
     // ширина одного слайда
-    this.#state.width = this.#state.elListItem[0].getBoundingClientRect().width;
+    this.#state.width = this.#state.elListItem[0].getBoundingClientRect().width + gap;
     // ширина #EL_WRAPPER
     const widthWrapper = this.#state.elWrapper.getBoundingClientRect().width;
     // количество активных элементов
@@ -410,7 +412,10 @@ class ItcSlider {
 
   #reset() {
     const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
-    const widthItem = this.#state.elListItem[0].getBoundingClientRect().width;
+    // получаем gap между слайдами
+    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap);
+    // ширина одного слайда
+    const widthItem = this.#state.elListItem[0].getBoundingClientRect().width + gap;
     const widthWrapper = this.#state.elWrapper.getBoundingClientRect().width;
     const countActiveEls = Math.round(widthWrapper / widthItem);
     if (widthItem === this.#state.width && countActiveEls === this.#state.countActiveItems) {
