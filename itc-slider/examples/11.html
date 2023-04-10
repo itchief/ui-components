@@ -22,7 +22,7 @@
       'Segoe UI Symbol';
     }
 
-    .container {
+    .itc-slider {
       max-width: 700px;
       margin: 0 auto;
     }
@@ -34,13 +34,14 @@
     }
 
     .itc-slider__item {
+      flex: 0 0 auto;
       /* 2 слайда */
-      flex: 0 0 calc(50% - var(--gap) / 2);
+      /* flex: 0 0 calc(50% - var(--gap) / 2); */
       /* 3 слайда */
-      flex: 0 0 calc(33.3333333333% - var(--gap) * 2 / 3);
+      /* flex: 0 0 calc(33.3333333333% - var(--gap) * 2 / 3); */
       /* 4 слайда */
-      flex: 0 0 calc(25% - var(--gap) * 3 / 4);
-      max-width: 50%;
+      /* flex: 0 0 calc(25% - var(--gap) * 3 / 4); */
+      width: 100%;
       counter-increment: slide;
       height: 250px;
       position: relative;
