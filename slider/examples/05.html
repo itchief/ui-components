@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>ItcSlider - Example 05</title>
+  <link href="../itc-slider.css" rel="stylesheet">
+  <script defer src="../itc-slider.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+      'Segoe UI Symbol';
+    }
+
+    .container {
+      max-width: 350px;
+      margin: 0 auto;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        max-width: 710px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container {
+        max-width: 1050px;
+        margin: 0 auto;
+      }
+    }
+
+    .itc-slider {
+      overflow: hidden;
+      padding-bottom: 35px;
+    }
+
+    .itc-slider__wrapper {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+
+    @media (min-width: 768px) {
+      .itc-slider__item {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .itc-slider__item {
+        flex: 0 0 33.3333333333%;
+        max-width: 33.3333333333%;
+      }
+    }
+
+    .card {
+      position: relative;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .card__header {
+      position: relative;
+    }
+
+    .card__img {
+      display: block;
+      height: auto;
+      max-width: 100%;
+    }
+
+    .card__section {
+      position: absolute;
+      bottom: 6px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 6px 10px;
+      font-size: 14px;
+      border-radius: 12px;
+      line-height: 1;
+    }
+
+    .card__title {
+      background: #fafafa;
+      color: #424242;
+      white-space: normal;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.3;
+      padding: 10px 15px;
+      margin: 0;
+      height: 72px;
+    }
+
+    .card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      background: #fafafa;
+      padding: 10px 15px 15px;
+      color: #616161;
+    }
+
+    .card__photo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .card__author {
+      margin-left: 6px;
+    }
+
+    .card__icon {
+      margin-left: auto;
+      width: 18px;
+      max-height: 20px;
+    }
+
+    .card__views {
+      margin-left: 6px;
+    }
+
+    .itc-slider__btn {
+      background-color: unset;
+    }
+
+    .itc-slider__btn:hover,
+    .itc-slider__btn:focus {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .itc-slider__indicators {
+      bottom: 0;
+    }
+
+    .itc-slider__indicator {
+      background-color: #eee;
+    }
+
+    .itc-slider__indicator_active {
+      background-color: #757575;
+    }
+  </style>
+</head>
+
+<body>
+
+<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="eye" viewBox="0 0 16 16">
+    <path
+      d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+  </symbol>
+</svg>
+
+
+<div class="container">
+
+  <div class="itc-slider" data-autoplay="false" data-interval="5000" data-loop="true" data-refresh="true"
+       data-slider="itc-slider">
+    <div class="itc-slider__wrapper">
+      <div class="itc-slider__items">
+        <div class="itc-slider__item"><!-- Начало 1 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/1-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">Как самому сделать мыльные пузыри?</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-2.jpg">
+              <span class="card__author">Ирина</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1250</span>
+            </footer>
+          </div>
+        </div> <!-- Конец 1 слайда -->
+        <div class="itc-slider__item"><!-- Начало 2 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/2-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">15 самых полезных свойств черники</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">757</span>
+            </footer>
+          </div>
+        </div><!-- Конец 2 слайда -->
+        <div class="itc-slider__item"><!-- Начало 3 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/3-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Лучшие фермерские рынки Майами</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-3.jpg">
+              <span class="card__author">Иван</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">320</span>
+            </footer>
+          </div>
+        </div><!-- Конец 3 слайда -->
+        <div class="itc-slider__item"><!-- Начало 4 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/4-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Почему утята такие милые?</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1855</span>
+            </footer>
+          </div>
+        </div><!-- Конец 4 слайда -->
+        <div class="itc-slider__item"><!-- Начало 5 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/5-350x250.jpg" width="350">
+              <span class="card__section">Подборка</span>
+            </header>
+            <h2 class="card__title">Вкусный лимонад в жаркий день</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-2.jpg">
+              <span class="card__author">Ирина</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">2799</span>
+            </footer>
+          </div>
+        </div><!-- Конец 5 слайда -->
+        <div class="itc-slider__item"><!-- Начало 6 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/6-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">10 заповедей счастливой женщины</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-4.jpg">
+              <span class="card__author">Тамара</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">1855</span>
+            </footer>
+          </div>
+        </div><!-- Конец 6 слайда -->
+        <div class="itc-slider__item"><!-- Начало 7 слайда -->
+          <div class="card">
+            <header class="card__header">
+              <img alt="..." class="card__img" height="250" loading="lazy"
+                   src="https://itchief.ru/examples/images/slider/7-350x250.jpg" width="350">
+              <span class="card__section">Совет эксперта</span>
+            </header>
+            <h2 class="card__title">Влияние кофе на организм человека</h2>
+            <footer class="card__footer">
+              <img alt="" class="card__photo" src="https://itchief.ru/examples/images/photo-1.jpg">
+              <span class="card__author">Арнольд</span>
+              <svg class="card__icon">
+                <use xlink:href="#eye"></use>
+              </svg>
+              <span class="card__views">2107</span>
+            </footer>
+          </div>
+        </div><!-- Конец 7 слайда -->
+      </div>
+    </div>
+    <button class="itc-slider__btn itc-slider__btn_prev"></button>
+    <button class="itc-slider__btn itc-slider__btn_next"></button>
+    <ol class="itc-slider__indicators">
+      <li class="itc-slider__indicator" data-slide-to="0"></li>
+      <li class="itc-slider__indicator" data-slide-to="1"></li>
+      <li class="itc-slider__indicator" data-slide-to="2"></li>
+      <li class="itc-slider__indicator" data-slide-to="3"></li>
+      <li class="itc-slider__indicator" data-slide-to="4"></li>
+      <li class="itc-slider__indicator" data-slide-to="5"></li>
+      <li class="itc-slider__indicator" data-slide-to="6"></li>
+    </ol>
+  </div>
+</div>
+</body>
+
+</html>
