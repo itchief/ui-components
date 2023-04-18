@@ -1,94 +1,59 @@
-(function () {
-    if (typeof window.CustomEvent === "function") return false;
-    function CustomEvent(event, params) {
-        params = params || { bubbles: false, cancelable: false, detail: null };
-        var evt = document.createEvent('CustomEvent');
-        evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-        return evt;
+class ItcModal {
+  #elem;
+  #template = '<div class="itc-modal-backdrop"><div class="itc-modal-content"><div class="itc-modal-header"><div class="itc-modal-title">{{title}}</div><span class="itc-modal-btn-close" title="Закрыть">×</span></div><div class="itc-modal-body">{{content}}</div>{{footer}}</div></div>';
+  #templateFooter = '<div class="itc-modal-footer">{{buttons}}</div>';
+  #templateBtn = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>';
+  #eventShowModal = new Event('show.itc.modal');
+  #eventHideModal = new Event('hide.itc.modal');
+  #disposed = false;
+
+  constructor(options = []) {
+    this.#elem = document.createElement('div');
+    this.#elem.classList.add('itc-modal');
+    let html = this.#template.replace('{{title}}', options.title || 'Новое окно');
+    html = html.replace('{{content}}', options.content || '');
+    const buttons = (options.footerButtons || []).map((item) => {
+      let btn = this.#templateBtn.replace('{{button_class}}', item.class);
+      btn = btn.replace('{{button_handler}}', item.handler);
+      return btn.replace('{{button_text}}', item.text);
+    });
+    const footer = buttons.length ? this.#templateFooter.replace('{{buttons}}', buttons.join('')) : '';
+    html = html.replace('{{footer}}', footer);
+    this.#elem.innerHTML = html;
+    document.body.append(this.#elem);
+    this.#elem.addEventListener('click', this.#handlerCloseModal.bind(this));
+  }
+
+  #handlerCloseModal(e) {
+    if (e.target.closest('.itc-modal-btn-close') || e.target.classList.contains('itc-modal-backdrop')) {
+      this.hide();
     }
-    window.CustomEvent = CustomEvent;
-})();
+  }
 
-$modal = function (options) {
-    var
-        _elemModal,
-        _eventShowModal,
-        _eventHideModal,
-        _hiding = false,
-        _destroyed = false,
-        _animationSpeed = 200;
-
-    function _createModal(options) {
-        var
-            elemModal = document.createElement('div'),
-            modalTemplate = '<div class="modal__backdrop" data-dismiss="modal"><div class="modal__content"><div class="modal__header"><div class="modal__title" data-modal="title">{{title}}</div><span class="modal__btn-close" data-dismiss="modal" title="Закрыть">×</span></div><div class="modal__body" data-modal="content">{{content}}</div>{{footer}}</div></div>',
-            modalFooterTemplate = '<div class="modal__footer">{{buttons}}</div>',
-            modalButtonTemplate = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>',
-            modalHTML,
-            modalFooterHTML = '';
-
-        elemModal.classList.add('modal');
-        modalHTML = modalTemplate.replace('{{title}}', options.title || 'Новое окно');
-        modalHTML = modalHTML.replace('{{content}}', options.content || '');
-        if (options.footerButtons) {
-            for (var i = 0, length = options.footerButtons.length; i < length; i++) {
-                var modalFooterButton = modalButtonTemplate.replace('{{button_class}}', options.footerButtons[i].class);
-                modalFooterButton = modalFooterButton.replace('{{button_handler}}', options.footerButtons[i].handler);
-                modalFooterButton = modalFooterButton.replace('{{button_text}}', options.footerButtons[i].text);
-                modalFooterHTML += modalFooterButton;
-            }
-            modalFooterHTML = modalFooterTemplate.replace('{{buttons}}', modalFooterHTML);
-        }
-        modalHTML = modalHTML.replace('{{footer}}', modalFooterHTML);
-        elemModal.innerHTML = modalHTML;
-        document.body.appendChild(elemModal);
-        return elemModal;
+  show() {
+    if (this.#disposed) {
+      return;
     }
+    this.#elem.classList.add('itc-modal-show');
+    document.dispatchEvent(this.#eventShowModal);
+  }
 
-    function _showModal() {
-        if (!_destroyed && !_hiding) {
-            _elemModal.classList.add('modal__show');
-            document.dispatchEvent(_eventShowModal);
-        }
-    }
+  hide() {
+    this.#elem.classList.remove('itc-modal-show');
+    document.dispatchEvent(this.#eventHideModal);
+  }
 
-    function _hideModal() {
-        _hiding = true;
-        _elemModal.classList.remove('modal__show');
-        _elemModal.classList.add('modal__hiding');
-        setTimeout(function () {
-            _elemModal.classList.remove('modal__hiding');
-            _hiding = false;
-        }, _animationSpeed);
-        document.dispatchEvent(_eventHideModal);
-    }
+  dispose() {
+    this.#elem.remove(this.#elem);
+    this.#elem.removeEventListener('click', this.#handlerCloseModal);
+    this.#disposed = true;
+  }
 
-    function _handlerCloseModal(e) {
-        if (e.target.dataset.dismiss === 'modal') {
-            _hideModal();
-        }
-    }
+  setBody(html) {
+    this.#elem.querySelector('.itc-modal-body').innerHTML = html;
+  }
 
-    _elemModal = _createModal(options || {});
-
-
-    _elemModal.addEventListener('click', _handlerCloseModal);
-    _eventShowModal = new CustomEvent('show.modal', { detail: _elemModal });
-    _eventHideModal = new CustomEvent('hide.modal', { detail: _elemModal });
-
-    return {
-        show: _showModal,
-        hide: _hideModal,
-        destroy: function () {
-            _elemModal.parentElement.removeChild(_elemModal),
-                _elemModal.removeEventListener('click', _handlerCloseModal),
-                _destroyed = true;
-        },
-        setContent: function (html) {
-            _elemModal.querySelector('[data-modal="content"]').innerHTML = html;
-        },
-        setTitle: function (text) {
-            _elemModal.querySelector('[data-modal="title"]').innerHTML = text;
-        }
-    }
-};
+  setTitle(text) {
+    this.#elem.querySelector('.itc-modal-title').innerHTML = text;
+  }
+}

@@ -1,92 +1,92 @@
-.modal__backdrop {
+.itc-modal-backdrop {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5);
-  opacity: 0;
   z-index: -1;
+  background: rgb(0 0 0 / 50%);
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
   pointer-events: none;
-  transition: opacity0 .2s ease-in;
 }
 
-.modal__content {
+.itc-modal-content {
   position: relative;
-  width: auto;
-  margin: 10px;
-  transition: opacity 0.3s ease-in;
   display: flex;
   flex-direction: column;
+  width: auto;
+  margin: 10px;
   background-color: #fff;
   background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgb(0 0 0 / 20%);
   border-radius: 0.3rem;
-  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 7px 0 rgb(0 0 0 / 30%);
+  transition: opacity 0.3s ease-in;
 }
 
 @media (min-width: 576px) {
-  .modal__content {
+  .itc-modal-content {
     max-width: 500px;
     margin: 50px auto;
   }
 }
 
-.modal__show .modal__backdrop,
-.modal__show .modal__content {
-  opacity: 1;
+.itc-modal-show .itc-modal-backdrop,
+.itc-modal-show .itc-modal-content {
   z-index: 1050;
-  pointer-events: auto;
   overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.modal__header {
+.itc-modal-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   padding: 15px;
   border-bottom: 1px solid #eceeef;
 }
 
-.modal__title {
+.itc-modal-title {
   margin-top: 0;
   margin-bottom: 0;
-  line-height: 1.5;
-  font-size: 1.25rem;
   font-weight: 500;
+  font-size: 1.25rem;
+  line-height: 1.5;
 }
 
-.modal__btn-close {
+.itc-modal-btn-close {
   float: right;
-  font-family: sans-serif;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 1;
   color: #000;
+  font-weight: 700;
+  font-size: 24px;
+  font-family: sans-serif;
+  line-height: 1;
+  text-decoration: none;
   text-shadow: 0 1px 0 #fff;
   opacity: 0.5;
-  text-decoration: none;
 }
 
-.modal__btn-close:focus,
-.modal__btn-close:hover {
+.itc-modal-btn-close:focus,
+.itc-modal-btn-close:hover {
   color: #000;
   text-decoration: none;
   cursor: pointer;
   opacity: 0.75;
 }
 
-.modal__body {
+.itc-modal-body {
   position: relative;
   flex: 1 1 auto;
   padding: 15px;
   overflow: auto;
 }
 
-.modal__footer {
+.itc-modal-footer {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
   padding: 1rem;
   border-top: 1px solid #e9ecef;
   border-bottom-right-radius: 0.3rem;
