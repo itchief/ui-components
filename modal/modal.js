@@ -35,12 +35,12 @@ class ItcModal {
       return;
     }
     this.#elem.classList.add('itc-modal-show');
-    document.dispatchEvent(this.#eventShowModal);
+    this.#elem.dispatchEvent(this.#eventShowModal);
   }
 
   hide() {
     this.#elem.classList.remove('itc-modal-show');
-    document.dispatchEvent(this.#eventHideModal);
+    this.#elem.dispatchEvent(this.#eventHideModal);
   }
 
   dispose() {
