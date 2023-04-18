@@ -2,7 +2,7 @@ class ItcModal {
   #elem;
   #template = '<div class="itc-modal-backdrop"><div class="itc-modal-content"><div class="itc-modal-header"><div class="itc-modal-title">{{title}}</div><span class="itc-modal-btn-close" title="Закрыть">×</span></div><div class="itc-modal-body">{{content}}</div>{{footer}}</div></div>';
   #templateFooter = '<div class="itc-modal-footer">{{buttons}}</div>';
-  #templateBtn = '<button type="button" class="{{button_class}}" data-handler={{button_handler}}>{{button_text}}</button>';
+  #templateBtn = '<button type="button" class="{{class}}" data-action={{action}}>{{text}}</button>';
   #eventShowModal = new Event('show.itc.modal');
   #eventHideModal = new Event('hide.itc.modal');
   #disposed = false;
@@ -13,9 +13,9 @@ class ItcModal {
     let html = this.#template.replace('{{title}}', options.title || 'Новое окно');
     html = html.replace('{{content}}', options.content || '');
     const buttons = (options.footerButtons || []).map((item) => {
-      let btn = this.#templateBtn.replace('{{button_class}}', item.class);
-      btn = btn.replace('{{button_handler}}', item.handler);
-      return btn.replace('{{button_text}}', item.text);
+      let btn = this.#templateBtn.replace('{{class}}', item.class);
+      btn = btn.replace('{{action}}', item.action);
+      return btn.replace('{{text}}', item.text);
     });
     const footer = buttons.length ? this.#templateFooter.replace('{{buttons}}', buttons.join('')) : '';
     html = html.replace('{{footer}}', footer);
