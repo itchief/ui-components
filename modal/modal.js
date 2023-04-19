@@ -3,8 +3,8 @@ class ItcModal {
   #template = '<div class="itc-modal-backdrop"><div class="itc-modal-content"><div class="itc-modal-header"><div class="itc-modal-title">{{title}}</div><span class="itc-modal-btn-close" title="Закрыть">×</span></div><div class="itc-modal-body">{{content}}</div>{{footer}}</div></div>';
   #templateFooter = '<div class="itc-modal-footer">{{buttons}}</div>';
   #templateBtn = '<button type="button" class="{{class}}" data-action={{action}}>{{text}}</button>';
-  #eventShowModal = new Event('show.itc.modal');
-  #eventHideModal = new Event('hide.itc.modal');
+  #eventShowModal = new Event('show.itc.modal', { bubbles: true });
+  #eventHideModal = new Event('hide.itc.modal', { bubbles: true });
   #disposed = false;
 
   constructor(options = []) {
