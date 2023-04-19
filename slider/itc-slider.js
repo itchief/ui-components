@@ -2,10 +2,11 @@
  * @class ItcSlider
  * @version 1.0.0
  * @author https://github.com/itchief
- * @copyright Alexander Maltsev 2020 - 2022
+ * @copyright Alexander Maltsev 2020 - 2023
  * @license MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  * @tutorial https://itchief.ru/javascript/slider
  */
+
 class ItcSlider {
   static #EL_WRAPPER = 'wrapper';
   static #EL_ITEMS = 'items';
@@ -29,10 +30,9 @@ class ItcSlider {
    * @param {String} prefix
    */
   constructor(el, config = {}, prefix = 'itc-slider__') {
-
     this.#state = {
-      prefix: prefix, // префикс для классов
-      el: el, // элемент который нужно активировать как ItcSlider
+      prefix, // префикс для классов
+      el, // элемент который нужно активировать как ItcSlider
       elWrapper: el.querySelector(`.${prefix}${this.constructor.#EL_WRAPPER}`), // элемент с #CLASS_WRAPPER
       elItems: el.querySelector(`.${prefix}${this.constructor.#EL_ITEMS}`), // элемент, в котором находятся слайды
       elListItem: el.querySelectorAll(`.${prefix}${this.constructor.#EL_ITEM}`), // список элементов, являющиеся слайдами
@@ -65,7 +65,7 @@ class ItcSlider {
    * @returns {?ItcSlider}
    */
   static getInstance(elSlider) {
-    const found = this.#instances.find(el => el.target === elSlider);
+    const found = this.#instances.find((el) => el.target === elSlider);
     if (found) {
       return found.instance;
     }
@@ -85,7 +85,7 @@ class ItcSlider {
         return result;
       }
       const slider = new this(elSlider, config, prefix);
-      this.#instances.push({target: elSlider, instance: slider});
+      this.#instances.push({ target: elSlider, instance: slider });
       return slider;
     } catch (e) {
       console.error(e);
@@ -95,7 +95,7 @@ class ItcSlider {
   // статический метод для активирования элементов как ItcSlider на основе data-атрибутов
   static createInstances() {
     document.querySelectorAll('[data-slider="itc-slider"]').forEach((el) => {
-      const dataset = el.dataset;
+      const { dataset } = el;
       const params = {};
       Object.keys(dataset).forEach((key) => {
         if (key === 'slider') {
@@ -143,10 +143,10 @@ class ItcSlider {
     const selIndicators = `${this.#state.prefix}${this.constructor.#EL_INDICATOR_ACTIVE}`;
     document.querySelectorAll(`.${selIndicators}`).forEach((el) => {
       el.classList.remove(selIndicators);
-    })
+    });
     this.#state.elItems.offsetHeight;
     this.#state.elItems.classList.remove(transitionNoneClass);
-    const index = this.constructor.#instances.findIndex(el => el.target === this.#state.el);
+    const index = this.constructor.#instances.findIndex((el) => el.target === this.#state.el);
     this.constructor.#instances.splice(index, 1);
   }
 
@@ -232,18 +232,18 @@ class ItcSlider {
 
   #attachEvents() {
     this.#state.events = {
-      'click': [this.#state.el, this.#onClick.bind(this), true],
-      'mouseenter': [this.#state.el, this.#onMouseEnter.bind(this), true],
-      'mouseleave': [this.#state.el, this.#onMouseLeave.bind(this), true],
-      'resize': [window, this.#onResize.bind(this), this.#config.refresh],
+      click: [this.#state.el, this.#onClick.bind(this), true],
+      mouseenter: [this.#state.el, this.#onMouseEnter.bind(this), true],
+      mouseleave: [this.#state.el, this.#onMouseLeave.bind(this), true],
+      resize: [window, this.#onResize.bind(this), this.#config.refresh],
       'itc-slider__transition-start': [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
-      'transitionend': [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
-      'touchstart': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
-      'mousedown': [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
-      'touchend': [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
-      'mouseup': [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
-      'dragstart': [this.#state.el, this.#onDragStart.bind(this), true],
-      'visibilitychange': [document, this.#onVisibilityChange.bind(this), true]
+      transitionend: [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
+      touchstart: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
+      mousedown: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
+      touchend: [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
+      mouseup: [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
+      dragstart: [this.#state.el, this.#onDragStart.bind(this), true],
+      visibilitychange: [document, this.#onVisibilityChange.bind(this), true]
     };
     Object.keys(this.#state.events).forEach((type) => {
       if (this.#state.events[type][2]) {
@@ -384,7 +384,7 @@ class ItcSlider {
     // состояние элементов
     this.#state.isBalancing = false;
     // получаем gap между слайдами
-    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap);
+    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap) || 0;
     // ширина одного слайда
     this.#state.width = this.#state.elListItem[0].getBoundingClientRect().width + gap;
     // ширина #EL_WRAPPER
@@ -394,7 +394,9 @@ class ItcSlider {
     this.#state.elListItem.forEach((el, index) => {
       el.style.transform = '';
       this.#state.activeItems.push(index < this.#state.countActiveItems ? 1 : 0);
-      this.#state.els.push({ el, index, order: index, translate: 0 });
+      this.#state.els.push({
+        el, index, order: index, translate: 0
+      });
     });
     if (this.#config.loop) {
       const lastIndex = this.#state.elListItem.length - 1;
@@ -413,7 +415,7 @@ class ItcSlider {
   #reset() {
     const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
     // получаем gap между слайдами
-    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap);
+    const gap = parseFloat(getComputedStyle(this.#state.elItems).gap) || 0;
     // ширина одного слайда
     const widthItem = this.#state.elListItem[0].getBoundingClientRect().width + gap;
     const widthWrapper = this.#state.elWrapper.getBoundingClientRect().width;
