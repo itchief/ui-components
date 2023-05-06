@@ -107,17 +107,17 @@ class ItcSlider {
     });
   }
 
-  next() {
+  slideNext() {
     this.#state.direction = 'next';
     this.#move();
   }
 
-  prev() {
+  slidePrev() {
     this.#state.direction = 'prev';
     this.#move();
   }
 
-  moveTo(index) {
+  slideTo(index) {
     this.#moveTo(index);
   }
 

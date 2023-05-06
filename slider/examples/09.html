@@ -110,10 +110,10 @@
     const btnNext = document.querySelector('.btn-next');
     const slider = ItcSlider.getOrCreateInstance('.itc-slider');
     btnPrev.onclick = () => {
-      slider.prev();
+      slider.slideNext();
     }
     btnNext.onclick = () => {
-      slider.next();
+      slider.slidePrev();
     }
   });
 </script>
