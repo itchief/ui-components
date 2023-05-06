@@ -5,8 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ItcSlider - Example 01</title>
-  <link rel="stylesheet" href="/examples/pens/itc-slider/main.css">
-  <script src="/examples/pens/itc-slider/main.js"></script>
+  <link rel="stylesheet" href="../itc-slider.css">
   <style>
     *,
     *::before,
@@ -27,11 +26,11 @@
       margin: 0 auto;
     }
 
-    .itc-slider__items {
+    .itc-slider-items {
       counter-reset: slide;
     }
 
-    .itc-slider__item {
+    .itc-slider-item {
       flex: 0 0 100%;
       max-width: 100%;
       counter-increment: slide;
@@ -50,33 +49,34 @@
 
 <template id="slider-template">
   <div class="itc-slider">
-    <div class="itc-slider__wrapper"><div class="itc-slider__items"></div></div>
-    <button class="itc-slider__btn itc-slider__btn_prev"></button>
-    <button class="itc-slider__btn itc-slider__btn_next"></button>
+    <div class="itc-slider-wrapper"><div class="itc-slider-items"></div></div>
+    <button class="itc-slider-btn itc-slider-btn-prev"></button>
+    <button class="itc-slider-btn itc-slider-btn-next"></button>
   </div>
 </template>
 
 <div class="container"></div>
 
+<script src="../itc-slider.js"></script>
 <script>
   const items = [
     {
-      img: '/examples/pens/itc-slider/images/1.jpg'
+      img: 'images/1.jpg'
     },
     {
-      img: '/examples/pens/itc-slider/images/2.jpg'
+      img: 'images/2.jpg'
     },
     {
-      img: '/examples/pens/itc-slider/images/3.jpg'
+      img: 'images/3.jpg'
     },
     {
-      img: '/examples/pens/itc-slider/images/4.jpg'
+      img: 'images/4.jpg'
     },
     {
-      img: '/examples/pens/itc-slider/images/5.jpg'
+      img: 'images/5.jpg'
     },
     {
-      img: '/examples/pens/itc-slider/images/6.jpg'
+      img: 'images/6.jpg'
     },
   ]
   const sliderTemplate = document.querySelector('#slider-template');
@@ -88,12 +88,12 @@
     items.push(items[1]);
   }
   const sliderItems = items.map((item) => {
-    return `<div class="itc-slider__item"><img src="${item.img}" alt=""></div>`;
+    return `<div class="itc-slider-item"><img src="${item.img}" alt=""></div>`;
   });
-  sliderContainerElem.querySelector('.itc-slider__items').innerHTML = sliderItems.join('');
+  sliderContainerElem.querySelector('.itc-slider-items').innerHTML = sliderItems.join('');
   containerElem.append(sliderContainerElem);
   const sliderElem = document.querySelector('.itc-slider');
-  if (sliderElem.querySelectorAll('.itc-slider__item').length > 1) {
+  if (sliderElem.querySelectorAll('.itc-slider-item').length > 1) {
     ItcSlider.getOrCreateInstance(sliderElem, {
       autoplay: false,
       interval: 5000,
@@ -102,8 +102,8 @@
       swipe: true
     });
   } else {
-    sliderElem.querySelectorAll('.itc-slider__btn').forEach((item) => {
-      item.classList.add('itc-slider__btn_hide');
+    sliderElem.querySelectorAll('.itc-slider-btn').forEach((item) => {
+      item.classList.add('itc-slider-btn-hide');
     });
   }
 </script>

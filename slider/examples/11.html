@@ -27,13 +27,13 @@
       margin: 0 auto;
     }
 
-    .itc-slider__items {
+    .itc-slider-items {
       counter-reset: slide;
       --gap: 0.8455rem;
       gap: var(--gap);
     }
 
-    .itc-slider__item {
+    .itc-slider-item {
       flex: 0 0 auto;
       width: 100%;
       counter-increment: slide;
@@ -42,18 +42,18 @@
     }
 
     @media (min-width: 768px) {
-      .itc-slider__item {
+      .itc-slider-item {
         width: calc(50% - var(--gap) / 2);
       }
     }
 
     @media (min-width: 992px) {
-      .itc-slider__item {
+      .itc-slider-item {
         width: calc(33.3333333333% - var(--gap) * 2 / 3);
       }
     }
 
-    .itc-slider__item::before {
+    .itc-slider-item::before {
       content: counter(slide) "/5";
       position: absolute;
       top: 10px;
@@ -65,23 +65,23 @@
       display: block;
     }
 
-    .itc-slider__item:nth-child(1) {
+    .itc-slider-item:nth-child(1) {
       background-color: #f44336;
     }
 
-    .itc-slider__item:nth-child(2) {
+    .itc-slider-item:nth-child(2) {
       background-color: #9c27b0;
     }
 
-    .itc-slider__item:nth-child(3) {
+    .itc-slider-item:nth-child(3) {
       background-color: #3f51b5;
     }
 
-    .itc-slider__item:nth-child(4) {
+    .itc-slider-item:nth-child(4) {
       background-color: #03a9f4;
     }
 
-    .itc-slider__item:nth-child(5) {
+    .itc-slider-item:nth-child(5) {
       background-color: #4caf50;
     }
   </style>
@@ -92,27 +92,27 @@
 <div class="container">
 
   <div class="itc-slider" data-slider="itc-slider" data-loop="true" data-autoplay="false">
-    <div class="itc-slider__wrapper">
-      <div class="itc-slider__items">
-        <div class="itc-slider__item">
+    <div class="itc-slider-wrapper">
+      <div class="itc-slider-items">
+        <div class="itc-slider-item">
           <!-- Контент 1 слайда -->
         </div>
-        <div class="itc-slider__item">
+        <div class="itc-slider-item">
           <!-- Контент 2 слайда -->
         </div>
-        <div class="itc-slider__item">
+        <div class="itc-slider-item">
           <!-- Контент 3 слайда -->
         </div>
-        <div class="itc-slider__item">
+        <div class="itc-slider-item">
           <!-- Контент 4 слайда -->
         </div>
-        <div class="itc-slider__item">
+        <div class="itc-slider-item">
           <!-- Контент 5 слайда -->
         </div>
       </div>
     </div>
-    <button class="itc-slider__btn itc-slider__btn_prev"></button>
-    <button class="itc-slider__btn itc-slider__btn_next"></button>
+    <button class="itc-slider-btn itc-slider-btn-prev"></button>
+    <button class="itc-slider-btn itc-slider-btn-next"></button>
   </div>
 
 </div>

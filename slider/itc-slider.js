@@ -1,6 +1,6 @@
 /**
  * @class ItcSlider
- * @version 1.0.0
+ * @version 1.0.1
  * @author https://github.com/itchief
  * @copyright Alexander Maltsev 2020 - 2023
  * @license MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
@@ -11,12 +11,12 @@ class ItcSlider {
   static #EL_WRAPPER = 'wrapper';
   static #EL_ITEMS = 'items';
   static #EL_ITEM = 'item';
-  static #EL_ITEM_ACTIVE = 'item_active';
+  static #EL_ITEM_ACTIVE = 'item-active';
   static #EL_INDICATOR = 'indicator';
-  static #EL_INDICATOR_ACTIVE = 'indicator_active';
-  static #BTN_PREV = 'btn_prev';
-  static #BTN_NEXT = 'btn_next';
-  static #BTN_HIDE = 'btn_hide';
+  static #EL_INDICATOR_ACTIVE = 'indicator-active';
+  static #BTN_PREV = 'btn-prev';
+  static #BTN_NEXT = 'btn-next';
+  static #BTN_HIDE = 'btn-hide';
   static #TRANSITION_NONE = 'transition-none';
 
   static #instances = [];
@@ -29,7 +29,7 @@ class ItcSlider {
    * @param {Object} config
    * @param {String} prefix
    */
-  constructor(el, config = {}, prefix = 'itc-slider__') {
+  constructor(el, config = {}, prefix = 'itc-slider-') {
     this.#state = {
       prefix, // префикс для классов
       el, // элемент который нужно активировать как ItcSlider
@@ -77,19 +77,15 @@ class ItcSlider {
    * @param {Object} config
    * @param {String} prefix
    */
-  static getOrCreateInstance(target, config = {}, prefix = 'itc-slider__') {
-    try {
-      const elSlider = typeof target === 'string' ? document.querySelector(target) : target;
-      const result = this.getInstance(elSlider);
-      if (result) {
-        return result;
-      }
-      const slider = new this(elSlider, config, prefix);
-      this.#instances.push({ target: elSlider, instance: slider });
-      return slider;
-    } catch (e) {
-      console.error(e);
+  static getOrCreateInstance(target, config = {}, prefix = 'itc-slider-') {
+    const elSlider = typeof target === 'string' ? document.querySelector(target) : target;
+    const result = this.getInstance(elSlider);
+    if (result) {
+      return result;
     }
+    const slider = new this(elSlider, config, prefix);
+    this.#instances.push({ target: elSlider, instance: slider });
+    return slider;
   }
 
   // статический метод для активирования элементов как ItcSlider на основе data-атрибутов
@@ -129,6 +125,21 @@ class ItcSlider {
     this.#reset();
   }
 
+  get autoplay() {
+    return {
+      // Start autoplay
+      start: () => {
+        this.#config.autoplay = true;
+        this.#autoplay();
+      },
+      // Stop autoplay
+      stop: () => {
+        this.#autoplay('stop');
+        this.#config.autoplay = false;
+      }
+    };
+  }
+
   dispose() {
     this.#detachEvents();
     const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
@@ -151,7 +162,7 @@ class ItcSlider {
   }
 
   #onClick(e) {
-    if (!(e.target.closest('.itc-slider__btn') || e.target.closest('.itc-slider__indicators'))) {
+    if (!(e.target.closest('.itc-slider-btn') || e.target.closest('.itc-slider-indicators'))) {
       return;
     }
     e.preventDefault();
@@ -236,7 +247,7 @@ class ItcSlider {
       mouseenter: [this.#state.el, this.#onMouseEnter.bind(this), true],
       mouseleave: [this.#state.el, this.#onMouseLeave.bind(this), true],
       resize: [window, this.#onResize.bind(this), this.#config.refresh],
-      'itc-slider__transition-start': [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
+      animating: [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
       transitionend: [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
       touchstart: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
       mousedown: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
@@ -355,7 +366,7 @@ class ItcSlider {
     this.#updateClasses();
     this.#state.translate = transform;
     this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
-    this.#state.elItems.dispatchEvent(new CustomEvent('itc-slider__transition-start', {
+    this.#state.elItems.dispatchEvent(new Event('animating', {
       bubbles: true
     }));
   }
@@ -373,7 +384,7 @@ class ItcSlider {
     }
   }
 
-  // приватный метод для выполнения первичной иницианализации
+  // приватный метод для выполнения первичной инициализации
   #init() {
     // состояние элементов
     this.#state.els = [];

@@ -1,8 +1,8 @@
 /**
  * ItcSlider
- * @version 1.0.0
+ * @version 1.0.1
  * @author https://github.com/itchief
- * @copyright Alexander Maltsev 2020 - 2022
+ * @copyright Alexander Maltsev 2020 - 2023
  * @license MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  * @tutorial https://itchief.ru/javascript/slider
  */
@@ -11,21 +11,21 @@
   position: relative;
 }
 
-.itc-slider__wrapper {
+.itc-slider-wrapper {
   overflow: hidden;
 }
 
-.itc-slider__items {
+.itc-slider-items {
   display: flex;
   transition: transform 0.5s ease;
   will-change: transform;
 }
 
-.itc-slider__transition-none {
+.itc-slider-transition-none {
   transition: none;
 }
 
-.itc-slider__item {
+.itc-slider-item {
   flex: 0 0 100%;
   max-width: 100%;
   user-select: none;
@@ -33,7 +33,7 @@
 }
 
 /* кнопки влево и вправо */
-.itc-slider__btn {
+.itc-slider-btn {
   position: absolute;
   top: 50%;
   display: flex;
@@ -49,27 +49,27 @@
   cursor: pointer;
 }
 
-.itc-slider__btn_hide {
+.itc-slider-btn-hide {
   display: none;
 }
 
-.itc-slider__btn_prev {
+.itc-slider-btn-prev {
   left: 0;
 }
 
-.itc-slider__btn_next {
+.itc-slider-btn-next {
   right: 0;
 }
 
-.itc-slider__btn:hover,
-.itc-slider__btn:focus {
+.itc-slider-btn:hover,
+.itc-slider-btn:focus {
   color: #fff;
   text-decoration: none;
   background: rgb(0 0 0 / 30%);
   outline: 0;
 }
 
-.itc-slider__btn::before {
+.itc-slider-btn::before {
   content: "";
   display: inline-block;
   width: 20px;
@@ -78,16 +78,16 @@
   background-size: 100% 100%;
 }
 
-.itc-slider__btn_prev::before {
+.itc-slider-btn-prev::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
 }
 
-.itc-slider__btn_next::before {
+.itc-slider-btn-next::before {
   background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
 
 /* индикаторы */
-.itc-slider__indicators {
+.itc-slider-indicators {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -100,7 +100,7 @@
   list-style: none;
 }
 
-.itc-slider__indicator {
+.itc-slider-indicator {
   flex: 0 1 auto;
   box-sizing: content-box;
   width: 30px;
@@ -115,6 +115,6 @@
   cursor: pointer;
 }
 
-.itc-slider__indicator_active {
+.itc-slider-indicator-active {
   background-color: rgb(255 255 255 / 90%);
 }
