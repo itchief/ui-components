@@ -18,6 +18,7 @@ class ItcSlider {
   static #BTN_NEXT = 'btn-next';
   static #BTN_HIDE = 'btn-hide';
   static #TRANSITION_NONE = 'transition-none';
+  static #SWIPE_THRESHOLD = 20;
 
   static #instances = [];
 
@@ -49,6 +50,7 @@ class ItcSlider {
       intervalId: null, // id таймера
       isSwiping: false,
       swipeX: 0,
+      swipeY: 0,
     };
 
     this.#config = {
@@ -187,46 +189,22 @@ class ItcSlider {
     this.#autoplay();
   }
 
-  #onResize() {
-    window.requestAnimationFrame(this.#reset.bind(this));
-  }
-
-  #onSwipeStart(e) {
-    this.#autoplay('stop');
-    const event = e.type.search('touch') === 0 ? e.touches[0] : e;
-    this.#state.swipeX = event.clientX;
-    this.#state.isSwiping = true;
-  }
-
-  #onSwipeEnd(e) {
-    if (!this.#state.isSwiping) {
-      return;
-    }
-    const event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
-    const diffPos = this.#state.swipeX - event.clientX;
-    if (diffPos > 50) {
-      this.#state.direction = 'next';
-      this.#move();
-    } else if (diffPos < -50) {
-      this.#state.direction = 'prev';
-      this.#move();
-    }
-    this.#state.isSwiping = false;
-    if (this.#config.loop) {
-      this.#autoplay();
-    }
-  }
-
   #onTransitionStart() {
-    if (this.#state.isBalancing) {
-      return;
+    if (this.#config.loop) {
+      if (this.#state.isBalancing) {
+        return;
+      }
+      this.#state.isBalancing = true;
+      window.requestAnimationFrame(() => {
+        this.#balanceItems(false);
+      });
     }
-    this.#state.isBalancing = true;
-    window.requestAnimationFrame(this.#balanceItems.bind(this));
   }
 
   #onTransitionEnd() {
-    this.#state.isBalancing = false;
+    if (this.#config.loop) {
+      this.#state.isBalancing = false;
+    }
   }
 
   #onDragStart(e) {
@@ -241,18 +219,114 @@ class ItcSlider {
     }
   }
 
+  #touchStart(e) {
+    this.#autoplay('stop');
+    const event = e.type.search('touch') === 0 ? e.touches[0] : e;
+    this.#state.swipeX = event.clientX;
+    this.#state.swipeY = event.clientY;
+    this.#state.isSwiping = true;
+    this.#state.isTouchMoving = false;
+  }
+
+  #touchEnd(e) {
+    if (!this.#state.isSwiping) {
+      return;
+    }
+    const event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
+    const wrapperRect = this.#state.elWrapper.getBoundingClientRect();
+    let clientX = event.clientX < wrapperRect.left ? wrapperRect.left : event.clientX;
+    clientX = clientX > wrapperRect.right ? wrapperRect.right : clientX;
+    let diffPosX = this.#state.swipeX - clientX;
+    if (diffPosX === 0) {
+      this.#state.isSwiping = false;
+      return;
+    }
+    if (!this.#config.loop) {
+      const isNotMoveFirst = this.#state.activeItems[0] === 1 && diffPosX <= 0;
+      const isNotMoveLast = this.#state.activeItems[this.#state.activeItems.length - 1] && diffPosX >= 0;
+      if (isNotMoveFirst || isNotMoveLast) {
+        diffPosX = 0;
+      }
+    }
+    const value = (diffPosX / this.#state.width) * 100;
+    const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
+    this.#state.elItems.classList.remove(transitionNoneClass);
+    if (value > this.constructor.#SWIPE_THRESHOLD) {
+      this.#state.direction = 'next';
+      let count = 0;
+      while (count <= Math.floor(Math.abs(value) - this.constructor.#SWIPE_THRESHOLD) / 100) {
+        this.#move();
+        count += 1;
+      }
+    } else if (value < -this.constructor.#SWIPE_THRESHOLD) {
+      this.#state.direction = 'prev';
+      let count = 0;
+      while (count <= Math.floor(Math.abs(value) - this.constructor.#SWIPE_THRESHOLD) / 100) {
+        this.#move();
+        count += 1;
+      }
+    } else {
+      this.#state.direction = 'none';
+      this.#move();
+    }
+    this.#state.isSwiping = false;
+    if (this.#config.loop) {
+      this.#autoplay();
+    }
+    this.#state.isBalancing = false;
+  }
+
+  #touchMove(e) {
+    if (!this.#state.isSwiping) {
+      return;
+    }
+    const event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
+    let diffPosX = this.#state.swipeX - event.clientX;
+    const diffPosY = this.#state.swipeY - event.clientY;
+    const prevPosX = this.#state.prevPosX ? this.#state.prevPosX : event.clientX;
+    const direction = prevPosX > event.clientX ? 'next' : 'prev';
+    this.#state.prevPosX = event.clientX;
+    if (!this.#state.isTouchMoving) {
+      if (Math.abs(diffPosY) > Math.abs(diffPosX) || Math.abs(diffPosX) === 0) {
+        this.#state.isSwiping = false;
+        return;
+      }
+      this.#state.isTouchMoving = true;
+    }
+    e.preventDefault();
+    if (!this.#config.loop) {
+      const isNotMoveFirst = this.#state.activeItems[0] === 1 && diffPosX <= 0;
+      const isNotMoveLast = this.#state.activeItems[this.#state.activeItems.length - 1] && diffPosX >= 0;
+      if (isNotMoveFirst || isNotMoveLast) {
+        diffPosX /= 4;
+      }
+    }
+    const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
+    this.#state.elItems.classList.add(transitionNoneClass);
+    const translate = this.#state.translate - diffPosX;
+    this.#state.elItems.style.transform = `translate3D(${translate}px, 0px, 0.1px)`;
+    if (this.#config.loop) {
+      this.#state.direction = diffPosX > 0 ? 'next' : 'prev';
+      this.#state.direction = direction;
+      window.requestAnimationFrame(() => {
+        this.#balanceItems(true);
+      });
+    }
+  }
+
   #attachEvents() {
     this.#state.events = {
       click: [this.#state.el, this.#onClick.bind(this), true],
       mouseenter: [this.#state.el, this.#onMouseEnter.bind(this), true],
       mouseleave: [this.#state.el, this.#onMouseLeave.bind(this), true],
-      resize: [window, this.#onResize.bind(this), this.#config.refresh],
-      animating: [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
+      transitionstart: [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
       transitionend: [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
-      touchstart: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
-      mousedown: [this.#state.el, this.#onSwipeStart.bind(this), this.#config.swipe],
-      touchend: [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
-      mouseup: [document, this.#onSwipeEnd.bind(this), this.#config.swipe],
+      touchstart: [this.#state.el, this.#touchStart.bind(this), this.#config.swipe],
+      mousedown: [this.#state.el, this.#touchStart.bind(this), this.#config.swipe],
+      touchend: [document, this.#touchEnd.bind(this), this.#config.swipe],
+      mouseup: [document, this.#touchEnd.bind(this), this.#config.swipe],
+      touchmove: [this.#state.el, this.#touchMove.bind(this), this.#config.swipe],
+      mousemove: [this.#state.el, this.#touchMove.bind(this), this.#config.swipe],
       dragstart: [this.#state.el, this.#onDragStart.bind(this), true],
       visibilitychange: [document, this.#onVisibilityChange.bind(this), true]
     };
@@ -263,6 +337,10 @@ class ItcSlider {
         el.addEventListener(type, fn);
       }
     });
+    const resizeObserver = new ResizeObserver((entries) => {
+      window.requestAnimationFrame(this.#reset.bind(this));
+    });
+    resizeObserver.observe(this.#state.elWrapper);
   }
 
   #detachEvents() {
@@ -292,8 +370,8 @@ class ItcSlider {
     }
   }
 
-  #balanceItems() {
-    if (!this.#state.isBalancing) {
+  #balanceItems(once = false) {
+    if (!this.#state.isBalancing && !once) {
       return;
     }
     const wrapperRect = this.#state.elWrapper.getBoundingClientRect();
@@ -320,7 +398,11 @@ class ItcSlider {
         this.#updateExProperties();
       }
     }
-    window.requestAnimationFrame(this.#balanceItems.bind(this));
+    if (!once) {
+      window.requestAnimationFrame(() => {
+        this.#balanceItems(false);
+      });
+    }
   }
 
   #updateClasses() {
@@ -341,6 +423,11 @@ class ItcSlider {
   }
 
   #move() {
+    if (this.#state.direction === 'none') {
+      const transform = this.#state.translate;
+      this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
+      return;
+    }
     const widthItem = this.#state.direction === 'next' ? -this.#state.width : this.#state.width;
     const transform = this.#state.translate + widthItem;
     if (!this.#config.loop) {
@@ -366,9 +453,6 @@ class ItcSlider {
     this.#updateClasses();
     this.#state.translate = transform;
     this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
-    this.#state.elItems.dispatchEvent(new Event('animating', {
-      bubbles: true
-    }));
   }
 
   #moveTo(index) {
