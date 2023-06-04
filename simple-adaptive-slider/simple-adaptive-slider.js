@@ -3,7 +3,7 @@
 
 /**
  * SimpleAdaptiveSlider by itchief (https://github.com/itchief/ui-components/tree/master/simple-adaptive-slider)
- * Copyright 2020 - 2022 Alexander Maltsev
+ * Copyright 2020 - 2023 Alexander Maltsev
  * Licensed under MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  */
 
