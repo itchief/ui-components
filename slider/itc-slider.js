@@ -164,10 +164,12 @@ class ItcSlider {
   }
 
   #onClick(e) {
+    if (this.#state.isMoving) {
+      e.preventDefault();
+    }
     if (!(e.target.closest('.itc-slider-btn') || e.target.closest('.itc-slider-indicators'))) {
       return;
     }
-    e.preventDefault();
     const classBtnPrev = this.#state.prefix + this.constructor.#BTN_PREV;
     const classBtnNext = this.#state.prefix + this.constructor.#BTN_NEXT;
     this.#autoplay('stop');
@@ -220,6 +222,7 @@ class ItcSlider {
   }
 
   #touchStart(e) {
+    this.#state.isMoving = false;
     this.#autoplay('stop');
     const event = e.type.search('touch') === 0 ? e.touches[0] : e;
     this.#state.swipeX = event.clientX;
@@ -280,6 +283,7 @@ class ItcSlider {
     if (!this.#state.isSwiping) {
       return;
     }
+    this.#state.isMoving = true;
     const event = e.type.search('touch') === 0 ? e.changedTouches[0] : e;
     let diffPosX = this.#state.swipeX - event.clientX;
     const diffPosY = this.#state.swipeY - event.clientY;

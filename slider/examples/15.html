@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ItcSlider - Example 01</title>
+  <link rel="stylesheet" href="../itc-slider.css">
+  <script src="../itc-slider.js" defer></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol';
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .itc-slider-items {
+      counter-reset: slide;
+    }
+
+    .itc-slider-item {
+      flex: 0 0 100%;
+      max-width: 100%;
+      counter-increment: slide;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .itc-slider-item::before {
+      content: counter(slide) "/5";
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: bold;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="itc-slider" data-slider="itc-slider" data-loop="false" data-autoplay="false">
+      <div class="itc-slider-wrapper">
+        <div class="itc-slider-items">
+          <div class="itc-slider-item">
+            <a href="https://itchief.ru"><img src="images/1.jpg" alt="" width="600" height="400"></a>
+          </div>
+          <div class="itc-slider-item">
+            <a href="https://itchief.ru"><img src="images/2.jpg" alt="" width="600" height="400"></a>
+          </div>
+          <div class="itc-slider-item">
+            <a href="https://itchief.ru"><img src="images/3.jpg" alt="" width="600" height="400"></a>
+          </div>
+          <div class="itc-slider-item">
+            <a href="https://itchief.ru"><img src="images/4.jpg" alt="" width="600" height="400"></a>
+          </div>
+          <div class="itc-slider-item">
+            <a href="https://itchief.ru"><img src="images/5.jpg" alt="" width="600" height="400"></a>
+          </div>
+        </div>
+      </div>
+      <button class="itc-slider-btn itc-slider-btn-prev"></button>
+      <button class="itc-slider-btn itc-slider-btn-next"></button>
+      <ol class="itc-slider-indicators">
+        <li class="itc-slider-indicator" data-slide-to="0"></li>
+        <li class="itc-slider-indicator" data-slide-to="1"></li>
+        <li class="itc-slider-indicator" data-slide-to="2"></li>
+        <li class="itc-slider-indicator" data-slide-to="3"></li>
+        <li class="itc-slider-indicator" data-slide-to="4"></li>
+      </ol>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
