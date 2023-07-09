@@ -54,7 +54,7 @@ class ItcSlider {
     };
 
     this.#config = {
-      loop: true, autoplay: false, interval: 5000, refresh: true, swipe: true, ...config
+      loop: true, direction: 'next', autoplay: false, interval: 5000, refresh: true, swipe: true, ...config
     };
 
     this.#init();
@@ -100,9 +100,9 @@ class ItcSlider {
           return;
         }
         let value = dataset[key];
+        value = Number.isNaN(Number(value)) ? value : Number(value);
         value = value === 'true' ? true : value;
         value = value === 'false' ? false : value;
-        value = Number.isNaN(Number(value)) ? Number(value) : value;
         params[key] = value;
       });
       this.getOrCreateInstance(el, params);
@@ -368,7 +368,7 @@ class ItcSlider {
     }
     if (this.#state.intervalId === null) {
       this.#state.intervalId = setInterval(() => {
-        this.#state.direction = 'next';
+        this.#state.direction = this.#config.direction === 'prev' ? 'prev' : 'next';
         this.#move();
       }, this.#config.interval);
     }
