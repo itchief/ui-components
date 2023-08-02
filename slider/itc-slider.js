@@ -22,6 +22,22 @@ class ItcSlider {
 
   static #instances = [];
 
+  static checkSupportPassiveEvents() {
+    let passiveSupported = false;
+    try {
+      const options = Object.defineProperty({}, 'passive', {
+        get() {
+          passiveSupported = true;
+        },
+      });
+      window.addEventListener('testPassiveListener', null, options);
+      window.removeEventListener('testPassiveListener', null, options);
+    } catch (error) {
+      passiveSupported = false;
+    }
+    return passiveSupported;
+  }
+
   #config;
   #state;
 
@@ -338,7 +354,12 @@ class ItcSlider {
       if (this.#state.events[type][2]) {
         const el = this.#state.events[type][0];
         const fn = this.#state.events[type][1];
-        el.addEventListener(type, fn);
+        if (type === 'touchstart' || type === 'touchmove') {
+          const options = this.constructor.checkSupportPassiveEvents() ? { passive: false } : false;
+          el.addEventListener(type, fn, options);
+        } else {
+          el.addEventListener(type, fn);
+        }
       }
     });
     const resizeObserver = new ResizeObserver((entries) => {
