@@ -21,19 +21,23 @@
       color: #212529;
       text-align: left;
       background-color: #fff;
+      height: 20000px;
     }
   </style>
-  <link href="css/modal.css" rel="stylesheet">
+  <link href="../css/modal.css" rel="stylesheet">
 </head>
 
 <body>
 
 <button class="btn" id="show-modal">Открыть</button>
 
-<script src="js/modal.js"></script>
+<script src="../js/modal.js"></script>
 <script>
   // создаём модальное окно
-  const modal = new ItcModal();
+  const modal = new ItcModal({
+    title: 'Какой-то текст',
+    content: '<p>Мой контент</p>'
+  });
   // при клике по кнопке #show-modal
   document.querySelector('#show-modal').addEventListener('click', () => {
     // откроем модальное окно

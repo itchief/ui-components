@@ -1,6 +1,6 @@
 class ItcModal {
   #elem;
-  #template = '<div class="itc-modal-backdrop"><div class="itc-modal-content"><div class="itc-modal-header"><div class="itc-modal-title">{{title}}</div><span class="itc-modal-btn-close" title="Закрыть">×</span></div><div class="itc-modal-body">{{content}}</div>{{footer}}</div></div>';
+  #template = '<div class="itc-modal-backdrop"><div class="itc-modal-content itc-modal-scrollable"><div class="itc-modal-header"><div class="itc-modal-title">{{title}}</div><span class="itc-modal-btn-close" title="Закрыть">×</span></div><div class="itc-modal-body">{{content}}</div>{{footer}}</div></div>';
   #templateFooter = '<div class="itc-modal-footer">{{buttons}}</div>';
   #templateBtn = '<button type="button" class="{{class}}" data-action={{action}}>{{text}}</button>';
   #eventShowModal = new Event('show.itc.modal', { bubbles: true });
@@ -35,12 +35,23 @@ class ItcModal {
       return;
     }
     this.#elem.classList.add('itc-modal-show');
+    const scrollbarWidth = Math.abs(window.innerWidth - document.documentElement.clientWidth);
+    if (window.innerWidth > document.body.clientWidth + scrollbarWidth) {
+      return;
+    }
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.body.style.overflow = 'hidden';
     this.#elem.dispatchEvent(this.#eventShowModal);
   }
 
   hide() {
     this.#elem.classList.remove('itc-modal-show');
     this.#elem.dispatchEvent(this.#eventHideModal);
+    document.body.style.paddingRight = '';
+    document.body.offsetHeight;
+    this.#elem.addEventListener('transitionend', () => {
+      document.body.style.overflow = '';
+    }, { once: true });
   }
 
   dispose() {

@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <title>ItcSlider - Example 01</title>
-  <link href="../itc-slider.css" rel="stylesheet">
-  <script defer src="../itc-slider.js"></script>
+  <link href="/examples/libs/itc-slider/main.css" rel="stylesheet">
+  <script defer src="/examples/libs/itc-slider/main.js"></script>
   <style>
     *,
     *::before,
@@ -30,9 +30,9 @@
     }
 
     .itc-slider-1, .itc-slider-2 {
-      flex: 1 0 40%;
+      flex: 0 0 calc(50% - 1rem);
       display: block;
-      max-width: 50%;
+      max-width: calc(50% - 1rem);
     }
 
     .itc-slider-items {
@@ -69,19 +69,19 @@
     <div class="itc-slider-wrapper">
       <div class="itc-slider-items">
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/1.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/1.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/2.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/2.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/3.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/3.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/4.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/4.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/5.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/5.jpg" width="600"></a>
         </div>
       </div>
     </div>
@@ -100,19 +100,19 @@
     <div class="itc-slider-wrapper">
       <div class="itc-slider-items">
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/1.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/1.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/2.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/2.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/3.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/3.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/4.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/4.jpg" width="600"></a>
         </div>
         <div class="itc-slider-item">
-          <a href="#"><img alt="" height="400" src="images/5.jpg" width="600"></a>
+          <a href="#"><img alt="" height="400" src="/examples/images/itc-slider/5.jpg" width="600"></a>
         </div>
       </div>
     </div>
