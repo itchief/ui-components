@@ -4,196 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>YouTube video gallery</title>
-  <style>
-    body {
-      -webkit-text-size-adjust: 100%;
-      -webkit-tap-highlight-color: rgba(0,0,0,0);
-      background-color: #eee;
-      color: #fff;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Noto Sans,Liberation Sans,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      margin: 0;
-      background-color: #212529;
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    form {
-      margin: 1rem auto 2rem;
-      max-width: 800px;
-      display: block;
-    }
-
-    label > span {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    input {
-      display: block;
-      width: 100%;
-      padding: 0.375rem 0.75rem;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #dee2e6;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      background-color: #212529;
-      background-clip: padding-box;
-      border: 1px solid #495057;
-      border-radius: 0.375rem;
-      transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-      margin-bottom: 1rem;
-    }
-
-    input:focus {
-      color: #dee2e6;
-      background-color: #212529;
-      border-color: #86b7fe;
-      outline: 0;
-      box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
-    }
-
-    button {
-      display: inline-block;
-      padding: 0.375rem 0.75rem;
-      font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #fff;
-      text-align: center;
-      text-decoration: none;
-      vertical-align: middle;
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-      border: 1px solid #0d6efd;
-      border-radius: 0.375rem;
-      background-color: #0d6efd;
-      transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-    }
-
-    button:hover {
-      color: #fff;
-      background-color: #0b5ed7;
-      border-color: #0a58ca;
-    }
-
-    .videos {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      gap: 1rem;
-    }
-
-    .video-item {
-      flex: 0 0 100%;
-    }
-
-    @media screen and (min-width: 800px) {
-      .video-item {
-        flex: 0 0 calc(50% - 0.5rem);
-      }
-    }
-
-    .video-wrapper {
-      position: relative;
-      cursor: pointer;
-      border-radius: 0.5rem;
-      overflow: hidden;
-    }
-
-    .video-wrapper::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      height: 64px;
-      width: 72px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16' width='14' height='16'%3E%3Cpath d='M13.262 6.708l-11-6.503C1.37-.323 0 .19 0 1.495v13.003c0 1.172 1.272 1.878 2.262 1.291l11-6.5c.981-.578.984-2.003 0-2.58z' fill='%23ffffff'/%3E%3C/svg%3E");
-      background-size: 72px 64px;
-      background-repeat: no-repeat;
-      background-position: center center;
-      margin-left: -32px;
-      margin-top: -36px;
-    }
-
-    .video-wrapper::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, .3);
-      transition: background-color 0.15s ease-in-out;
-    }
-
-    .video-wrapper:hover::after {
-      background-color: rgba(0, 0, 0, .4);
-    }
-
-    .video-thumbnail {
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-
-    .video-title {
-      font-size: 1rem;
-      font-weight: 500;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.9);
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 0.75rem 1rem;
-    }
-
-    .modal-close {
-      position: absolute;
-      right: 1rem;
-      top: 0.75rem;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .d-none {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
 
+  <!-- Модальное окно -->
   <div class="modal d-none">
-    <div class="modal-close">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path></svg>
+    <!-- Кнопка для закрытия модального окна -->
+    <button class="modal-close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path></svg>
+    </button>
+    <div class="modal-body">
+      <div class="modal-iframe">
+        <!-- Элемент, с помощью которого встроим проигрыватель видео YouTube на сайт -->
+        <iframe class="iframe" id="player" type="text/html" width="800" height="450" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
-    <iframe class="modal-iframe" id="player" type="text/html" width="800" height="450" frameborder="0" allowfullscreen></iframe>
   </div>
 
-  <form method="post" class="embed-video" action="/youtube-video-gallery/processing.php">
+  <form method="post" class="embed-video" action="processing.php">
     <label>
       <span>URL:</span>
       <input type="url" name="url" value="">
@@ -204,101 +33,7 @@
 
   <div class="videos"></div>
 
-  <script>
-
-    const MAX_WIDTH = 800;
-    const RATIO = 16 / 9;
-    const URL = '/youtube-video-gallery/processing.php';
-
-    const form = document.querySelector('.embed-video');
-    const elVideos = document.querySelector('.videos');
-    const elModal = document.querySelector('.modal');
-    const elIframe = elModal.querySelector('.modal-iframe');
-
-    const createCard = (id, src, title) => {
-      return `<div class="video-item" data-id="${id}">
-          <div class="video-wrapper">
-            <img class="video-thumbnail" src="${src}">
-          </div>
-          <h3 class="video-title">${title}</h3>
-        </div>`;
-    }
-
-    const createURL = (id) => {
-      return `http://www.youtube.com/embed/${id}?enablejsapi=1&origin=${location.origin}`;
-    }
-
-    (async () => {
-      try {
-        let response = await fetch(URL);
-        if (response.ok) {
-          let result = await response.json();
-          const html = [];
-          Object.keys(result).forEach(key => {
-            const item = result[key];
-            html.push(createCard(key, item['image'], item['title']));
-          });
-          elVideos.innerHTML = html.join('');
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      try {
-        let response = await fetch(e.target.action, {
-          method: 'post',
-          body: new FormData(e.target)
-        });
-        if (response.ok) {
-          let result = await response.json();
-          const videoId = Object.keys(result)[0];
-          if (elVideos.querySelector(`[data-id="${videoId}"]`)) {
-            return;
-          }
-          const item = result[videoId];
-          const html = createCard(videoId, item['image'], item['title']);
-          elVideos.insertAdjacentHTML('beforeend', html);
-          e.target.querySelector('input[name="url"]').value = '';
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    });
-
-    document.addEventListener('click', (e) => {
-      if (e.target && e.target.closest('.video-item')) {
-        e.preventDefault();
-        const el = e.target.closest('.video-item');
-        elIframe.src = createURL(el.dataset.id);
-        elModal.classList.remove('d-none');
-        document.body.style.overflow = 'hidden';
-      }
-      if (e.target && e.target.closest('.modal-close')) {
-        e.preventDefault();
-        elIframe.src = "";
-        elModal.classList.add('d-none');
-      }
-    });
-
-    const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        let maxWidth = entry.contentBoxSize[0].inlineSize;
-        maxWidth = maxWidth > MAX_WIDTH ? MAX_WIDTH : maxWidth;
-        let maxHeight = entry.contentBoxSize[0].blockSize;
-        const widthRatio = maxHeight * RATIO;
-        const heightRatio = maxWidth / RATIO;
-        const calcWidth = heightRatio > maxHeight ? widthRatio : maxWidth;
-        const calcHeight = heightRatio > maxHeight ? maxHeight : heightRatio;
-        elIframe.style.height = `${calcHeight}px`;
-        elIframe.style.width = `${calcWidth}px`;
-      }
-    });
-
-    observer.observe(elModal);
-  </script>
+  <script src="main.js"></script>
 
 </body>
 </html>

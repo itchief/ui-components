@@ -2,32 +2,28 @@
 
 const PATH = 'videos.json';
 
-class YouTubeVideo {
-  private static $apiKey = 'AIzaSyDUS5oxD4fEDC9LQ5WuEQmCwTxRnVutemk';
-  private static function getId(string $url) {
-    if (filter_var($url, FILTER_VALIDATE_URL)) {
-      $pattern = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=|live/)|youtu\.be/)([^"&?/ ]{11})%i';
-      preg_match($pattern, $url, $match);
-      return count($match) > 0 ? $match[1] : '';
-    }
-    return '';
+const API_KEY = 'BKl3DxC4ohjYusw6FdxGk1LNMSRs35Jq0KRe9_U';
+
+function getId(string $url) : string
+{
+  if (filter_var($url, FILTER_VALIDATE_URL)) {
+    $pattern = '%(?:youtube(?:-nocookie)?.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=|live/)|youtu.be/)([^"&?/ ]{11})%i';
+    preg_match($pattern, $url, $match);
+    return count($match) > 0 ? $match[1] : '';
   }
-  private static function createUrl(string $id) {
-    return 'https://www.googleapis.com/youtube/v3/videos?' .
-      'id=' . $id .
-      '&key=' . self::$apiKey .
-      '&part=snippet';
-  }
-  public static function getSnippet(string $url) {
-    $id = self::getId($url);
-    $url = self::createUrl($id);
-    $curlSession = curl_init();
-    curl_setopt($curlSession, CURLOPT_URL, $url);
-    curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
-    $result = json_decode(curl_exec($curlSession), true);
-    curl_close($curlSession);
-    return $result;
-  }
+  return '';
+}
+
+function getSnippet(string $url) : array
+{
+  $id = getId($url);
+  $url = 'https://www.googleapis.com/youtube/v3/videos?id=' . $id . '&key=' . API_KEY . '&part=snippet';
+  $curlSession = curl_init();
+  curl_setopt($curlSession, CURLOPT_URL, $url);
+  curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, true);
+  $result = json_decode(curl_exec($curlSession), true);
+  curl_close($curlSession);
+  return $result;
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -48,7 +44,7 @@ if ($method === 'POST') {
     $data = file_get_contents(PATH);
   }
   $data = json_decode($data, true);
-  $result = YouTubeVideo::getSnippet($_POST['url']);
+  $result = getSnippet($_POST['url']);
   $result = $result['items'][0];
   $key = array_key_last($result['snippet']['thumbnails']);
   $data[$result['id']] = [
