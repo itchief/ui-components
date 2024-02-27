@@ -126,6 +126,16 @@ class ItcSimpleSlider {
         this._elListIndicator[index].classList.remove(this.constructor.EL_INDICATOR_ACTIVE);
       }
     });
+    if (this._states.length) {
+      const btnPrev = this._el.querySelector('.itcss__btn_prev');
+      const btnNext = this._el.querySelector('.itcss__btn_next');
+      if (btnPrev) {
+        this._states[0] === 1 ? btnPrev.classList.add('d-none') : btnPrev.classList.remove('d-none');
+      }
+      if (btnNext) {
+        this._states[this._states.length - 1] === 1 ? btnNext.classList.add('d-none') : btnNext.classList.remove('d-none');
+      }
+    }
     this._el.dispatchEvent(new CustomEvent('change.itc.slider', { bubbles: true }));
   }
 
