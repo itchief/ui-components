@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поиск по сайту</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔍 Поиск по сайту</h1>
+    <form class="search-form" action="#" method="GET">
+      <label class="search-label" for="search-input">
+        <svg xmlns="http://www.w3.org/2000/svg" focusable="false" width="16" height="16" fill="currentColor" class="search-image" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path></svg>
+      </label>
+      <input class="search-input" id="search-input" type="search" name="q" value="" placeholder="что хотите найти?">
+      <button type="reset" class="search-reset" title="Очистить запрос" hidden>
+        <svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+      <button class="search-submit" type="submit" tabindex="-1">Найти</button>
+    </form>
+    <div class="search-header">📢 Результаты поиска</div>
+    <div class="gcse-result">
+      <div class="gcse-searchresults-only"></div>
+    </div>
+  </div>
+
+  <script async src="https://cse.google.com/cse.js?cx=a50c64a99584d4961"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
