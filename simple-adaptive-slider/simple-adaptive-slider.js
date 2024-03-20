@@ -102,7 +102,7 @@ class ItcSimpleSlider {
     }
     // добавляем индикаторы к слайдеру
     this._addIndicators();
-    this._elListIndicator = document.querySelectorAll(`.${this.constructor.EL_INDICATOR}`);
+    this._elListIndicator = this._el.querySelectorAll(`.${this.constructor.EL_INDICATOR}`);
     // обновляем экстремальные значения переменных
     this._updateExProperties();
     // помечаем активные элементы
