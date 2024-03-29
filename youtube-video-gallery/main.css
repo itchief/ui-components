@@ -16,6 +16,7 @@ body {
   background-color: #212529;
   padding-left: 1rem;
   padding-right: 1rem;
+  height: 3000px;
 }
 
 *, *::before, *::after {
@@ -70,7 +71,6 @@ button[type="submit"] {
   text-align: center;
   text-decoration: none;
   vertical-align: middle;
-  cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
@@ -80,7 +80,15 @@ button[type="submit"] {
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:disabled {
+  opacity: 0.7;
+}
+
+button[type="submit"]:not(:disabled) {
+  cursor: pointer;
+}
+
+button[type="submit"]:not(:disabled):hover {
   color: #fff;
   background-color: #0b5ed7;
   border-color: #0a58ca;

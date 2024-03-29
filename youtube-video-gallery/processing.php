@@ -45,6 +45,12 @@ if ($method === 'POST') {
   }
   $data = json_decode($data, true);
   $result = getSnippet($_POST['url']);
+  if (!isset($result['items'][0])) {
+    echo json_encode([
+      'success' => false
+    ]);
+    exit();
+  }
   $result = $result['items'][0];
   $key = array_key_last($result['snippet']['thumbnails']);
   $data[$result['id']] = [
@@ -53,6 +59,10 @@ if ($method === 'POST') {
     'image' => $result['snippet']['thumbnails'][$key]['url'],
   ];
   file_put_contents(PATH, json_encode($data));
-  echo json_encode([$result['id'] => $data[$result['id']]]);
+  echo json_encode([
+    'success' => true,
+    'id' => $result['id'],
+    'data' => $data[$result['id']]
+  ]);
   exit();
 }

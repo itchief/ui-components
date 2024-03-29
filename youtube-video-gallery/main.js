@@ -12,7 +12,7 @@ const createCard = (id, src, title) => `<div class="video-item" data-id="${id}">
     <h3 class="video-title">${title}</h3>
   </div>`;
 
-const createURL = (id) => `http://www.youtube.com/embed/${id}?enablejsapi=1&origin=${window.location.origin}`;
+const createURL = (id) => `${window.location.protocol}//www.youtube.com/embed/${id}?enablejsapi=1&origin=${window.location.origin}`;
 
 (async () => {
   try {
@@ -40,14 +40,18 @@ form.addEventListener('submit', async (e) => {
     });
     if (response.ok) {
       const result = await response.json();
-      const videoId = Object.keys(result)[0];
-      if (elVideos.querySelector(`[data-id="${videoId}"]`)) {
-        return;
+      if (result.success) {
+        const videoId = result.id;
+        if (elVideos.querySelector(`[data-id="${videoId}"]`)) {
+          return;
+        }
+        const item = result.data;
+        const html = createCard(videoId, item.image, item.title);
+        elVideos.insertAdjacentHTML('beforeend', html);
+        e.target.querySelector('input[name="url"]').value = '';
+      } else {
+        console.log('Произошла ошибка при добавлении видео в галерею')
       }
-      const item = result[videoId];
-      const html = createCard(videoId, item.image, item.title);
-      elVideos.insertAdjacentHTML('beforeend', html);
-      e.target.querySelector('input[name="url"]').value = '';
     }
   } catch (error) {
     console.log(error);
@@ -66,6 +70,12 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     elIframe.src = '';
     elModal.classList.add('d-none');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = '';
   }
+});
+
+const input = form.querySelector('input');
+input.addEventListener('input', () => {
+  const btnSubmit = form.querySelector('button[type="submit"]');
+  btnSubmit.disabled = !input.value.trim().length;
 });
