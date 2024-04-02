@@ -40,6 +40,7 @@ class ItcSlider {
 
   #config;
   #state;
+  #resizeObserver;
 
   /**
    * @param {HTMLElement} el
@@ -68,6 +69,8 @@ class ItcSlider {
       swipeX: 0,
       swipeY: 0,
     };
+
+    this.#resizeObserver = null;
 
     this.#config = {
       loop: true, direction: 'next', autoplay: false, interval: 5000, refresh: true, swipe: true, ...config
@@ -362,10 +365,10 @@ class ItcSlider {
         }
       }
     });
-    const resizeObserver = new ResizeObserver((entries) => {
+    this.#resizeObserver = new ResizeObserver((entries) => {
       window.requestAnimationFrame(this.#reset.bind(this));
     });
-    resizeObserver.observe(this.#state.elWrapper);
+    this.#resizeObserver.observe(this.#state.elWrapper);
   }
 
   #detachEvents() {
@@ -374,6 +377,7 @@ class ItcSlider {
         const el = this.#state.events[type][0];
         const fn = this.#state.events[type][1];
         el.removeEventListener(type, fn);
+        this.#resizeObserver.disconnect();
       }
     });
   }
