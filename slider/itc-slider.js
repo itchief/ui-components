@@ -518,6 +518,21 @@ class ItcSlider {
         el, index, order: index, translate: 0
       });
     });
+    if (this.#state.countActiveItems === this.#state.elListItem.length) {
+      if (this.#state.btnPrev) {
+        this.#state.btnPrev.classList.add(this.#state.btnClassHide);
+      }
+      if (this.#state.btnNext) {
+        this.#state.btnNext.classList.add(this.#state.btnClassHide);
+      }
+    } else {
+      if (this.#state.btnPrev) {
+        this.#state.btnPrev.classList.remove(this.#state.btnClassHide);
+      }
+      if (this.#state.btnNext) {
+        this.#state.btnNext.classList.remove(this.#state.btnClassHide);
+      }
+    }
     if (this.#config.loop) {
       const lastIndex = this.#state.elListItem.length - 1;
       const translate = -(lastIndex + 1) * this.#state.width;
