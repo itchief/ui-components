@@ -1,10 +1,10 @@
-.accordion {
+.itc-accordion {
   border-right: 1px solid rgb(0 0 0 / 12.5%);
   border-bottom: 1px solid rgb(0 0 0 / 12.5%);
   border-left: 1px solid rgb(0 0 0 / 12.5%);
 }
 
-.accordion__header {
+.itc-accordion-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,28 +15,28 @@
   transition: background-color 0.2s ease-out;
 }
 
-.accordion__header:hover {
+.itc-accordion-header:hover {
   background-color: #eee;
 }
 
-.accordion__content .accordion__header {
+.itc-accordion-content .itc-accordion-header {
   padding-left: 2rem;
 }
 
-.accordion__content .accordion__content .accordion__header {
+.itc-accordion-content .itc-accordion-content .itc-accordion-header {
   padding-left: 3rem;
 }
 
-.accordion > .accordion__item > .accordion__header {
+.accordion > .itc-accordion-item > .itc-accordion-header {
   font-weight: bold;
   background-color: #fafafa;
 }
 
-.accordion > .accordion__item > .accordion__header:hover {
+.accordion > .itc-accordion-item > .itc-accordion-header:hover {
   background-color: #eee;
 }
 
-.accordion__header::after {
+.itc-accordion-header::after {
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
@@ -48,18 +48,18 @@
   transition: transform 0.2s ease-out;
 }
 
-.accordion__item_show > .accordion__header::after,
-.accordion__item_slidedown > .accordion__header::after {
+.itc-accordion-item-show > .itc-accordion-header::after,
+.itc-accordion-item-slidedown > .itc-accordion-header::after {
   transform: rotate(-180deg);
 }
 
-.accordion__content {
+.itc-accordion-content {
   display: flex;
   flex-direction: column;
   background: #fff;
 }
 
-.accordion__content > a {
+.itc-accordion-content > a {
   position: relative;
   display: block;
   padding: 0.5rem 1rem 0.5rem 2rem;
@@ -69,18 +69,18 @@
   border-top: 1px solid rgb(0 0 0 / 12.5%);
 }
 
-.accordion__content .accordion__content > a {
+.itc-accordion-content .itc-accordion-content > a {
   padding-left: 3rem;
 }
 
-.accordion__content .accordion__content .accordion__content > a {
+.itc-accordion-content .itc-accordion-content .itc-accordion-content > a {
   padding-left: 4rem;
 }
 
-.accordion__body .accordion__content > a:hover {
+.itc-accordion-body .itc-accordion-content > a:hover {
   background-color: #eee;
 }
 
-.accordion__item:not(.accordion__item_show) > .accordion__body {
+.itc-accordion-item:not(.itc-accordion-item-show) > .itc-accordion-body {
   display: none;
 }

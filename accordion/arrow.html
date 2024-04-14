@@ -24,7 +24,6 @@
     }
   </style>
   <link href="css/accordion-arrow.css" rel="stylesheet">
-  <script src="js/accordion.js"></script>
 </head>
 
 <body>
@@ -35,41 +34,41 @@
     </symbol>
   </svg>
 
-  <div class="accordion" style="max-width: 30rem; margin: 1rem auto 2rem;">
-    <div class="accordion__item accordion__item_show">
-      <div class="accordion__header">
+  <div class="itc-accordion" style="max-width: 30rem; margin: 1rem auto 2rem;">
+    <div class="itc-accordion-item itc-accordion-item-show">
+      <div class="itc-accordion-header">
         Заголовок 1
-        <svg class="accordion__arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
+        <svg class="itc-accordion-arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
       </div>
-      <div class="accordion__body">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur et numquam optio, aut consequuntur iure magni
-        tempore quo, velit, quos ipsum perferendis sit quidem sapiente voluptatem nesciunt rerum soluta amet.
+      <div class="itc-accordion-body">
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur et numquam optio, aut consequuntur iure magni tempore quo, velit, quos ipsum perferendis sit quidem sapiente voluptatem nesciunt rerum soluta amet.
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 2
-        <svg class="accordion__arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
+        <svg class="itc-accordion-arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
       </div>
-      <div class="accordion__body">
+      <div class="itc-accordion-body">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Non earum deleniti recusandae placeat rem eius quod
         aliquid adipisci nemo alias debitis corporis pariatur quibusdam est, porro fuga id iure vero?
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 3
-        <svg class="accordion__arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
+        <svg class="itc-accordion-arrow" role="img" aria-label="Переключить"><use xlink:href="#arrow"></use></svg>
       </div>
-      <div class="accordion__body">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid repellat dicta vel sapiente laudantium minima
-        porro voluptatem nam, alias aliquam qui quasi eveniet odit fugiat eius aspernatur nesciunt veniam expedita!
+      <div class="itc-accordion-body">
+        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquid repellat dicta vel sapiente laudantium minima porro voluptatem nam, alias aliquam qui quasi eveniet odit fugiat eius aspernatur nesciunt veniam expedita!
       </div>
     </div>
   </div>
 
-  <script>
-    new ItcAccordion(document.querySelector('.accordion'), {
+  <script type="module">
+    import ItcAccordion from './js/accordion.js';
+
+    new ItcAccordion('.itc-accordion', {
       alwaysOpen: true
     });
   </script>

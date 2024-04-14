@@ -24,34 +24,33 @@
     }
   </style>
   <link href="css/multilevel-accordion.css" rel="stylesheet">
-  <script src="js/multilevel-accordion.js"></script>
 </head>
 
 <body>
 
 
-  <div id="accordion" class="accordion" style="max-width: 30rem; margin: 1rem auto;">
-    <div class="accordion__item">
-      <div class="accordion__header">
+  <div id="accordion" class="itc-accordion" style="max-width: 30rem; margin: 1rem auto;">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 1
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
           <a href="#">Пункт 1.1</a>
-          <div class="accordion__item">
-            <div class="accordion__header">
+          <div class="itc-accordion-item">
+            <div class="itc-accordion-header">
               Пункт 1.2
             </div>
-            <div class="accordion__body">
-              <div class="accordion__content">
+            <div class="itc-accordion-body">
+              <div class="itc-accordion-content">
                 <a href="#">Пункт 1.2.1</a>
                 <a href="#">Пункт 1.2.2</a>
-                <div class="accordion__item">
-                  <div class="accordion__header">
+                <div class="itc-accordion-item">
+                  <div class="itc-accordion-header">
                     Пункт 1.2.3
                   </div>
-                  <div class="accordion__body">
-                    <div class="accordion__content">
+                  <div class="itc-accordion-body">
+                    <div class="itc-accordion-content">
                       <a href="#">Пункт 1.2.3.1</a>
                       <a href="#">Пункт 1.2.3.2</a>
                       <a href="#">Пункт 1.2.3.3</a>
@@ -62,12 +61,12 @@
                 </div>
                 <a href="#">Пункт 1.2.4</a>
                 <a href="#">Пункт 1.2.5</a>
-                <div class="accordion__item">
-                  <div class="accordion__header">
+                <div class="itc-accordion-item">
+                  <div class="itc-accordion-header">
                     Пункт 1.2.6
                   </div>
-                  <div class="accordion__body">
-                    <div class="accordion__content">
+                  <div class="itc-accordion-body">
+                    <div class="itc-accordion-content">
                       <a href="#">Пункт 1.2.6.1</a>
                       <a href="#">Пункт 1.2.6.2</a>
                       <a href="#">Пункт 1.2.6.3</a>
@@ -85,12 +84,12 @@
         </div>
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 2
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
           <a href="#">Пункт 2.1</a>
           <a href="#">Пункт 2.2</a>
           <a href="#">Пункт 2.3</a>
@@ -99,12 +98,12 @@
         </div>
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 3
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
           <a href="#">Пункт 3.1</a>
           <a href="#">Пункт 3.2</a>
           <a href="#">Пункт 3.3</a>
@@ -115,8 +114,10 @@
     </div>
   </div>
 
-  <script>
-    new ItcAccordion(document.querySelector('.accordion'), {
+  <script type="module">
+    import ItcAccordion from './js/multilevel-accordion.js';
+
+    new ItcAccordion(document.querySelector('.itc-accordion'), {
       alwaysOpen: false
     });
   </script>

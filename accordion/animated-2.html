@@ -24,54 +24,51 @@
     }
   </style>
   <link href="css/animated-accordion-2.css" rel="stylesheet">
-  <script src="js/animated-accordion-2.js"></script>
 </head>
 
 <body>
 
 
-  <div id="accordion" class="accordion" style="max-width: 30rem; margin: 1rem auto;">
-    <div class="accordion__item">
-      <div class="accordion__header">
+  <div id="accordion" class="itc-accordion" style="max-width: 30rem; margin: 1rem auto;">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 1
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati consequuntur autem, mollitia rem aperiam
           fugit eos officia vel quidem quis officiis dolores porro beatae veritatis tenetur. Culpa ex libero a!
         </div>
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 2
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea dignissimos a autem perspiciatis sit eum
           exercitationem expedita omnis ipsam voluptate veritatis dolores similique eligendi, earum quasi officia in
           facilis dolorum!
         </div>
       </div>
     </div>
-    <div class="accordion__item">
-      <div class="accordion__header">
+    <div class="itc-accordion-item">
+      <div class="itc-accordion-header">
         Заголовок 3
       </div>
-      <div class="accordion__body">
-        <div class="accordion__content">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta pariatur dolore consectetur perferendis libero
-          nam sit magni voluptatibus voluptates autem nesciunt, praesentium quidem deserunt ipsa totam esse ullam? Quod,
-          maiores!
+      <div class="itc-accordion-body">
+        <div class="itc-accordion-content">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta pariatur dolore consectetur perferendis libero nam sit magni voluptatibus voluptates autem nesciunt, praesentium quidem deserunt ipsa totam esse ullam? Quod, maiores!
         </div>
       </div>
     </div>
   </div>
 
+  <script type="module">
+    import ItcAccordion from './js/animated-accordion-2.js';
 
-
-  <script>
-    new ItcAccordion(document.querySelector('.accordion'), {
+    new ItcAccordion('.itc-accordion', {
       alwaysOpen: false
     });
   </script>
