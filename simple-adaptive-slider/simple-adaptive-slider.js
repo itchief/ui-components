@@ -107,6 +107,9 @@ class ItcSimpleSlider {
     this._updateExProperties();
     // помечаем активные элементы
     this._changeActiveItems();
+
+    this._config.onInit ? this._config.onInit(this) : null;
+
     // назначаем обработчики
     this._addEventListener();
     // запускаем автоматическую смену слайдов
