@@ -1,0 +1,213 @@
+
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>JavaScript SimpleAdaptiveSlider - Слайдер с миниатюрами</title>
+  <!-- Подключаем CSS слайдера -->
+  <link rel="stylesheet" href="../simple-adaptive-slider.css">
+  <!-- Подключаем JS слайдера -->
+  <script defer src="../simple-adaptive-slider.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // инициализация слайдера
+      const slider = new ItcSimpleSlider('.itcss', {
+        loop: true,
+        autoplay: false,
+        swipe: true,
+        onInit(that) {
+          console.log(that);
+        }
+      });
+      var thumbnailsItem = document.querySelectorAll('.itcss__thumbnails-item');
+
+      function setActiveThumbnail() {
+        var sliderItemActive = document.querySelector('.itcss__item_active');
+        var index = parseInt(sliderItemActive.dataset.index);
+        for (var i = 0, length = thumbnailsItem.length; i < length; i++) {
+          if (i !== index) {
+            thumbnailsItem[i].classList.remove('active');
+          } else {
+            thumbnailsItem[index].classList.add('active');
+          }
+        }
+      }
+      setActiveThumbnail();
+      document.querySelector('.itcss').addEventListener('change.itc.slider', setActiveThumbnail);
+      var sliderThumbnails = document.querySelector('.itcss__thumbnails');
+      sliderThumbnails.addEventListener('click', function(e) {
+        $target = e.target.closest('.itcss__thumbnails-item');
+        if (!$target) {
+          return;
+        }
+        var index = parseInt($target.dataset.slideTo, 10);
+        slider.moveTo(index);
+      });
+    });
+  </script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #212529;
+      background-color: #fff;
+      -webkit-text-size-adjust: 100%;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      min-width: 550px;
+    }
+
+    .itcss__container {
+      position: relative;
+      margin-left: 200px;
+    }
+
+    .itcss {
+      max-width: 310px;
+      flex: 0 0 310px;
+      margin-left: unset;
+      margin-right: unset;
+    }
+
+    /* дополнительные стили для этого примера */
+    .itcss__items {
+      counter-reset: slide;
+    }
+
+    .itcss__item {
+      counter-increment: slide;
+      display: flex;
+      background-color: #eee;
+    }
+
+    .itcss__item::before {
+      content: counter(slide);
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      color: #fff;
+      font-style: italic;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .itcss img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .itcss__thumbnails {
+      position: absolute;
+      display: flex;
+      flex-flow: column wrap;
+      align-content: center;
+      width: 150px;
+      left: -175px;
+      top: 0;
+      height: 100%;
+    }
+
+    .itcss__thumbnails-item {
+      line-height: 0;
+      max-width: 52px;
+      margin: 0 10px 10px 0;
+      opacity: .5;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: 0.15s opacity ease-in-out;
+    }
+
+    .itcss__thumbnails-item.active {
+      opacity: 1;
+    }
+
+    .itcss__thumbnails-item:hover {
+      opacity: 1;
+    }
+
+    .itcss__thumbnails-item>img {
+      display: inline-block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Разметка слайдера -->
+  <div class="itcss__container">
+    <!-- slider -->
+    <div class="itcss">
+      <div class="itcss__wrapper">
+        <div class="itcss__items">
+          <div class="itcss__item">
+            <img src="images/image-1-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-2-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-3-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-4-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-5-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-6-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-7-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+          <div class="itcss__item">
+            <img src="images/image-8-700x1000.jpg" alt="..." width="700" height="1000" loading="lazy">
+          </div>
+        </div>
+      </div>
+      <button class="itcss__btn itcss__btn_prev" role="button" data-slide="prev"></button>
+      <button class="itcss__btn itcss__btn_next" role="button" data-slide="next"></button>
+    </div>
+    <!-- thumbnails -->
+    <div class="itcss__thumbnails">
+      <div class="itcss__thumbnails-item" data-slide-to="0">
+        <img src="images/image-1-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="1">
+        <img src="images/image-2-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="2">
+        <img src="images/image-3-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="3">
+        <img src="images/image-4-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="4">
+        <img src="images/image-5-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="5">
+        <img src="images/image-6-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="6">
+        <img src="images/image-7-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+      <div class="itcss__thumbnails-item" data-slide-to="7">
+        <img src="images/image-8-100x143.jpg" alt="..." width="100" height="143" loading="lazy">
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
