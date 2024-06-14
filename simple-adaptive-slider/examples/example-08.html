@@ -18,7 +18,11 @@
         autoplay: false,
         swipe: true,
         onInit(that) {
-          console.log(that);
+          const img = that._elListItem[0].querySelector('img');
+          img.onload = () => {
+            that._el.style.height = `${img.offsetHeight}px`;
+            that._el.style.overflow = 'hidden';
+          }
         }
       });
       var thumbnailsItem = document.querySelectorAll('.itcss__thumbnails-item');
