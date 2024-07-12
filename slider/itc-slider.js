@@ -1,8 +1,8 @@
 /**
  * @class ItcSlider
- * @version 1.0.1
+ * @version 1.0.2
  * @author https://github.com/itchief
- * @copyright Alexander Maltsev 2020 - 2023
+ * @copyright Alexander Maltsev 2020 - 2024
  * @license MIT (https://github.com/itchief/ui-components/blob/master/LICENSE)
  * @tutorial https://itchief.ru/javascript/slider
  */
@@ -461,16 +461,16 @@ class ItcSlider {
     const transform = this.#state.translate + widthItem;
     if (!this.#config.loop) {
       const limit = this.#state.width * (this.#state.elListItem.length - this.#state.countActiveItems);
-      if (transform < -limit || transform > 0) {
+      if (Math.round(transform * 100) < -Math.round(limit * 100) || Math.round(transform * 100) > 0) {
         return;
       }
       if (this.#state.btnPrev) {
         this.#state.btnPrev.classList.remove(this.#state.btnClassHide);
         this.#state.btnNext.classList.remove(this.#state.btnClassHide);
       }
-      if (this.#state.btnPrev && transform === -limit) {
+      if (this.#state.btnPrev && Math.round(transform * 100) === -Math.round(limit * 100)) {
         this.#state.btnNext.classList.add(this.#state.btnClassHide);
-      } else if (this.#state.btnPrev && transform === 0) {
+      } else if (this.#state.btnPrev && Math.round(transform * 100) === 0) {
         this.#state.btnPrev.classList.add(this.#state.btnClassHide);
       }
     }
