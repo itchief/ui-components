@@ -56,6 +56,7 @@
 </div>
 
 
+
 <script type="module">
     import CountdownTimer from "./CountdownTimer.js";
 
@@ -82,8 +83,10 @@
                 elSeconds.dataset.title = time.secondsTitle;
             },
             () => {
-                console.log('С Новым Годом!');
-            });
+                document.querySelector('.timer').style.display = 'block';
+                document.querySelector('.timer').textContent = 'С Новым Годом!';
+            }
+        );
 
         // Остановка через 30 секунд (для примера)
         /* setTimeout(() => {
