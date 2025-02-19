@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Countdown timer</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+      flex-direction: column;
+    }
+
+    .timer {
+      display: grid;
+      grid-template-columns: 4.5rem 0.5rem 4.5rem 0.5rem 4.5rem 0.5rem 4.5rem;
+      font-size: 3rem;
+      justify-items: center;
+    }
+
+    .timer__item {
+      position: relative;
+    }
+
+    .timer__item::before {
+      content: attr(data-title);
+      display: block;
+      position: absolute;
+      left: 50%;
+      bottom: -0.75rem;
+      transform: translateX(-50%);
+      font-size: 0.875rem;
+      color: #424242;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div style="margin-bottom: 2rem;">
+    <div style="text-align: center;">До конца дня:</div>
+    <div class="timer" id="timer-1">
+      <div class="timer__item timer__days">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__hours">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__minutes">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__seconds">00</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div style="margin-bottom: 2rem;">
+    <div style="text-align: center;">До Нового Года:</div>
+    <div class="timer" id="timer-2">
+      <div class="timer__item timer__days">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__hours">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__minutes">00</div>
+      <div class="separator">:</div>
+      <div class="timer__item timer__seconds">00</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import CountdownTimer from "/examples/libs/ui-components/CountdownTimer.js";
+
+    const now = new Date();
+
+    // Инициализация таймера
+    const timers = [
+      { deadline: new Date(now.getFullYear(), now.getMonth(), now.getDate(), '23', '59', '59'), elementId: '#timer-1' },
+      { deadline: new Date(`${now.getFullYear()}-12-31T23:59:59`), elementId: '#timer-2' },
+    ];
+
+    timers.forEach(({ deadline, elementId }) => {
+      const container = document.querySelector(elementId);
+      const elDays = container.querySelector('.timer__days');
+      const elHours = container.querySelector('.timer__hours');
+      const elMinutes = container.querySelector('.timer__minutes');
+      const elSeconds = container.querySelector('.timer__seconds');
+
+      new CountdownTimer(
+        deadline,
+        (time) => {
+          elDays.textContent = time.days;
+          elHours.textContent = time.hours;
+          elMinutes.textContent = time.minutes;
+          elSeconds.textContent = time.seconds;
+          elDays.dataset.title = time.daysTitle;
+          elHours.dataset.title = time.hoursTitle;
+          elMinutes.dataset.title = time.minutesTitle;
+          elSeconds.dataset.title = time.secondsTitle;
+        },
+        () => {
+          container.textContent = 'Время истекло!';
+        }
+      );
+    });
+  </script>
+</body>
+
+</html>
