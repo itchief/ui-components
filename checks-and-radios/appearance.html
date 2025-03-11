@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Кастомные чекбоксы - Демо</title>
+    <style>
+        /* Определяем CSS-переменные для удобства последующих настроек */
+        :root {
+            --itc-body-bg: #fff; /* Цвет фона для чекбоксов */
+            --itc-border-width: 1px; /* Толщина границы чекбокса */
+            --itc-border-color: #dee2e6; /* Базовый цвет границы */
+            --itc-checkbox-color: #0d6efd; /* Цвет для состояний hover, focus и checked */
+            --itc-checkbox-size: 1em; /* Размер чекбокса */
+            --itc-checkbox-gap: 0.5rem; /* Расстояние между кастомным чекбоксом и текстом */
+        }
+
+        /* Общие стили для страницы */
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            line-height: 1.5;
+            padding: 2rem;
+            background-color: #f8f9fa;
+        }
+
+        /* Стили для контейнера группы чекбоксов */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+            max-width: 300px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Стили для отдельного элемента группы чекбоксов */
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+            /* Используем переменную для фона чекбокса */
+            --itc-checkbox-bg: var(--itc-body-bg);
+        }
+
+        /* Скрываем нативный чекбокс для последующей кастомизации */
+        .checkbox-input {
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        /* Стили для метки, которая будет содержать кастомный чекбокс */
+        .checkbox-label {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--itc-checkbox-gap);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Создание кастомного чекбокса с помощью псевдоэлемента ::before */
+        .checkbox-label::before {
+            content: '';
+            display: inline-block;
+            flex-shrink: 0;
+            width: var(--itc-checkbox-size);
+            height: var(--itc-checkbox-size);
+            border: var(--itc-border-width) solid var(--itc-border-color);
+            border-radius: 0.25rem;
+            background-color: var(--itc-checkbox-bg);
+            background-image: none; /* По умолчанию изображение отсутствует */
+            transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+            border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        /* Эффект при нажатии (активном состоянии) */
+        .checkbox-input:active + .checkbox-label::before {
+            filter: brightness(90%);
+        }
+
+        /* Стили при наведении курсора на чекбокс */
+        .checkbox-input:hover:not(:disabled) + .checkbox-label::before {
+            border-color: var(--itc-checkbox-color);
+        }
+
+        /* Стили при получении фокуса на чекбоксе */
+        .checkbox-input:focus + .checkbox-label::before {
+            border-color: var(--itc-checkbox-color);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* Дополнительное оформление для видимого фокуса */
+        .checkbox-input:focus-visible + .checkbox-label::before {
+            outline: 2px solid var(--itc-checkbox-color);
+            outline-offset: 2px;
+        }
+
+        /* Стили для состояния "выбран" */
+        .checkbox-input:checked + .checkbox-label::before {
+            background-color: var(--itc-checkbox-color);
+            border-color: var(--itc-checkbox-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+        }
+
+        /* Стили для состояния "неопределённое" (indeterminate) */
+        .checkbox-input:indeterminate + .checkbox-label::before {
+            background-color: var(--itc-checkbox-color);
+            border-color: var(--itc-checkbox-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+        }
+
+        /* Стили для отключённого (disabled) состояния */
+        .checkbox-input:disabled {
+            cursor: not-allowed;
+        }
+
+        .checkbox-input:disabled + .checkbox-label {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: none;
+        }
+
+        /* Стили для заголовка группы (отступы) */
+        h2 {
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        /* Стили для визуального скрытия заголовка */
+        .visually-hidden {
+            position: absolute; /* Убираем элемент из нормального потока документа */
+            width: 1px; /* Задаём минимальную ширину */
+            height: 1px; /* Задаём минимальную высоту */
+            padding: 0; /* Убираем внутренние отступы */
+            margin: -1px; /* Смещаем элемент, чтобы он не занимал место */
+            overflow: hidden; /* Скрываем содержимое, выходящее за пределы элемента */
+            clip: rect(0, 0, 0, 0); /* Обрезаем элемент так, чтобы он не отображался */
+            white-space: nowrap; /* Предотвращаем перенос строк */
+            border: 0; /* Убираем границы */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Группа кастомных чекбоксов с ролью группировки для улучшения доступности -->
+<div class="checkbox-group" role="group" aria-labelledby="colors-heading">
+    <!-- Скрытый заголовок для скринридеров -->
+    <h2 id="colors-heading" class="visually-hidden">Выбор цвета</h2>
+
+    <!-- Чекбокс "Индиго" -->
+    <div class="checkbox-item">
+        <input type="checkbox" class="checkbox-input" id="color-1" name="colors" value="indigo">
+        <label for="color-1" class="checkbox-label">Индиго</label>
+    </div>
+
+    <!-- Чекбокс "Красный" (по умолчанию выбран) -->
+    <div class="checkbox-item">
+        <input type="checkbox" class="checkbox-input" id="color-2" name="colors" value="red" checked>
+        <label for="color-2" class="checkbox-label">Красный</label>
+    </div>
+
+    <!-- Чекбокс "Коричневый" (отключён) -->
+    <div class="checkbox-item">
+        <input type="checkbox" class="checkbox-input" id="color-3" name="colors" value="brown" disabled>
+        <label for="color-3" class="checkbox-label">Коричневый</label>
+    </div>
+
+    <!-- Чекбокс "Жёлтый" с неопределённым состоянием.
+         Атрибут indeterminate нельзя задать напрямую в HTML,
+         его нужно установить через JavaScript -->
+    <div class="checkbox-item">
+        <input type="checkbox" class="checkbox-input" id="color-4" name="colors" value="yellow">
+        <label for="color-4" class="checkbox-label">Жёлтый</label>
+    </div>
+
+    <!-- Чекбокс "Зелёный" -->
+    <div class="checkbox-item">
+        <input type="checkbox" class="checkbox-input" id="color-5" name="colors" value="green">
+        <label for="color-5" class="checkbox-label">Зелёный</label>
+    </div>
+</div>
+
+<script>
+    // Установка состояния indeterminate для чекбокса "Жёлтый"
+    // Атрибут indeterminate не работает при установке в HTML, поэтому задаём его через JavaScript.
+    document.getElementById('color-4').indeterminate = true;
+</script>
+
+</body>
+</html>
