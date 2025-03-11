@@ -114,6 +114,12 @@
 
         /* Отключенный чекбокс */
         .checkbox-input:disabled {
+            filter: none;
+            opacity: var(--itc-disabled-opacity);
+            cursor: not-allowed;
+        }
+
+        .checkbox-input:disabled ~ .checkbox-label {
             opacity: var(--itc-disabled-opacity);
             cursor: not-allowed;
         }
