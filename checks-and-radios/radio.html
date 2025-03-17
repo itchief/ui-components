@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Кастомные чекбоксы - Демо</title>
+    <title>Кастомные радиокнопки - Демо</title>
     <style>
         /* Сброс стилей для всех элементов */
         *, *::before, *::after {
@@ -14,13 +14,13 @@
         :root {
             --itc-body-bg: #fff; /* Цвет фона */
             --itc-border-color: #dee2e6; /* Цвет границы */
-            --itc-checkbox-color: #0d6efd; /* Цвет активного состояния */
+            --itc-radio-color: #0d6efd; /* Цвет активного состояния */
             --itc-disabled-opacity: 0.5; /* Прозрачность отключенного чекбокса */
 
             /* Размеры и стили оформления */
             --itc-border-width: 1px; /* Толщина границы */
-            --itc-checkbox-size: 1rem; /* Размер чекбокса */
-            --itc-checkbox-gap: 0.5rem; /* Расстояние между чекбоксом и текстом */
+            --itc-radio-size: 1rem; /* Размер чекбокса */
+            --itc-radio-gap: 0.5rem; /* Расстояние между чекбоксом и текстом */
             --itc-radius: 0.375rem; /* Радиус скругления */
             --itc-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Плавные анимации */
         }
@@ -37,7 +37,7 @@
         }
 
         /* Оформление контейнера для чекбоксов */
-        .checkbox-group {
+        .radio-group {
             display: flex;
             flex-direction: column;
             gap: 0.125rem;
@@ -49,77 +49,78 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .radio-group:disabled .radio-input {
+            opacity: var(--itc-disabled-opacity);
+            cursor: not-allowed;
+        }
+
         /* Контейнер для каждого чекбокса */
-        .checkbox-item {
+        .radio-item {
             display: flex;
             align-items: center;
-            gap: var(--itc-checkbox-gap);
+            gap: var(--itc-radio-gap);
             position: relative;
         }
 
         /* Стилизация чекбокса */
-        .checkbox-input {
+        .radio-input {
+            -webkit-appearance: none;
             appearance: none;
-            width: var(--itc-checkbox-size);
-            height: var(--itc-checkbox-size);
+            width: var(--itc-radio-size);
+            height: var(--itc-radio-size);
             border: var(--itc-border-width) solid var(--itc-border-color);
-            border-radius: 0.25rem;
+            border-radius: 50%;
             background-color: var(--itc-body-bg);
-            background-image: var(--itc-checkbox-bg-image);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
             cursor: pointer;
             transition: var(--itc-transition);
             margin: 0;
         }
 
         /* Эффект нажатия */
-        .checkbox-input:active {
+        .radio-input:active {
             filter: brightness(90%);
         }
 
         /* Смена цвета границы при наведении */
-        .checkbox-input:hover:not(:disabled) {
-            border-color: var(--itc-checkbox-color);
+        .radio-input:hover:not(:disabled) {
+            border-color: var(--itc-radio-color);
         }
 
         /* Стили для чекбокса при фокусе */
-        .checkbox-input:focus {
-            border-color: var(--itc-checkbox-color);
+        .radio-input:focus {
+            border-color: var(--itc-radio-color);
             outline: none;
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
 
-        /* Оформление состояния checked и indeterminate */
-        .checkbox-input:checked,
-        .checkbox-input:indeterminate {
-            background-color: var(--itc-checkbox-color);
-            border-color: var(--itc-checkbox-color);
-            background-image: var(--itc-checkbox-bg-image);
+        .radio-input:focus-visible {
+            outline: 2px solid var(--itc-radio-color);
         }
 
-        /* Иконка галочки при выборе чекбокса */
-        .checkbox-input:checked {
-            --itc-checkbox-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
-        }
-
-        /* Иконка для неопределенного состояния */
-        .checkbox-input:indeterminate {
-            --itc-checkbox-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
+        /* Оформление состояния checked */
+        .radio-input:checked {
+            background-color: var(--itc-radio-color);
+            border-color: var(--itc-radio-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
         }
 
         /* Стили метки чекбокса */
-        .checkbox-label {
+        .radio-label {
             cursor: pointer;
             user-select: none;
         }
 
         /* Отключенный чекбокс */
-        .checkbox-input:disabled {
+        .radio-input:disabled {
             filter: none;
             opacity: var(--itc-disabled-opacity);
             cursor: not-allowed;
         }
 
-        .checkbox-input:disabled ~ .checkbox-label {
+        .radio-input:disabled ~ .radio-label {
             opacity: var(--itc-disabled-opacity);
             cursor: not-allowed;
         }
@@ -140,48 +141,35 @@
 </head>
 <body>
 
-<!-- Группа чекбоксов -->
-<fieldset class="checkbox-group" role="group">
+<!-- Группа радиокнопок -->
+<fieldset class="radio-group" role="group">
     <!-- Скрытый заголовок для скринридеров -->
     <legend class="visually-hidden">Выбор цвета</legend>
-    <!-- Чекбокс "Индиго" -->
-    <div class="checkbox-item">
-        <input type="checkbox" class="checkbox-input" id="color-1" name="colors" value="indigo">
-        <label for="color-1" class="checkbox-label">Индиго</label>
+    <!-- Радиокнопка "Индиго" -->
+    <div class="radio-item">
+        <input type="radio" class="radio-input" id="color-1" name="colors" value="indigo">
+        <label for="color-1" class="radio-label">Индиго</label>
     </div>
-    <!-- Чекбокс "Красный" (по умолчанию выбран) -->
-    <div class="checkbox-item">
-        <input type="checkbox" class="checkbox-input" id="color-2" name="colors" value="red" checked>
-        <label for="color-2" class="checkbox-label">Красный</label>
+    <!-- Радиокнопка "Красный" (по умолчанию выбран) -->
+    <div class="radio-item">
+        <input type="radio" class="radio-input" id="color-2" name="colors" value="red" checked>
+        <label for="color-2" class="radio-label">Красный</label>
     </div>
-    <!-- Чекбокс "Коричневый" (отключён) -->
-    <div class="checkbox-item">
-        <input type="checkbox" class="checkbox-input" id="color-3" name="colors" value="brown" disabled>
-        <label for="color-3" class="checkbox-label">Коричневый</label>
+    <!-- Радиокнопка "Коричневый" (отключён) -->
+    <div class="radio-item">
+        <input type="radio" class="radio-input" id="color-3" name="colors" value="brown" disabled>
+        <label for="color-3" class="radio-label">Коричневый</label>
     </div>
-    <!-- Чекбокс "Жёлтый" с неопределённым состоянием.
-         Атрибут indeterminate нельзя задать напрямую в HTML,
-         его нужно установить через JavaScript -->
-    <div class="checkbox-item">
-        <input type="checkbox" class="checkbox-input" id="color-4" name="colors" value="yellow">
-        <label for="color-4" class="checkbox-label">Жёлтый</label>
+    <div class="radio-item">
+        <input type="radio" class="radio-input" id="color-4" name="colors" value="yellow" disabled>
+        <label for="color-4" class="radio-label">Жёлтый</label>
     </div>
     <!-- Чекбокс "Зелёный" -->
-    <div class="checkbox-item">
-        <input type="checkbox" class="checkbox-input" id="color-5" name="colors" value="green">
-        <label for="color-5" class="checkbox-label">Зелёный</label>
+    <div class="radio-item">
+        <input type="radio" class="radio-input" id="color-5" name="colors" value="green">
+        <label for="color-5" class="radio-label">Зелёный</label>
     </div>
 </fieldset>
-
-<script>
-    // Устанавливаем чекбоксу неопределенное состояние
-    document.addEventListener('DOMContentLoaded', () => {
-        const yellowCheckbox = document.getElementById('color-4');
-        if (yellowCheckbox) {
-            yellowCheckbox.indeterminate = true;
-        }
-    });
-</script>
 
 </body>
 </html>
