@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Кастомные чекбоксы - Демо</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --itc-body-bg: #fff;
+            --itc-border-color: #dee2e6;
+            --itc-checkbox-color: #0d6efd;
+            --itc-disabled-opacity: 0.5;
+            --itc-border-width: 1px;
+            --itc-checkbox-size: 1rem;
+            --itc-checkbox-gap: 0.5rem;
+            --itc-radius: 0.375rem;
+            --itc-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            line-height: 1.5;
+            padding: 2rem;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+            max-width: 320px;
+            padding: 1.5rem;
+            background: var(--itc-body-bg);
+            border: var(--itc-border-width) solid var(--itc-border-color);
+            border-radius: var(--itc-radius);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: var(--itc-checkbox-gap);
+            cursor: pointer;
+        }
+
+        .checkbox-input {
+            appearance: none;
+            width: var(--itc-checkbox-size);
+            height: var(--itc-checkbox-size);
+            border: var(--itc-border-width) solid var(--itc-border-color);
+            border-radius: 0.25rem;
+            background-color: var(--itc-body-bg);
+            cursor: pointer;
+            transition: var(--itc-transition);
+            margin: 0;
+        }
+
+        .checkbox-input:hover:not(:disabled) {
+            border-color: var(--itc-checkbox-color);
+        }
+
+        .checkbox-input:focus {
+            border-color: var(--itc-checkbox-color);
+            outline: none;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .checkbox-input:checked {
+            background-color: var(--itc-checkbox-color);
+            border-color: var(--itc-checkbox-color);
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+        }
+
+        .checkbox-input:disabled {
+            opacity: var(--itc-disabled-opacity);
+            cursor: not-allowed;
+        }
+
+        .checkbox-input:disabled + span {
+            opacity: var(--itc-disabled-opacity);
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<fieldset class="checkbox-group" role="group">
+    <legend class="visually-hidden">Выбор цвета</legend>
+    <label>
+        <input type="checkbox" class="checkbox-input" name="colors" value="indigo">
+        <span>Индиго</span>
+    </label>
+    <label>
+        <input type="checkbox" class="checkbox-input" name="colors" value="red" checked>
+        <span>Красный</span>
+    </label>
+    <label>
+        <input type="checkbox" class="checkbox-input" name="colors" value="brown" disabled>
+        <span>Коричневый</span>
+    </label>
+    <label>
+        <input type="checkbox" class="checkbox-input" name="colors" value="yellow">
+        <span>Жёлтый</span>
+    </label>
+    <label>
+        <input type="checkbox" class="checkbox-input" name="colors" value="green">
+        <span>Зелёный</span>
+    </label>
+</fieldset>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('input[value="yellow"]').indeterminate = true;
+    });
+</script>
+
+</body>
+</html>
