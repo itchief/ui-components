@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Голосование: Любимый цвет</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <form class="poll-form" id="poll-form">
+    <fieldset>
+      <legend>Какой ваш любимый цвет?</legend>
+
+      <label>
+        <input type="radio" name="color" value="0" required>
+        Красный
+      </label>
+      <label>
+        <input type="radio" name="color" value="1">
+        Синий
+      </label>
+      <label>
+        <input type="radio" name="color" value="2">
+        Зеленый
+      </label>
+      <label>
+        <input type="radio" name="color" value="3">
+        Желтый
+      </label>
+
+      <button type="submit">Голосовать</button>
+    </fieldset>
+  </form>
+
+  <section class="poll-results" id="poll-results" aria-live="polite"></section>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

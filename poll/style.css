@@ -1,0 +1,76 @@
+body {
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+legend {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.75rem;
+}
+
+.poll-form {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.poll-form label {
+    display: block;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+
+.poll-form label:hover {
+    background-color: #e9ecef;
+}
+
+.poll-form input {
+    margin-right: 0.5rem;
+}
+
+.poll-form button {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.poll-form button:hover {
+    background-color: #0056b3;
+}
+
+.poll-results {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+}
+
+.poll-results h3 {
+    margin-top: 0;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.poll-results ul {
+    margin-bottom: 0.75rem;
+    line-height: 1.75rem;
+}
