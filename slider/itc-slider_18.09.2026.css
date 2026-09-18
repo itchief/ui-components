@@ -9,7 +9,6 @@
 
 .itc-slider {
   position: relative;
-  touch-action: pan-y;
 }
 
 .itc-slider-wrapper {
@@ -19,7 +18,7 @@
 
 .itc-slider-items {
   display: flex;
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: transform 0.5s ease;
   will-change: transform;
 }
 
@@ -31,24 +30,24 @@
   flex: 0 0 100%;
   max-width: 100%;
   user-select: none;
+  will-change: transform;
 }
 
 /* кнопки влево и вправо */
 .itc-slider-btn {
   position: absolute;
   top: 50%;
-  z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 50px;
   color: #fff;
-  background: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  background: rgb(0 0 0 / 20%);
   border: none;
   transform: translateY(-50%);
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .itc-slider-btn-hide {
@@ -57,20 +56,18 @@
 
 .itc-slider-btn-prev {
   left: 0;
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
 }
 
 .itc-slider-btn-next {
   right: 0;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
 }
 
 .itc-slider-btn:hover,
 .itc-slider-btn:focus {
-  background: rgba(0, 0, 0, 0.6);
-  outline: none;
+  color: #fff;
+  text-decoration: none;
+  background: rgb(0 0 0 / 30%);
+  outline: 0;
 }
 
 .itc-slider-btn::before {
@@ -78,7 +75,8 @@
   display: inline-block;
   width: 20px;
   height: 20px;
-  background: transparent no-repeat center center / contain;
+  background: transparent no-repeat center center;
+  background-size: 100% 100%;
 }
 
 .itc-slider-btn-prev::before {
@@ -93,28 +91,31 @@
 .itc-slider-indicators {
   position: absolute;
   right: 0;
-  bottom: 15px;
+  bottom: 0;
   left: 0;
   z-index: 15;
   display: flex;
   justify-content: center;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
+  margin: 0 15%;
+  padding-left: 0;
   list-style: none;
 }
 
 .itc-slider-indicator {
   flex: 0 1 auto;
+  box-sizing: content-box;
   width: 30px;
-  height: 6px;
-  border: none;
-  border-radius: 3px;
-  background-color: rgba(255, 255, 255, 0.5);
+  height: 5px;
+  margin-right: 3px;
+  margin-left: 3px;
+  text-indent: -999px;
+  background-color: rgb(255 255 255 / 50%);
+  background-clip: padding-box;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
   cursor: pointer;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 .itc-slider-indicator-active {
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgb(255 255 255 / 90%);
 }

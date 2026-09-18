@@ -41,7 +41,6 @@ class ItcSlider {
   #config;
   #state;
   #resizeObserver;
-  #handlers = {};
 
   /**
    * @param {HTMLElement} el
@@ -77,7 +76,6 @@ class ItcSlider {
       loop: true, direction: 'next', autoplay: false, interval: 5000, refresh: true, swipe: true, ...config
     };
 
-    this.#bindHandlers();
     this.#init();
     this.#attachEvents();
   }
@@ -165,28 +163,23 @@ class ItcSlider {
 
   dispose() {
     this.#detachEvents();
-    this.#autoplay('stop');
-
     const transitionNoneClass = this.#state.prefix + this.constructor.#TRANSITION_NONE;
     const activeClass = this.#state.prefix + this.constructor.#EL_ITEM_ACTIVE;
-
+    this.#autoplay('stop');
     this.#state.elItems.classList.add(transitionNoneClass);
     this.#state.elItems.style.transform = '';
-
     this.#state.elListItem.forEach((el) => {
       el.style.transform = '';
       el.classList.remove(activeClass);
     });
-
     const selIndicators = `${this.#state.prefix}${this.constructor.#EL_INDICATOR_ACTIVE}`;
-    this.#state.el.querySelectorAll(`.${selIndicators}`).forEach((el) => {
+    document.querySelectorAll(`.${selIndicators}`).forEach((el) => {
       el.classList.remove(selIndicators);
     });
-
+    this.#state.elItems.offsetHeight;
+    this.#state.elItems.classList.remove(transitionNoneClass);
     const index = this.constructor.#instances.findIndex((el) => el.target === this.#state.el);
-    if (index !== -1) {
-      this.constructor.#instances.splice(index, 1);
-    }
+    this.constructor.#instances.splice(index, 1);
   }
 
   #onClick(e) {
@@ -344,72 +337,49 @@ class ItcSlider {
     }
   }
 
-  // Привязка контекста единоразово для предотвращения утечек памяти
-  #bindHandlers() {
-    this.#handlers.onClick = this.#onClick.bind(this);
-    this.#handlers.onMouseEnter = this.#onMouseEnter.bind(this);
-    this.#handlers.onMouseLeave = this.#onMouseLeave.bind(this);
-    this.#handlers.onTransitionStart = this.#onTransitionStart.bind(this);
-    this.#handlers.onTransitionEnd = this.#onTransitionEnd.bind(this);
-    this.#handlers.touchStart = this.#touchStart.bind(this);
-    this.#handlers.touchEnd = this.#touchEnd.bind(this);
-    this.#handlers.touchMove = this.#touchMove.bind(this);
-    this.#handlers.onDragStart = this.#onDragStart.bind(this);
-    this.#handlers.onVisibilityChange = this.#onVisibilityChange.bind(this);
-  }
-
   #attachEvents() {
-    const { el, elItems } = this.#state;
-
-    el.addEventListener('click', this.#handlers.onClick);
-    el.addEventListener('mouseenter', this.#handlers.onMouseEnter);
-    el.addEventListener('mouseleave', this.#handlers.onMouseLeave);
-
-    if (this.#config.loop) {
-      elItems.addEventListener('transitionstart', this.#handlers.onTransitionStart);
-      elItems.addEventListener('transitionend', this.#handlers.onTransitionEnd);
-    }
-
-    if (this.#config.swipe) {
-      el.addEventListener('touchstart', this.#handlers.touchStart, { passive: true });
-      el.addEventListener('mousedown', this.#handlers.touchStart);
-      document.addEventListener('touchend', this.#handlers.touchEnd);
-      document.addEventListener('mouseup', this.#handlers.touchEnd);
-      el.addEventListener('touchmove', this.#handlers.touchMove, { passive: false });
-      el.addEventListener('mousemove', this.#handlers.touchMove);
-    }
-
-    el.addEventListener('dragstart', this.#handlers.onDragStart);
-    document.addEventListener('visibilitychange', this.#handlers.onVisibilityChange);
-
-    this.#resizeObserver = new ResizeObserver(() => {
-      window.requestAnimationFrame(() => this.#reset());
+    this.#state.events = {
+      click: [this.#state.el, this.#onClick.bind(this), true],
+      mouseenter: [this.#state.el, this.#onMouseEnter.bind(this), true],
+      mouseleave: [this.#state.el, this.#onMouseLeave.bind(this), true],
+      transitionstart: [this.#state.elItems, this.#onTransitionStart.bind(this), this.#config.loop],
+      transitionend: [this.#state.elItems, this.#onTransitionEnd.bind(this), this.#config.loop],
+      touchstart: [this.#state.el, this.#touchStart.bind(this), this.#config.swipe],
+      mousedown: [this.#state.el, this.#touchStart.bind(this), this.#config.swipe],
+      touchend: [document, this.#touchEnd.bind(this), this.#config.swipe],
+      mouseup: [document, this.#touchEnd.bind(this), this.#config.swipe],
+      touchmove: [this.#state.el, this.#touchMove.bind(this), this.#config.swipe],
+      mousemove: [this.#state.el, this.#touchMove.bind(this), this.#config.swipe],
+      dragstart: [this.#state.el, this.#onDragStart.bind(this), true],
+      visibilitychange: [document, this.#onVisibilityChange.bind(this), true]
+    };
+    Object.keys(this.#state.events).forEach((type) => {
+      if (this.#state.events[type][2]) {
+        const el = this.#state.events[type][0];
+        const fn = this.#state.events[type][1];
+        if (type === 'touchstart' || type === 'touchmove') {
+          const options = this.constructor.checkSupportPassiveEvents() ? { passive: false } : false;
+          el.addEventListener(type, fn, options);
+        } else {
+          el.addEventListener(type, fn);
+        }
+      }
+    });
+    this.#resizeObserver = new ResizeObserver((entries) => {
+      window.requestAnimationFrame(this.#reset.bind(this));
     });
     this.#resizeObserver.observe(this.#state.elWrapper);
   }
 
   #detachEvents() {
-    const { el, elItems } = this.#state;
-
-    el.removeEventListener('click', this.#handlers.onClick);
-    el.removeEventListener('mouseenter', this.#handlers.onMouseEnter);
-    el.removeEventListener('mouseleave', this.#handlers.onMouseLeave);
-    elItems.removeEventListener('transitionstart', this.#handlers.onTransitionStart);
-    elItems.removeEventListener('transitionend', this.#handlers.onTransitionEnd);
-
-    el.removeEventListener('touchstart', this.#handlers.touchStart);
-    el.removeEventListener('mousedown', this.#handlers.touchStart);
-    document.removeEventListener('touchend', this.#handlers.touchEnd);
-    document.removeEventListener('mouseup', this.#handlers.touchEnd);
-    el.removeEventListener('touchmove', this.#handlers.touchMove);
-    el.removeEventListener('mousemove', this.#handlers.touchMove);
-
-    el.removeEventListener('dragstart', this.#handlers.onDragStart);
-    document.removeEventListener('visibilitychange', this.#handlers.onVisibilityChange);
-
-    if (this.#resizeObserver) {
-      this.#resizeObserver.disconnect();
-    }
+    Object.keys(this.#state.events).forEach((type) => {
+      if (this.#state.events[type][2]) {
+        const el = this.#state.events[type][0];
+        const fn = this.#state.events[type][1];
+        el.removeEventListener(type, fn);
+        this.#resizeObserver.disconnect();
+      }
+    });
   }
 
   #autoplay(action) {
@@ -466,41 +436,6 @@ class ItcSlider {
 
   #updateClasses() {
     const activeClass = this.#state.prefix + this.constructor.#EL_ITEM_ACTIVE;
-    const indicatorActiveClass = `${this.#state.prefix}${this.constructor.#EL_INDICATOR_ACTIVE}`;
-    const elListIndicators = this.#state.el.querySelectorAll(
-      `.${this.#state.prefix}${this.constructor.#EL_INDICATOR}`
-    );
-
-    // Общее количество УНИКАЛЬНЫХ (оригинальных) слайдов
-    const totalLogical = elListIndicators.length || this.#state.elListItem.length;
-
-    // Сбрасываем активный класс у всех индикаторов
-    if (elListIndicators.length) {
-      elListIndicators.forEach((indicator) => indicator.classList.remove(indicatorActiveClass));
-    }
-
-    this.#state.activeItems.forEach((item, index) => {
-      const elItem = this.#state.elListItem[index];
-      const realIndex = parseInt(elItem.dataset.index, 10);
-
-      // Проставляем номер слайда для CSS (индекс + 1) и общее количество
-      if (!Number.isNaN(realIndex)) {
-        elItem.style.setProperty('--slide-num', `"${realIndex + 1}"`);
-        elItem.style.setProperty('--slide-total', `"${totalLogical}"`);
-      }
-
-      if (item) {
-        elItem.classList.add(activeClass);
-
-        // Подсвечиваем индикатор
-        if (elListIndicators.length && !Number.isNaN(realIndex) && elListIndicators[realIndex]) {
-          elListIndicators[realIndex].classList.add(indicatorActiveClass);
-        }
-      } else {
-        elItem.classList.remove(activeClass);
-      }
-    });
-    /*const activeClass = this.#state.prefix + this.constructor.#EL_ITEM_ACTIVE;
     this.#state.activeItems.forEach((item, index) => {
       if (item) {
         this.#state.elListItem[index].classList.add(activeClass);
@@ -513,18 +448,17 @@ class ItcSlider {
       } else if (elListIndicators.length && !item) {
         elListIndicators[index].classList.remove(`${this.#state.prefix}${this.constructor.#EL_INDICATOR_ACTIVE}`);
       }
-    });*/
+    });
   }
 
   #move() {
     if (this.#state.direction === 'none') {
       const transform = this.#state.translate;
-      this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0)`;
+      this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
       return;
     }
     const widthItem = this.#state.direction === 'next' ? -this.#state.width : this.#state.width;
     const transform = this.#state.translate + widthItem;
-
     if (!this.#config.loop) {
       const limit = this.#state.width * (this.#state.elListItem.length - this.#state.countActiveItems);
       if (Math.round(transform * 100) < -Math.round(limit * 100) || Math.round(transform * 100) > 0) {
@@ -547,52 +481,11 @@ class ItcSlider {
     }
     this.#updateClasses();
     this.#state.translate = transform;
-    this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0)`;
+    this.#state.elItems.style.transform = `translate3D(${transform}px, 0px, 0.1px)`;
   }
 
   #moveTo(index) {
-    // 1. Находим текущий активный элемент в физическом массиве
-    const currentActivePhysicalIndex = this.#state.activeItems.indexOf(1);
-    if (currentActivePhysicalIndex === -1) return;
-
-    // 2. Получаем логический (оригинальный) индекс текущего активного слайда
-    const currentLogicalIndex = parseInt(
-      this.#state.elListItem[currentActivePhysicalIndex].dataset.index,
-      10
-    );
-
-    if (currentLogicalIndex === index) return; // Ужe на нужном слайде
-
-    // 3. Вычисляем кратчайшее расстояние на закольцованной орбите индикаторов
-    // totalLogical - это общее количество УНИКАЛЬНЫХ слайдов (индикаторов)
-    const elListIndicators = this.#state.el.querySelectorAll(
-      `.${this.#state.prefix}${this.constructor.#EL_INDICATOR}`
-    );
-    const totalLogical = elListIndicators.length || this.#state.elListItem.length;
-
-    // Прямое расстояние от текущего логического индекса до целевого
-    let diff = index - currentLogicalIndex;
-
-    // Корректируем разницу для кольцевого движения по кратчайшему пути
-    if (this.#config.loop) {
-      if (diff > totalLogical / 2) {
-        diff -= totalLogical;
-      } else if (diff < -totalLogical / 2) {
-        diff += totalLogical;
-      }
-    }
-
-    if (diff === 0) return;
-
-    // 4. Задаем правильное направление и делаем нужное количество шагов
-    this.#state.direction = diff > 0 ? 'next' : 'prev';
-    const steps = Math.abs(diff);
-
-    for (let i = 0; i < steps; i++) {
-      this.#move();
-    }
-
-    /*const delta = this.#state.activeItems.reduce((acc, current, currentIndex) => {
+    const delta = this.#state.activeItems.reduce((acc, current, currentIndex) => {
       const diff = current ? index - currentIndex : acc;
       return Math.abs(diff) < Math.abs(acc) ? diff : acc;
     }, this.#state.activeItems.length);
@@ -601,46 +494,11 @@ class ItcSlider {
       for (let i = 0; i < Math.abs(delta); i++) {
         this.#move();
       }
-    }*/
+    }
   }
 
   // приватный метод для выполнения первичной инициализации
   #init() {
-    // Проверяем и при необходимости дублируем элементы
-    if (this.#config.loop) {
-      // Размечаем исходные слайды оригинальными индексами
-      const originalItems = Array.from(this.#state.elListItem);
-      originalItems.forEach((el, index) => {
-        if (!el.hasAttribute('data-index')) {
-          el.dataset.index = index;
-        }
-      });
-
-      const minItemsNeeded = 5; // Безопасный минимум элементов для корректного loop
-      if (originalItems.length > 0 && originalItems.length < minItemsNeeded) {
-        const originalCount = originalItems.length;
-        let currentCount = originalItems.length;
-
-        while (currentCount < minItemsNeeded) {
-          for (let i = 0; i < originalCount; i++) {
-            const clone = originalItems[i].cloneNode(true);
-            clone.dataset.isClone = 'true';
-            this.#state.elItems.appendChild(clone);
-            currentCount++;
-          }
-        }
-        // Обновляем список элементов в состоянии
-        this.#state.elListItem = this.#state.el.querySelectorAll(
-          `.${this.#state.prefix}${this.constructor.#EL_ITEM}`
-        );
-      }
-    } else {
-      // В нецикличном режиме просто размечаем индексы
-      this.#state.elListItem.forEach((el, index) => {
-        el.dataset.index = index;
-      });
-    }
-
     // состояние элементов
     this.#state.els = [];
     // текущее значение translate
@@ -679,7 +537,6 @@ class ItcSlider {
         this.#state.btnNext.classList.remove(this.#state.btnClassHide);
       }
     }
-
     if (this.#config.loop) {
       const lastIndex = this.#state.elListItem.length - 1;
       const translate = -(lastIndex + 1) * this.#state.width;
